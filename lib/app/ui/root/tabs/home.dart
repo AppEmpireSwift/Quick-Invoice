@@ -4,11 +4,35 @@ import 'package:flutter/material.dart' show Colors, Divider;
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:pdfx/pdfx.dart';
 
 import '../../../../data/database.dart';
 import '../../../../style/style.dart';
 import '../../../services/pdf_service.dart';
 import 'clients.dart';
+
+String getCurrencySymbol(String code) {
+  switch (code) {
+    case 'USD':
+      return '\$';
+    case 'EUR':
+      return '€';
+    case 'GBP':
+      return '£';
+    case 'JPY':
+      return '¥';
+    case 'CNY':
+      return '¥';
+    case 'RUB':
+      return '₽';
+    case 'CAD':
+      return 'C\$';
+    case 'AUD':
+      return 'A\$';
+    default:
+      return code;
+  }
+}
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -106,7 +130,21 @@ class _HomeTabState extends State<HomeTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 50.r),
-                  Text('Invoices', style: TextStyles.largeTitleEmphasized),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Invoices', style: TextStyles.largeTitleEmphasized),
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: _navigateToCreateInvoice,
+                        child: Icon(
+                          CupertinoIcons.plus_circle_fill,
+                          color: ColorStyles.primary,
+                          size: 28.r,
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 16.r),
                   CupertinoSearchTextField(
                     controller: _searchController,
@@ -168,7 +206,7 @@ class _HomeTabState extends State<HomeTab> {
           // Filter Tabs
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 4.r),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -178,7 +216,7 @@ class _HomeTabState extends State<HomeTab> {
                         return Padding(
                           padding: EdgeInsets.only(right: 8.r),
                           child: CupertinoButton(
-                            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+                            padding: EdgeInsets.zero,
                             onPressed: () {
                               HapticFeedback.selectionClick();
                               setState(() => _selectedStatus = entry.key);
@@ -187,11 +225,8 @@ class _HomeTabState extends State<HomeTab> {
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
                               decoration: BoxDecoration(
-                                color: isSelected ? ColorStyles.primary : ColorStyles.white,
+                                color: isSelected ? ColorStyles.primary : ColorStyles.fillsTertiary,
                                 borderRadius: BorderRadius.circular(20.r),
-                                border: Border.all(
-                                  color: isSelected ? ColorStyles.primary : ColorStyles.separator,
-                                ),
                               ),
                               child: Text(
                                 entry.value,
@@ -376,7 +411,10 @@ class _OverviewCard extends StatelessWidget {
         children: [
           Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
           SizedBox(height: 8.r),
-          Text('$currency ${amount.toStringAsFixed(0)}', style: TextStyles.title3Emphasized),
+          Text(
+            '${getCurrencySymbol(currency)}${amount.toStringAsFixed(0)}',
+            style: TextStyles.title3Emphasized,
+          ),
         ],
       ),
     );
@@ -467,7 +505,7 @@ class _InvoiceWidget extends StatelessWidget {
                     style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
                   ),
                   Text(
-                    '${invoice.currency} ${invoice.totalAmount.toStringAsFixed(2)}',
+                    '${getCurrencySymbol(invoice.currency)}${invoice.totalAmount.toStringAsFixed(2)}',
                     style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primaryTxt),
                   ),
                 ],
@@ -515,6 +553,15 @@ class _SelectClientPageState extends State<SelectClientPage> {
         automaticBackgroundVisibility: false,
         transitionBetweenRoutes: false,
         border: null,
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true)
+                .push(CupertinoPageRoute(builder: (_) => const AddClientPage()))
+                .then((_) => _loadClients());
+          },
+          child: Icon(CupertinoIcons.plus_circle_fill, color: ColorStyles.primary, size: 28.r),
+        ),
       ),
       child: SafeArea(
         child:
@@ -852,13 +899,18 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 ),
               ),
             ),
-            Padding(
+            Container(
               padding: EdgeInsets.all(16.r),
+              decoration: BoxDecoration(
+                color: ColorStyles.white,
+                border: Border(top: BorderSide(color: ColorStyles.separator, width: 0.5)),
+              ),
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed:
                     isCurrentStepValid
                         ? () {
+                          HapticFeedback.selectionClick();
                           if (_currentStep < 2) {
                             setState(() => _currentStep++);
                           } else {
@@ -870,7 +922,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: isCurrentStepValid ? ColorStyles.primary : ColorStyles.searchBg,
+                    color: isCurrentStepValid ? ColorStyles.primary : ColorStyles.fillsTertiary,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   alignment: Alignment.center,
@@ -998,7 +1050,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
             letterSpacing: 0.5,
           ),
         ),
-        SizedBox(height: 16.r),
+        SizedBox(height: 12.r),
         Container(
           decoration: BoxDecoration(
             color: ColorStyles.white,
@@ -1016,7 +1068,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                     Row(
                       children: [
                         Text(
-                          selectedClient != null ? 'Choose from list' : 'Choose from list',
+                          'Choose from list',
                           style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary),
                         ),
                         SizedBox(width: 4.r),
@@ -1027,15 +1079,15 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 ),
               ),
               Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
-              _InputWidget(
-                controller: clientNameController,
+              _buildInlineField(
                 label: 'Client Name',
+                controller: clientNameController,
                 placeholder: 'Enter name',
               ),
               Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
-              _InputWidget(
-                controller: clientPhoneController,
+              _buildInlineField(
                 label: 'Phone',
+                controller: clientPhoneController,
                 placeholder: 'Enter phone',
                 keyboardType: TextInputType.phone,
               ),
@@ -1050,36 +1102,90 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
             letterSpacing: 0.5,
           ),
         ),
-        SizedBox(height: 16.r),
-        _InputWidget(
-          controller: itemDescriptionController,
-          label: 'Description',
-          placeholder: 'What are you billing',
-        ),
-        SizedBox(height: 16.r),
-        _InputWidget(
-          controller: priceController,
-          label: 'Price',
-          placeholder: '0.00',
-          keyboardType: TextInputType.number,
-          suffix: Text('£', style: TextStyles.bodyRegular),
-        ),
-        SizedBox(height: 16.r),
-        _InputWidget(
-          controller: quantityController,
-          label: 'Quantity',
-          placeholder: '1',
-          keyboardType: TextInputType.number,
-        ),
-        SizedBox(height: 16.r),
-        _InputWidget(
-          controller: taxController,
-          label: 'Tax',
-          placeholder: '0',
-          keyboardType: TextInputType.number,
-          suffix: Text('%', style: TextStyles.bodyRegular),
+        SizedBox(height: 12.r),
+        Container(
+          decoration: BoxDecoration(
+            color: ColorStyles.white,
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: Column(
+            children: [
+              _buildInlineField(
+                label: 'Description',
+                controller: itemDescriptionController,
+                placeholder: 'What are you billing',
+              ),
+              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              _buildInlineField(
+                label: 'Price',
+                controller: priceController,
+                placeholder: '0.00',
+                keyboardType: TextInputType.number,
+                suffix: Text('£', style: TextStyles.bodyRegular),
+              ),
+              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              _buildInlineField(
+                label: 'Quantity',
+                controller: quantityController,
+                placeholder: '1',
+                keyboardType: TextInputType.number,
+              ),
+              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              _buildInlineField(
+                label: 'Tax',
+                controller: taxController,
+                placeholder: '0',
+                keyboardType: TextInputType.number,
+                suffix: Text('%', style: TextStyles.bodyRegular),
+              ),
+            ],
+          ),
         ),
       ],
+    );
+  }
+
+  Widget _buildInlineField({
+    required String label,
+    required TextEditingController controller,
+    required String placeholder,
+    TextInputType keyboardType = TextInputType.text,
+    Widget? suffix,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 100.r,
+            child: Text(
+              label,
+              style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: CupertinoTextField(
+                    controller: controller,
+                    style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+                    placeholder: placeholder,
+                    placeholderStyle: TextStyles.bodyRegular.copyWith(
+                      color: ColorStyles.secondary.withValues(alpha: 0.5),
+                    ),
+                    padding: EdgeInsets.zero,
+                    decoration: null,
+                    keyboardType: keyboardType,
+                  ),
+                ),
+                if (suffix != null) ...[SizedBox(width: 8.r), suffix!],
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1114,7 +1220,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               Divider(color: ColorStyles.separator),
               _buildReviewRow('Description', itemDescriptionController.text),
               Divider(color: ColorStyles.separator),
-              _buildReviewRow('Price', '${currencyController.text} ${priceController.text}'),
+              _buildReviewRow(
+                'Price',
+                '${getCurrencySymbol(currencyController.text)}${priceController.text}',
+              ),
               Divider(color: ColorStyles.separator),
               _buildReviewRow('Quantity', quantityController.text),
               Divider(color: ColorStyles.separator),
@@ -1125,7 +1234,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 children: [
                   Text('Total', style: TextStyles.bodyEmphasized),
                   Text(
-                    '${currencyController.text} ${total.toStringAsFixed(2)}',
+                    '${getCurrencySymbol(currencyController.text)}${total.toStringAsFixed(2)}',
                     style: TextStyles.title3Emphasized.copyWith(color: ColorStyles.primary),
                   ),
                 ],
@@ -1159,6 +1268,7 @@ class _ProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _ProgressStep(
@@ -1167,10 +1277,12 @@ class _ProgressIndicator extends StatelessWidget {
           isCompleted: currentStep > 0,
           isActive: currentStep == 0,
         ),
-        Container(
-          width: 40.r,
-          height: 2.r,
-          color: currentStep > 0 ? ColorStyles.primary : ColorStyles.separator,
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(bottom: 16.h),
+            height: 2.r,
+            color: currentStep > 0 ? ColorStyles.primary : ColorStyles.separator,
+          ),
         ),
         _ProgressStep(
           step: 2,
@@ -1178,10 +1290,12 @@ class _ProgressIndicator extends StatelessWidget {
           isCompleted: currentStep > 1,
           isActive: currentStep == 1,
         ),
-        Container(
-          width: 40.r,
-          height: 2.r,
-          color: currentStep > 1 ? ColorStyles.primary : ColorStyles.separator,
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(bottom: 16.h),
+            height: 2.r,
+            color: currentStep > 1 ? ColorStyles.primary : ColorStyles.separator,
+          ),
         ),
         _ProgressStep(step: 3, label: 'Review', isCompleted: false, isActive: currentStep == 2),
       ],
@@ -1494,7 +1608,7 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                           ),
                           SizedBox(height: 8.r),
                           Text(
-                            '${invoice.currency} ${invoice.totalAmount.toStringAsFixed(2)}',
+                            '${getCurrencySymbol(invoice.currency)}${invoice.totalAmount.toStringAsFixed(2)}',
                             style: TextStyles.largeTitleEmphasized.copyWith(
                               color: ColorStyles.white,
                               fontSize: 32.sp,
@@ -1608,7 +1722,7 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                                     Text(invoice.itemName, style: TextStyles.bodyRegular),
                                     SizedBox(height: 4.r),
                                     Text(
-                                      '${invoice.itemQuantity} x ${invoice.currency} ${invoice.itemPrice.toStringAsFixed(2)}',
+                                      '${invoice.itemQuantity} x ${getCurrencySymbol(invoice.currency)}${invoice.itemPrice.toStringAsFixed(2)}',
                                       style: TextStyles.footnoteRegular.copyWith(
                                         color: ColorStyles.secondary,
                                       ),
@@ -1617,7 +1731,7 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                                 ),
                               ),
                               Text(
-                                '${invoice.currency} ${(invoice.itemPrice * invoice.itemQuantity).toStringAsFixed(2)}',
+                                '${getCurrencySymbol(invoice.currency)}${(invoice.itemPrice * invoice.itemQuantity).toStringAsFixed(2)}',
                                 style: TextStyles.bodyEmphasized,
                               ),
                             ],
@@ -1644,7 +1758,11 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                       padding: EdgeInsets.zero,
                       onPressed: () {
                         _showTemplateSelector((template) {
-                          PdfService.printInvoice(invoice, template: template);
+                          Navigator.of(context, rootNavigator: true).push(
+                            CupertinoPageRoute(
+                              builder: (_) => PdfPreviewPage(invoice: invoice, template: template),
+                            ),
+                          );
                         });
                       },
                       child: Container(
@@ -1714,7 +1832,9 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
 
   void _showExportOptions() {
     _showTemplateSelector((template) {
-      PdfService.shareInvoice(invoice, template: template);
+      Navigator.of(context, rootNavigator: true).push(
+        CupertinoPageRoute(builder: (_) => PdfPreviewPage(invoice: invoice, template: template)),
+      );
     });
   }
 
@@ -1874,12 +1994,8 @@ class _TemplateOption extends StatelessWidget {
               ),
               child: _buildTemplatePreview(template),
             ),
-            SizedBox(height: 12.r),
+            SizedBox(height: 8.r),
             Text(name, style: TextStyles.footnoteEmphasized),
-            if (isSelected) ...[
-              SizedBox(height: 8.r),
-              Icon(CupertinoIcons.checkmark_circle_fill, color: ColorStyles.primary, size: 20.r),
-            ],
           ],
         ),
       ),
@@ -2012,5 +2128,65 @@ class _TemplateOption extends StatelessWidget {
           ),
         );
     }
+  }
+}
+
+class PdfPreviewPage extends StatefulWidget {
+  final Invoice invoice;
+  final PdfTemplate template;
+
+  const PdfPreviewPage({super.key, required this.invoice, required this.template});
+
+  @override
+  State<PdfPreviewPage> createState() => _PdfPreviewPageState();
+}
+
+class _PdfPreviewPageState extends State<PdfPreviewPage> {
+  PdfControllerPinch? _pdfController;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPdf();
+  }
+
+  Future<void> _loadPdf() async {
+    final path = await PdfService.savePdfToTemp(widget.invoice, template: widget.template);
+    if (mounted) {
+      setState(() {
+        _pdfController = PdfControllerPinch(document: PdfDocument.openFile(path));
+        _loading = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _pdfController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      backgroundColor: ColorStyles.bgSecondary,
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('Preview'),
+        backgroundColor: ColorStyles.white,
+        automaticBackgroundVisibility: false,
+        transitionBetweenRoutes: false,
+        border: null,
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => PdfService.shareInvoice(widget.invoice, template: widget.template),
+          child: Icon(CupertinoIcons.share, color: ColorStyles.primary, size: 22.r),
+        ),
+      ),
+      child:
+          _loading || _pdfController == null
+              ? const Center(child: CupertinoActivityIndicator())
+              : PdfViewPinch(controller: _pdfController!, padding: 16),
+    );
   }
 }

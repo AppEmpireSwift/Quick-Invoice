@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/core.dart';
 import '../../../../style/style.dart';
@@ -37,8 +38,7 @@ class SettingsTab extends StatelessWidget {
               child: Column(
                 children: [
                   _buildSection([
-                    _buildItem(context, 'Profile', () {}),
-                    _buildItem(context, 'Company Info', () {}),
+                    _buildItem(context, 'Company Info', () => _openCompanyInfo(context)),
                   ]),
                   SizedBox(height: 16.r),
                   _buildSection([
@@ -159,36 +159,16 @@ class SettingsTab extends StatelessWidget {
       ),
     );
   }
-}
 
-class _PolicyPage extends StatelessWidget {
-  final String title;
-  final String content;
-
-  const _PolicyPage({required this.title, required this.content});
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(title),
-        backgroundColor: ColorStyles.white,
-      ),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.r),
-          child: Text(
-            content,
-            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
-          ),
-        ),
+  void _openCompanyInfo(BuildContext context) {
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (_) => const CompanyInfoPage(),
       ),
     );
   }
-}
 
-String get _privacyPolicyText => '''
+  static String get _privacyPolicyText => '''
 This privacy policy applies to the ${Core.config.appName} app (hereby referred to as "Application") for mobile devices that was created by The Developer (hereby referred to as "Service Provider") as a Freemium service. This service is intended for use "AS IS".
 
 What information does the Application obtain and how is it used?
@@ -219,7 +199,7 @@ Contact Us
 If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at ${Core.config.supportEmail}.
 ''';
 
-String get _termsOfUseText => '''
+  static String get _termsOfUseText => '''
 These terms and conditions apply to the ${Core.config.appName} app (hereby referred to as "Application") for mobile devices that was created by The Developer (hereby referred to as "Service Provider") as a Freemium service.
 
 Upon downloading or utilizing the Application, you are automatically agreeing to the following terms. It is strongly advised that you thoroughly read and understand these terms prior to using the Application.
@@ -236,3 +216,210 @@ The Service Provider may periodically update their Terms and Conditions. Therefo
 Contact Us
 If you have any questions or suggestions about the Terms and Conditions, please do not hesitate to contact the Service Provider at ${Core.config.supportEmail}.
 ''';
+}
+
+class CompanyInfoPage extends StatefulWidget {
+  const CompanyInfoPage({super.key});
+
+  @override
+  State<CompanyInfoPage> createState() => _CompanyInfoPageState();
+}
+
+class _CompanyInfoPageState extends State<CompanyInfoPage> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _taxIdController = TextEditingController();
+  final _websiteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCompanyInfo();
+  }
+
+  Future<void> _loadCompanyInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _nameController.text = prefs.getString('company_name') ?? '';
+      _emailController.text = prefs.getString('company_email') ?? '';
+      _phoneController.text = prefs.getString('company_phone') ?? '';
+      _addressController.text = prefs.getString('company_address') ?? '';
+      _taxIdController.text = prefs.getString('company_tax_id') ?? '';
+      _websiteController.text = prefs.getString('company_website') ?? '';
+    });
+  }
+
+  Future<void> _saveCompanyInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('company_name', _nameController.text);
+    await prefs.setString('company_email', _emailController.text);
+    await prefs.setString('company_phone', _phoneController.text);
+    await prefs.setString('company_address', _addressController.text);
+    await prefs.setString('company_tax_id', _taxIdController.text);
+    await prefs.setString('company_website', _websiteController.text);
+    
+    if (mounted) {
+      HapticFeedback.lightImpact();
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _taxIdController.dispose();
+    _websiteController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      backgroundColor: ColorStyles.bgSecondary,
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('Company Info'),
+        backgroundColor: ColorStyles.white,
+        automaticBackgroundVisibility: false,
+        transitionBetweenRoutes: false,
+        border: null,
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextField(
+                controller: _nameController,
+                label: 'Company Name',
+                placeholder: 'Enter company name',
+              ),
+              SizedBox(height: 16.r),
+              _buildTextField(
+                controller: _emailController,
+                label: 'Email',
+                placeholder: 'company@email.com',
+                keyboardType: TextInputType.emailAddress,
+              ),
+              SizedBox(height: 16.r),
+              _buildTextField(
+                controller: _phoneController,
+                label: 'Phone',
+                placeholder: '+1 234 567 890',
+                keyboardType: TextInputType.phone,
+              ),
+              SizedBox(height: 16.r),
+              _buildTextField(
+                controller: _addressController,
+                label: 'Address',
+                placeholder: 'Company address',
+                maxLines: 3,
+              ),
+              SizedBox(height: 16.r),
+              _buildTextField(
+                controller: _taxIdController,
+                label: 'Tax ID',
+                placeholder: 'Tax identification number',
+              ),
+              SizedBox(height: 16.r),
+              _buildTextField(
+                controller: _websiteController,
+                label: 'Website',
+                placeholder: 'www.company.com',
+                keyboardType: TextInputType.url,
+              ),
+              SizedBox(height: 24.r),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: _saveCompanyInfo,
+                child: Container(
+                  width: double.infinity,
+                  height: 50.r,
+                  decoration: BoxDecoration(
+                    color: ColorStyles.primary,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Save',
+                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 100.r),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String placeholder,
+    TextInputType keyboardType = TextInputType.text,
+    int maxLines = 1,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+        ),
+        SizedBox(height: 8.r),
+        Container(
+          decoration: BoxDecoration(
+            color: ColorStyles.white,
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: CupertinoTextField(
+            controller: controller,
+            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+            placeholder: placeholder,
+            placeholderStyle: TextStyles.bodyRegular.copyWith(
+              color: ColorStyles.secondary.withValues(alpha: 0.5),
+            ),
+            padding: EdgeInsets.all(16.r),
+            decoration: null,
+            keyboardType: keyboardType,
+            maxLines: maxLines,
+          ),
+        ),
+      ],
+    );
+  }
+}
+class _PolicyPage extends StatelessWidget {
+  final String title;
+  final String content;
+
+  const _PolicyPage({required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      backgroundColor: ColorStyles.bgSecondary,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(title),
+        backgroundColor: ColorStyles.white,
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.r),
+          child: Text(
+            content,
+            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+          ),
+        ),
+      ),
+    );
+  }
+}

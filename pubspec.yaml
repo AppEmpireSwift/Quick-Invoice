@@ -40,7 +40,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.28
 
   pdf: ^3.10.8
-  printing: ^5.12.0
+  pdfx: ^2.6.0
 
 dependency_overrides:
   device_frame_plus: 1.3.1
@@ -65,3 +65,4 @@ flutter:
     - assets/images/
     - assets/images/onboarding/
     - assets/images/premium/
+    - assets/fonts/

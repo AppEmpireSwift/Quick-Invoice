@@ -18,11 +18,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
   String _selectedPeriod = 'week';
   List<Invoice> _invoices = [];
 
-  final Map<String, String> _periods = {
-    'week': 'Week',
-    'month': 'Month',
-    'year': 'Year',
-  };
+  final Map<String, String> _periods = {'week': 'Week', 'month': 'Month', 'year': 'Year'};
 
   @override
   void initState() {
@@ -118,7 +114,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
   Map<String, double> _getDailyIncome() {
     final filtered = _getFilteredInvoices().where((i) => i.status == 'paid').toList();
     final Map<String, double> dailyIncome = {};
-    
+
     if (_selectedPeriod == 'week') {
       final now = DateTime.now();
       final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
@@ -127,28 +123,27 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
         final dayName = DateFormat('E').format(date);
         dailyIncome[dayName] = 0.0;
       }
-      
+
       for (var invoice in filtered) {
         final dayName = DateFormat('E').format(invoice.invoiceDate);
         dailyIncome[dayName] = (dailyIncome[dayName] ?? 0.0) + invoice.totalAmount;
       }
     }
-    
+
     return dailyIncome;
   }
 
   Map<String, double> _getTopClients() {
     final filtered = _getFilteredInvoices().where((i) => i.status == 'paid').toList();
     final Map<String, double> clientTotals = {};
-    
+
     for (var invoice in filtered) {
-      clientTotals[invoice.clientName] = 
+      clientTotals[invoice.clientName] =
           (clientTotals[invoice.clientName] ?? 0.0) + invoice.totalAmount;
     }
-    
-    final sorted = clientTotals.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    
+
+    final sorted = clientTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+
     return Map.fromEntries(sorted.take(5));
   }
 
@@ -169,30 +164,28 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
     final invoiceCount = _getInvoiceCount();
     final dailyIncome = _getDailyIncome();
     final topClients = _getTopClients();
-    final maxIncome = dailyIncome.values.isEmpty 
-        ? 1.0 
-        : dailyIncome.values.reduce((a, b) => a > b ? a : b);
+    final maxIncome =
+        dailyIncome.values.isEmpty ? 1.0 : dailyIncome.values.reduce((a, b) => a > b ? a : b);
 
     return CupertinoPageScaffold(
       backgroundColor: ColorStyles.bgSecondary,
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              color: ColorStyles.white.withValues(alpha: 0.9),
-              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 50.r),
-                  Text('Analytics', style: TextStyles.largeTitleEmphasized),
-                ],
-              ),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            color: ColorStyles.white,
+            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 50.r),
+                Text('Analytics', style: TextStyles.largeTitleEmphasized),
+              ],
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.all(16.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,10 +283,7 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                   ),
                   SizedBox(height: 24.r),
                   // Income Overview
-                  Text(
-                    'Income Overview',
-                    style: TextStyles.title3Emphasized,
-                  ),
+                  Text('Income Overview', style: TextStyles.title3Emphasized),
                   SizedBox(height: 16.r),
                   Container(
                     padding: EdgeInsets.all(16.r),
@@ -301,68 +291,68 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                       color: ColorStyles.white,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
-                    child: _selectedPeriod == 'week'
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                height: 120.r,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: dailyIncome.entries.map((entry) {
-                                    final height = maxIncome > 0
-                                        ? (entry.value / maxIncome) * 100.r
-                                        : 0.0;
-                                    return Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 4.r),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              width: double.infinity,
-                                              height: height,
-                                              decoration: BoxDecoration(
-                                                color: ColorStyles.primary,
-                                                borderRadius: BorderRadius.vertical(
-                                                  top: Radius.circular(4.r),
-                                                ),
+                    child:
+                        _selectedPeriod == 'week'
+                            ? Column(
+                              children: [
+                                SizedBox(
+                                  height: 120.r,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children:
+                                        dailyIncome.entries.map((entry) {
+                                          final height =
+                                              maxIncome > 0
+                                                  ? (entry.value / maxIncome) * 100.r
+                                                  : 0.0;
+                                          return Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 4.r),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    width: double.infinity,
+                                                    height: height,
+                                                    decoration: BoxDecoration(
+                                                      color: ColorStyles.primary,
+                                                      borderRadius: BorderRadius.vertical(
+                                                        top: Radius.circular(4.r),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 8.r),
+                                                  Text(
+                                                    entry.key,
+                                                    style: TextStyles.caption1Regular.copyWith(
+                                                      color: ColorStyles.secondary,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            SizedBox(height: 8.r),
-                                            Text(
-                                              entry.key,
-                                              style: TextStyles.caption1Regular.copyWith(
-                                                color: ColorStyles.secondary,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
+                                          );
+                                        }).toList(),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        : SizedBox(
-                            height: 120.r,
-                            child: Center(
-                              child: Text(
-                                'Chart available for week view',
-                                style: TextStyles.bodyRegular.copyWith(
-                                  color: ColorStyles.secondary,
+                              ],
+                            )
+                            : SizedBox(
+                              height: 120.r,
+                              child: Center(
+                                child: Text(
+                                  'Chart available for week view',
+                                  style: TextStyles.bodyRegular.copyWith(
+                                    color: ColorStyles.secondary,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
                   ),
                   if (topClients.isNotEmpty) ...[
                     SizedBox(height: 24.r),
-                    Text(
-                      'Top Clients',
-                      style: TextStyles.title3Emphasized,
-                    ),
+                    Text('Top Clients', style: TextStyles.title3Emphasized),
                     SizedBox(height: 16.r),
                     Container(
                       padding: EdgeInsets.all(16.r),
@@ -371,44 +361,45 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
-                        children: topClients.entries.map((entry) {
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 16.r),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 40.r,
-                                  height: 40.r,
-                                  decoration: BoxDecoration(
-                                    color: ColorStyles.primary,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      _getClientInitials(entry.key),
-                                      style: TextStyles.footnoteEmphasized.copyWith(
-                                        color: ColorStyles.white,
+                        children:
+                            topClients.entries.map((entry) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 16.r),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 40.r,
+                                      height: 40.r,
+                                      decoration: BoxDecoration(
+                                        color: ColorStyles.primary,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          _getClientInitials(entry.key),
+                                          style: TextStyles.footnoteEmphasized.copyWith(
+                                            color: ColorStyles.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(width: 12.r),
+                                    Expanded(
+                                      child: Text(
+                                        entry.key,
+                                        style: TextStyles.bodyRegular,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text(
+                                      '£${entry.value.toStringAsFixed(0)}',
+                                      style: TextStyles.bodyEmphasized,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(width: 12.r),
-                                Expanded(
-                                  child: Text(
-                                    entry.key,
-                                    style: TextStyles.bodyRegular,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Text(
-                                  '£${entry.value.toStringAsFixed(0)}',
-                                  style: TextStyles.bodyEmphasized,
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                              );
+                            }).toList(),
                       ),
                     ),
                   ],
@@ -443,39 +434,41 @@ class _AnimatedSegmentedControl extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
-        children: segments.entries.map((entry) {
-          final isSelected = selectedValue == entry.key;
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => onValueChanged(entry.key),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                margin: EdgeInsets.all(2.r),
-                decoration: BoxDecoration(
-                  color: isSelected ? ColorStyles.white : Colors.transparent,
-                  borderRadius: BorderRadius.circular(6.r),
-                  boxShadow: isSelected
-                      ? [
-                          BoxShadow(
-                            color: ColorStyles.black.withValues(alpha: 0.1),
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ]
-                      : null,
-                ),
-                child: Center(
-                  child: Text(
-                    entry.value,
-                    style: TextStyles.footnoteEmphasized.copyWith(
-                      color: isSelected ? ColorStyles.primaryTxt : ColorStyles.secondary,
+        children:
+            segments.entries.map((entry) {
+              final isSelected = selectedValue == entry.key;
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => onValueChanged(entry.key),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: EdgeInsets.all(2.r),
+                    decoration: BoxDecoration(
+                      color: isSelected ? ColorStyles.white : Colors.transparent,
+                      borderRadius: BorderRadius.circular(6.r),
+                      boxShadow:
+                          isSelected
+                              ? [
+                                BoxShadow(
+                                  color: ColorStyles.black.withValues(alpha: 0.1),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 2),
+                                ),
+                              ]
+                              : null,
+                    ),
+                    child: Center(
+                      child: Text(
+                        entry.value,
+                        style: TextStyles.footnoteEmphasized.copyWith(
+                          color: isSelected ? ColorStyles.primaryTxt : ColorStyles.secondary,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
       ),
     );
   }
@@ -505,6 +498,7 @@ class _MetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 40.r,
@@ -514,24 +508,12 @@ class _MetricCard extends StatelessWidget {
               shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
               borderRadius: isSquare ? BorderRadius.circular(8.r) : null,
             ),
-            child: Icon(
-              icon,
-              color: iconColor,
-              size: 20.r,
-            ),
+            child: Icon(icon, color: iconColor, size: 20.r),
           ),
           SizedBox(height: 12.r),
-          Text(
-            value,
-            style: TextStyles.title3Emphasized,
-          ),
+          Text(value, style: TextStyles.title3Emphasized),
           SizedBox(height: 4.r),
-          Text(
-            label,
-            style: TextStyles.footnoteRegular.copyWith(
-              color: ColorStyles.secondary,
-            ),
-          ),
+          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
         ],
       ),
     );

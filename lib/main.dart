@@ -13,10 +13,10 @@ void main() async {
     config: CommonConfig(
       appName: 'Quick Invoice',
       figmaDesignSize: Size(375, 812),
-      appId: '111111111',
+      appId: '6757950869',
       appHudKey: 'app_HorEUWWedWd1V683fWnwZwZFLfvZEr',
-      supportEmail: 'support@email.com',
-      supportForm: 'https://forms.gle/EH8YUddXBzfSxVR26',
+      supportEmail: 'hollyreeves@murermesterdennisbotker.com',
+      supportForm: 'https://forms.gle/EH8YUddXBzfSxVR26', //TODO
     ),
     home: MainPage(),
     splash: SplashPage(),
@@ -31,7 +31,7 @@ void main() async {
       mainPaywallSettings: MainPaywallSettings(),
       onBoardingPaywallSettings: OnBoardingPaywallSettings(),
     ),
-    helperType: HelperType.fallbackBased,
+    helperType: HelperType.fallbackBased, //TODO:
   );
   runApp(
     DevicePreview(

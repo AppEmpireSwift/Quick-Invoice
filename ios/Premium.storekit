@@ -9,7 +9,7 @@
       }
     ]
   },
-  "identifier" : "CE6AC5B4",
+  "identifier" : "1C7EDB9A",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -17,7 +17,7 @@
     {
       "displayPrice" : "59.99",
       "familyShareable" : false,
-      "internalID" : "859610DB",
+      "internalID" : "A15A244C",
       "localizations" : [
         {
           "description" : "",
@@ -25,33 +25,21 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.example.flutterWaSkeleton.lifetime",
+      "productID" : "com.QuickInvoicea23p.appLifetime",
       "referenceName" : "Lifetime",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
-    "_billingGracePeriodEnabled" : false,
-    "_compatibilityTimeRate" : {
-      "3" : 6
-    },
     "_failTransactionsEnabled" : false,
-    "_locale" : "en_US",
-    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
-        "current" : {
-          "index" : 2,
-          "type" : "generic"
-        },
+        "current" : null,
         "enabled" : false,
         "name" : "Load Products"
       },
       {
-        "current" : {
-          "index" : 1,
-          "type" : "generic"
-        },
+        "current" : null,
         "enabled" : false,
         "name" : "Purchase"
       },
@@ -66,10 +54,7 @@
         "name" : "App Store Sync"
       },
       {
-        "current" : {
-          "index" : 2,
-          "type" : "generic"
-        },
+        "current" : null,
         "enabled" : false,
         "name" : "Subscription Status"
       },
@@ -79,10 +64,7 @@
         "name" : "App Transaction"
       },
       {
-        "current" : {
-          "index" : 3,
-          "type" : "generic"
-        },
+        "current" : null,
         "enabled" : false,
         "name" : "Manage Subscriptions Sheet"
       },
@@ -96,12 +78,11 @@
         "enabled" : false,
         "name" : "Offer Code Redeem Sheet"
       }
-    ],
-    "_timeRate" : 1003
+    ]
   },
   "subscriptionGroups" : [
     {
-      "id" : "3B85A69E",
+      "id" : "390DC71C",
       "localizations" : [
 
       ],
@@ -114,10 +95,10 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "12.99",
+          "displayPrice" : "4.99",
           "familyShareable" : false,
           "groupNumber" : 1,
-          "internalID" : "AA62C56D",
+          "internalID" : "53EBEC61",
           "introductoryOffer" : null,
           "localizations" : [
             {
@@ -126,10 +107,10 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.example.flutterWaSkeleton.month",
-          "recurringSubscriptionPeriod" : "P2M",
-          "referenceName" : "Monthly",
-          "subscriptionGroupID" : "3B85A69E",
+          "productID" : "com.QuickInvoicea23p.appWeek",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "Week",
+          "subscriptionGroupID" : "390DC71C",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
 
@@ -145,9 +126,9 @@
           "displayPrice" : "4.99",
           "familyShareable" : false,
           "groupNumber" : 1,
-          "internalID" : "A937149A",
+          "internalID" : "29B8AF02",
           "introductoryOffer" : {
-            "internalID" : "8C22D4F9",
+            "internalID" : "250CC118",
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
           },
@@ -158,10 +139,38 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.example.flutterWaSkeleton.week",
+          "productID" : "com.QuickInvoicea23p.appWeekTrial",
           "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "Weekly",
-          "subscriptionGroupID" : "3B85A69E",
+          "referenceName" : "Week-Trial",
+          "subscriptionGroupID" : "390DC71C",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "12.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "DD066615",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.QuickInvoicea23p.appMonth",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Month",
+          "subscriptionGroupID" : "390DC71C",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
 
@@ -177,7 +186,7 @@
           "displayPrice" : "39.99",
           "familyShareable" : false,
           "groupNumber" : 1,
-          "internalID" : "B05B01D4",
+          "internalID" : "58EF8BBF",
           "introductoryOffer" : null,
           "localizations" : [
             {
@@ -186,38 +195,10 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.example.flutterWaSkeleton.year",
+          "productID" : "com.QuickInvoicea23p.appYear",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Yearly",
-          "subscriptionGroupID" : "3B85A69E",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [
-
-          ]
-        },
-        {
-          "adHocOffers" : [
-
-          ],
-          "codeOffers" : [
-
-          ],
-          "displayPrice" : "4.99",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "F000873A",
-          "introductoryOffer" : null,
-          "localizations" : [
-            {
-              "description" : "",
-              "displayName" : "",
-              "locale" : "en_US"
-            }
-          ],
-          "productID" : "com.example.flutterWaSkeleton.weekNonTrial",
-          "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "Weekly",
-          "subscriptionGroupID" : "3B85A69E",
+          "referenceName" : "Year",
+          "subscriptionGroupID" : "390DC71C",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
 
