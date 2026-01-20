@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Colors, Divider;
+import 'package:flutter/material.dart' show Divider;
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -359,10 +359,9 @@ class _HomeTabState extends State<HomeTab> {
 class _EmptyStateWidget extends StatelessWidget {
   final String message;
   final String? subtitle;
-  final IconData? icon;
   final Widget? action;
 
-  const _EmptyStateWidget({required this.message, this.subtitle, this.icon, this.action});
+  const _EmptyStateWidget({required this.message, this.subtitle, this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -372,7 +371,7 @@ class _EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon ?? CupertinoIcons.doc_text, size: 64.r, color: ColorStyles.secondary),
+            Icon(CupertinoIcons.doc_text, size: 64.r, color: ColorStyles.secondary),
             SizedBox(height: 16.r),
             Text(message, textAlign: TextAlign.center, style: TextStyles.title3Emphasized),
             if (subtitle != null) ...[
@@ -1180,7 +1179,7 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                     keyboardType: keyboardType,
                   ),
                 ),
-                if (suffix != null) ...[SizedBox(width: 8.r), suffix!],
+                if (suffix != null) ...[SizedBox(width: 8.r), suffix],
               ],
             ),
           ),
@@ -1355,18 +1354,8 @@ class _InputWidget extends StatelessWidget {
   final TextEditingController controller;
   final String? label;
   final String? placeholder;
-  final TextInputType keyboardType;
-  final int maxLines;
-  final Widget? suffix;
 
-  const _InputWidget({
-    required this.controller,
-    this.label,
-    this.placeholder,
-    this.keyboardType = TextInputType.text,
-    this.maxLines = 1,
-    this.suffix,
-  });
+  const _InputWidget({required this.controller, this.label, this.placeholder});
 
   @override
   Widget build(BuildContext context) {
@@ -1401,13 +1390,8 @@ class _InputWidget extends StatelessWidget {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
                   decoration: null,
-                  keyboardType: keyboardType,
-                  maxLines: maxLines,
                 ),
               ),
-              if (suffix != null) ...[
-                Padding(padding: EdgeInsets.only(right: 16.r), child: suffix!),
-              ],
             ],
           ),
         ),
@@ -1674,7 +1658,7 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                             onChanged: (value) {
                               _updateStatus(value ? 'paid' : 'pending');
                             },
-                            activeColor: ColorStyles.green,
+                            activeTrackColor: ColorStyles.green,
                           ),
                         ],
                       ),

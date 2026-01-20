@@ -358,9 +358,7 @@ class _CompanyInfoPageState extends State<CompanyInfoPage> {
         ),
       ),
     );
-  }
-
-  Widget _buildTextField({
+  }  Widget _buildTextField({
     required TextEditingController controller,
     required String label,
     required String placeholder,

@@ -9,6 +9,19 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/Roboto-Bold.ttf
+  String get robotoBold => 'assets/fonts/Roboto-Bold.ttf';
+
+  /// File path: assets/fonts/Roboto-Regular.ttf
+  String get robotoRegular => 'assets/fonts/Roboto-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [robotoBold, robotoRegular];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -126,6 +139,18 @@ class $AssetsImagesOnboardingGen {
   AssetGenImage get onb5 =>
       const AssetGenImage('assets/images/onboarding/onb5.png');
 
+  /// File path: assets/images/onboarding/onb5_album.png
+  AssetGenImage get onb5Album =>
+      const AssetGenImage('assets/images/onboarding/onb5_album.png');
+
+  /// File path: assets/images/onboarding/onb5_ipad.png
+  AssetGenImage get onb5Ipad =>
+      const AssetGenImage('assets/images/onboarding/onb5_ipad.png');
+
+  /// File path: assets/images/onboarding/onb5_se.png
+  AssetGenImage get onb5Se =>
+      const AssetGenImage('assets/images/onboarding/onb5_se.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     onb1,
@@ -145,6 +170,9 @@ class $AssetsImagesOnboardingGen {
     onb4Ipad,
     onb4Se,
     onb5,
+    onb5Album,
+    onb5Ipad,
+    onb5Se,
   ];
 }
 
@@ -184,6 +212,7 @@ class $AssetsImagesPremiumGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsVectorsGen vectors = $AssetsVectorsGen();

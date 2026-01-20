@@ -1,11 +1,9 @@
 import 'package:apphud_helper/apphud_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../../core/core.dart';
 import '../../../core/services/ui.helper.dart';
 import '../../../core/ui/home_indicator_space.dart';
@@ -51,6 +49,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           Assets.images.onboarding.onb2Se.path,
           Assets.images.onboarding.onb3Se.path,
           Assets.images.onboarding.onb4Se.path,
+          Assets.images.onboarding.onb5Se.path,
         ];
       case AppleDeviceType.iphoneBase:
         pages = [
@@ -58,6 +57,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           Assets.images.onboarding.onb2.path,
           Assets.images.onboarding.onb3.path,
           Assets.images.onboarding.onb4.path,
+          Assets.images.onboarding.onb5.path,
         ];
       case AppleDeviceType.ipad:
         if (uiHelper.isLandscape) {
@@ -66,6 +66,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             Assets.images.onboarding.onb2Album.path,
             Assets.images.onboarding.onb3Album.path,
             Assets.images.onboarding.onb4Album.path,
+            Assets.images.onboarding.onb5Album.path,
           ];
         } else {
           pages = [
@@ -73,31 +74,26 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             Assets.images.onboarding.onb2Ipad.path,
             Assets.images.onboarding.onb3Ipad.path,
             Assets.images.onboarding.onb4Ipad.path,
+            Assets.images.onboarding.onb5Ipad.path,
           ];
         }
     }
 
-    /// Strings from your figma design
-    final firstTitles = ['User Choice', 'We value', 'Use'];
-    final secondTitles = [
-      'Math Brain Booster',
-      'Your Feedback',
-      Core.config.appName,
-      // 'Arithmetic Adventure',
-    ];
+    final firstTitles = ['Invoice', 'Send', 'Use', 'Select', 'We Value'];
+    final secondTitles = ['Making', 'to Client', 'Template', 'Your Feedback'];
     final descriptions = [
-      'Exercise your brain, learn some quick\ncomputational know-how for fast computations',
-      'Share your opinion about\n${Core.config.appName}',
-      'Practice with lots of fun challenges\nand track your progress',
+      "Create invoices from scratch or use\nready-made templates",
+      "Share invoices with your personal customer base,\nand send them directly from the app",
+      "Choose a convenient template for work and\ntransform your invoice",
+      "Any feedback is important to us so that\nwe could improve our app!",
     ];
 
     final cloudText = [
-      'Subscribe to unlimited exercise',
-      'Unlock all practice',
-      'Access to custom exercise editor',
+      'Unlimited invoices',
+      'Build a customer base',
+      'Use templates',
+      'Check why users love it',
     ];
-
-    ///
 
     final lastPageNumber = pages.length - 1;
     return Scaffold(
@@ -107,17 +103,10 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           Positioned.fill(
             child: PageView(
               controller: _pageController,
-              //comment this to use scroll for fast check ui
-              // physics: NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               children:
                   pages
-                      .map(
-                        (p) => Image.asset(
-                          p,
-                          fit: BoxFit.cover,
-                          alignment: Alignment(0, -0.4),
-                        ),
-                      )
+                      .map((p) => Image.asset(p, fit: BoxFit.cover, alignment: Alignment(0, -0.4)))
                       .toList(),
             ),
           ),
@@ -140,12 +129,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
                       Widget titleSection;
 
-                      ///build title
-                      ///last page - onboarding paywall
                       if (pageNumber == lastPageNumber) {
                         titleSection = PaywallTitle(
                           titleBuilder: (title) {
-                            //because at design we have two colors for title
                             final titles = title.split('\n');
                             return Text.rich(
                               TextSpan(
@@ -156,12 +142,18 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                     TextSpan(
                                       text: titles.last,
                                       style: TextStyle(
-                                        color: ColorStyles.primary,
+                                        fontSize: 26.spMin,
+                                        letterSpacing: -0.4,
+                                        color: CupertinoColors.black,
                                       ),
                                     ),
                                 ],
                               ),
-                              style: TextStyles.onboarding,
+                              style: TextStyle(
+                                fontSize: 26.spMin,
+                                letterSpacing: -0.4,
+                                color: CupertinoColors.black,
+                              ),
                               textAlign: TextAlign.center,
                             );
                           },
@@ -174,7 +166,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               TextSpan(text: '\n'),
                               TextSpan(
                                 text: secondTitles[pageNumber],
-                                style: TextStyle(color: ColorStyles.primary),
+                                style: TextStyle(
+                                  fontSize: 26.spMin,
+                                  letterSpacing: -0.4,
+                                  color: CupertinoColors.black,
+                                ),
                               ),
                             ],
                           ),
@@ -185,8 +181,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
                       Widget descriptionSection;
 
-                      ///build description
-                      ///last page - onboarding paywall
                       if (pageNumber == lastPageNumber) {
                         descriptionSection = OnBoardingPaywallActiveProductInfo(
                           infoBuilder: (
@@ -198,20 +192,20 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               TextSpan(
                                 children: [
                                   TextSpan(text: subInfo),
-                                  if (limitedButton != null)
-                                    TextSpan(text: '\n'),
+                                  if (limitedButton != null) TextSpan(text: '\n'),
                                   if (limitedButton != null)
                                     TextSpan(
                                       text: limitedButton,
-                                      recognizer:
-                                          TapGestureRecognizer()
-                                            ..onTap = onLimitedTap,
+                                      recognizer: TapGestureRecognizer()..onTap = onLimitedTap,
                                     ),
                                 ],
                               ),
                               textAlign: TextAlign.center,
-                              style: TextStyles.subheadlineRegular.copyWith(
-                                color: ColorStyles.labelsTertiary,
+                              style: TextStyle(
+                                fontSize: 15.sp.clamp(0, 21),
+                                letterSpacing: -0.23,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromRGBO(60, 60, 67, 0.6),
                               ),
                             );
                           },
@@ -220,16 +214,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                         descriptionSection = Text(
                           descriptions[pageNumber],
                           textAlign: TextAlign.center,
-                          style: TextStyles.subheadlineRegular.copyWith(
-                            color: ColorStyles.labelsTertiary,
+                          style: TextStyle(
+                            fontSize: 15.sp.clamp(0, 21),
+                            letterSpacing: -0.23,
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromRGBO(60, 60, 67, 0.6),
                           ),
                         );
                       }
 
                       Widget button;
-
-                      ///build button
-                      ///last page - onboarding paywall
                       if (pageNumber == lastPageNumber) {
                         button = PurchaseButtonBuilder(
                           buttonBuilder: (buttonText, onPressed) {
@@ -255,46 +249,35 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
                       if (pageNumber == lastPageNumber) {
                         cloud = OnBoardingPaywallTrialSwitchBuilder(
-                          switchBuilder: (
-                            bool hide,
-                            bool? value,
-                            String? text,
-                            onChange,
-                          ) {
+                          switchBuilder: (bool hide, bool? value, String? text, onChange) {
                             return Container(
                               height: 48.spMin,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100).r,
-                                color: hide ? null : ColorStyles.bgSecondary,
+                                color: hide ? null : Color.fromRGBO(203, 221, 255, 0.33),
                               ),
 
                               child:
                                   hide
                                       ? Container()
                                       : Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.all(12.0.spMin),
                                             child: Text(
                                               text ?? '',
-                                              style: TextStyles
-                                                  .subheadlineRegular
-                                                  .copyWith(
-                                                    color: ColorStyles.black,
-                                                  ),
+                                              style: TextStyles.subheadlineRegular.copyWith(
+                                                color: ColorStyles.black,
+                                              ),
                                             ),
                                           ),
 
                                           Padding(
-                                            padding: EdgeInsets.only(
-                                              right: 10.spMin,
-                                            ),
+                                            padding: EdgeInsets.only(right: 10.spMin),
                                             child: Switch.adaptive(
                                               value: value ?? false,
-                                              onChanged:
-                                                  (_) => onChange?.call(),
+                                              onChanged: (_) => onChange?.call(),
                                             ),
                                           ),
                                         ],
@@ -303,15 +286,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           },
                         );
                       } else {
-                        if (cloudText.length <= pageNumber ||
-                            cloudText[pageNumber].isEmpty) {
+                        if (cloudText.length <= pageNumber || cloudText[pageNumber].isEmpty) {
                           cloud = Container(height: 48.spMin);
                         } else {
                           cloud = Container(
                             height: 48.spMin,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100).r,
-                              color: ColorStyles.bgSecondary,
+                              color: Color.fromRGBO(203, 221, 255, 0.33),
                             ),
 
                             child: Row(
@@ -320,8 +302,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                   padding: EdgeInsets.all(12.0.spMin),
                                   child: Text(
                                     cloudText[pageNumber],
-                                    style: TextStyles.subheadlineRegular
-                                        .copyWith(color: ColorStyles.black),
+                                    style: TextStyles.subheadlineRegular.copyWith(
+                                      color: ColorStyles.black,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -329,8 +312,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           );
                         }
                       }
-
-                      ///build page
                       page = Column(
                         children: [
                           SizedBox(
@@ -348,20 +329,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               count: pages.length,
                             ),
                           ),
-                          SizedBox(height: 8.r),
+                          SizedBox(height: 8.h),
                           titleSection,
-
-                          SizedBox(height: 12.r),
+                          SizedBox(height: 12.h),
                           descriptionSection,
-                          SizedBox(height: 8.r),
+                          SizedBox(height: 8.h),
                           cloud,
-                          SizedBox(height: 6.r),
+                          SizedBox(height: 6.h),
                           button,
                         ],
                       );
-
-                      ///last page - onboarding paywall
-                      ///wrap it with special wrapper
                       if (pageNumber == lastPageNumber) {
                         page = PaywallWrapper(
                           onSkipPaywallCallback: () {

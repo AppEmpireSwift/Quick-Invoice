@@ -2,15 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WAFilledButton extends StatefulWidget {
   final FutureOr<void> Function()? onPressed;
   final Widget child;
-  const WAFilledButton({
-    super.key,
-    required this.onPressed,
-    required this.child,
-  });
+  const WAFilledButton({super.key, required this.onPressed, required this.child});
 
   @override
   State<WAFilledButton> createState() => _WAFilledButtonState();
@@ -21,9 +18,12 @@ class _WAFilledButtonState extends State<WAFilledButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: handleOnPressed,
-      child: isLoading ? CircularProgressIndicator.adaptive() : widget.child,
+    return SizedBox(
+      height: 52.h,
+      child: FilledButton(
+        onPressed: handleOnPressed,
+        child: isLoading ? CircularProgressIndicator.adaptive() : widget.child,
+      ),
     );
   }
 
