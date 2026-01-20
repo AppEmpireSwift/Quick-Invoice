@@ -30,7 +30,7 @@ class ClientsTab extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         onPressed: () {
                           HapticFeedback.lightImpact();
-                          Navigator.of(context).push(
+                          Navigator.of(context, rootNavigator: true).push(
                             CupertinoPageRoute(builder: (_) => const AddClientPage()),
                           );
                         },
@@ -86,6 +86,9 @@ class AddClientPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Text('New Client'),
         backgroundColor: ColorStyles.white,
+        automaticBackgroundVisibility: false,
+        transitionBetweenRoutes: false,
+        border: null,
       ),
       child: SafeArea(
         child: Padding(

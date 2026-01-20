@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../style/style.dart';
 import 'tabs/home.dart';
 import 'tabs/clients.dart';
+import 'tabs/analytics.dart';
 import 'tabs/settings.dart';
 
 class MainPage extends StatefulWidget {
@@ -20,52 +21,41 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: ColorStyles.bgSecondary,
-      child: Stack(
+      child: Column(
         children: [
-          Positioned.fill(
+          Expanded(
             child: IndexedStack(
               index: _currentIndex,
-              children: [
-                Navigator(
-                  onGenerateRoute: (_) => CupertinoPageRoute(builder: (_) => const HomeTab()),
-                ),
-                Navigator(
-                  onGenerateRoute: (_) => CupertinoPageRoute(builder: (_) => const ClientsTab()),
-                ),
-                Navigator(
-                  onGenerateRoute: (_) => CupertinoPageRoute(builder: (_) => const SettingsTab()),
-                ),
+              children: const [
+                HomeTab(),
+                ClientsTab(),
+                AnalyticsTab(),
+                SettingsTab(),
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SafeArea(
-              child: Container(
-                height: 60.r,
-                margin: EdgeInsets.only(bottom: 0),
-                decoration: BoxDecoration(
-                  color: ColorStyles.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.r),
-                    topRight: Radius.circular(10.r),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorStyles.black.withValues(alpha: 0.08),
-                      blurRadius: 8,
-                      offset: Offset(0, -2),
-                    ),
-                  ],
+          Container(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            decoration: BoxDecoration(
+              color: ColorStyles.white,
+              boxShadow: [
+                BoxShadow(
+                  color: ColorStyles.black.withValues(alpha: 0.08),
+                  blurRadius: 8,
+                  offset: Offset(0, -2),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildTabItem(0, CupertinoIcons.doc_text_fill, 'Invoices'),
-                    _buildTabItem(1, CupertinoIcons.person_2_fill, 'Clients'),
-                    _buildTabItem(2, CupertinoIcons.settings, 'Settings'),
-                  ],
-                ),
+              ],
+            ),
+            child: SizedBox(
+              height: 60.r,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildTabItem(0, CupertinoIcons.doc_text_fill, 'Invoices'),
+                  _buildTabItem(1, CupertinoIcons.person_2_fill, 'Clients'),
+                  _buildTabItem(2, CupertinoIcons.chart_bar_fill, 'Analytics'),
+                  _buildTabItem(3, CupertinoIcons.settings, 'Settings'),
+                ],
               ),
             ),
           ),

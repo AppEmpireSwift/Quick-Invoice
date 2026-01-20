@@ -20,7 +20,7 @@ class SettingsTab extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(
             child: Container(
-              color: ColorStyles.white.withValues(alpha: 0.9),
+              color: ColorStyles.white,
               padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,15 +72,16 @@ class SettingsTab extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
-        children: items.asMap().entries.map((e) {
-          final isLast = e.key == items.length - 1;
-          return Column(
-            children: [
-              e.value,
-              if (!isLast) Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
-            ],
-          );
-        }).toList(),
+        children:
+            items.asMap().entries.map((e) {
+              final isLast = e.key == items.length - 1;
+              return Column(
+                children: [
+                  e.value,
+                  if (!isLast) Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+                ],
+              );
+            }).toList(),
       ),
     );
   }
@@ -146,10 +147,7 @@ class SettingsTab extends StatelessWidget {
   void _openPrivacyPolicy(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        builder: (_) => _PolicyPage(
-          title: 'Privacy Policy',
-          content: _privacyPolicyText,
-        ),
+        builder: (_) => _PolicyPage(title: 'Privacy Policy', content: _privacyPolicyText),
       ),
     );
   }
@@ -157,10 +155,7 @@ class SettingsTab extends StatelessWidget {
   void _openTermsOfUse(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        builder: (_) => _PolicyPage(
-          title: 'Terms of Use',
-          content: _termsOfUseText,
-        ),
+        builder: (_) => _PolicyPage(title: 'Terms of Use', content: _termsOfUseText),
       ),
     );
   }

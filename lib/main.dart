@@ -1,9 +1,6 @@
 import 'package:device_preview_plus/device_preview_plus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import 'package:apphud_helper/apphud_helper.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'app/app.dart';
 import 'app/ui/onboarding/onboarding.page.dart';
 import 'app/ui/root/main.page.dart';
