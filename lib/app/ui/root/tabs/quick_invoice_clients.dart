@@ -68,20 +68,21 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Clients', style: TextStyles.largeTitleEmphasized),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
-                        Navigator.of(context, rootNavigator: true)
-                            .push(CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()))
-                            .then((_) => _loadClients());
-                      },
-                      child: Icon(
-                        CupertinoIcons.plus_circle_fill,
-                        color: ColorStyles.primary,
-                        size: 28.r,
+                    if (_clients.isNotEmpty)
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.of(context, rootNavigator: true)
+                              .push(CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()))
+                              .then((_) => _loadClients());
+                        },
+                        child: Icon(
+                          CupertinoIcons.plus_circle_fill,
+                          color: ColorStyles.primary,
+                          size: 28.r,
+                        ),
                       ),
-                    ),
                   ],
                 ),
                 SizedBox(height: 16.r),
@@ -124,6 +125,27 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                             'Add your first client',
                             style: TextStyles.footnoteRegular.copyWith(
                               color: ColorStyles.secondary,
+                            ),
+                          ),
+                          SizedBox(height: 20.r),
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              HapticFeedback.lightImpact();
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()))
+                                  .then((_) => _loadClients());
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24.r, vertical: 12.r),
+                              decoration: BoxDecoration(
+                                color: ColorStyles.primary,
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Text(
+                                'Add Client',
+                                style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                              ),
                             ),
                           ),
                         ],
@@ -541,13 +563,13 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: ColorStyles.pink.withValues(alpha: 0.1),
+                    color: ColorStyles.pink,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
                     child: Text(
                       'Delete Client',
-                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.pink),
+                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
                     ),
                   ),
                 ),

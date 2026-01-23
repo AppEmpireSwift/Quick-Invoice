@@ -32,7 +32,10 @@ class _QuickInvoicePdfPreviewPageState extends State<QuickInvoicePdfPreviewPage>
     final path = await PdfService.savePdfToTemp(widget.invoice, template: widget.template);
     if (mounted) {
       setState(() {
-        _pdfController = PdfControllerPinch(document: PdfDocument.openFile(path));
+        _pdfController = PdfControllerPinch(
+          document: PdfDocument.openFile(path),
+          viewportFraction: 0.7,
+        );
         _loading = false;
       });
     }
@@ -60,10 +63,12 @@ class _QuickInvoicePdfPreviewPageState extends State<QuickInvoicePdfPreviewPage>
           child: Icon(CupertinoIcons.share, color: ColorStyles.primary, size: 22.r),
         ),
       ),
-      child:
-          _loading || _pdfController == null
-              ? const Center(child: CupertinoActivityIndicator())
-              : PdfViewPinch(controller: _pdfController!, padding: 16),
+      child: SafeArea(
+        child:
+            _loading || _pdfController == null
+                ? const Center(child: CupertinoActivityIndicator())
+                : PdfViewPinch(minScale: 0.6, controller: _pdfController!, padding: 16),
+      ),
     );
   }
 }
@@ -108,51 +113,56 @@ class _TemplateSelectorModalState extends State<TemplateSelectorModal> {
             SizedBox(height: 24.r),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.r),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _TemplateOption(
-                      name: 'Classic',
-                      template: PdfTemplate.classic,
-                      isSelected: _selectedTemplate == PdfTemplate.classic,
-                      onTap: () => setState(() => _selectedTemplate = PdfTemplate.classic),
-                    ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 400),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _TemplateOption(
+                          name: 'Classic',
+                          template: PdfTemplate.classic,
+                          isSelected: _selectedTemplate == PdfTemplate.classic,
+                          onTap: () => setState(() => _selectedTemplate = PdfTemplate.classic),
+                        ),
+                      ),
+                      SizedBox(width: 12.r),
+                      Expanded(
+                        child: _TemplateOption(
+                          name: 'Modern',
+                          template: PdfTemplate.modern,
+                          isSelected: _selectedTemplate == PdfTemplate.modern,
+                          isLocked: !PremiumLimits.isPremium,
+                          onTap: () {
+                            if (!PremiumLimits.isPremium) {
+                              Navigator.pop(context);
+                              QuickInvoiceMainPaywallPage.show(context);
+                              return;
+                            }
+                            setState(() => _selectedTemplate = PdfTemplate.modern);
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 12.r),
+                      Expanded(
+                        child: _TemplateOption(
+                          name: 'Minimal',
+                          template: PdfTemplate.minimal,
+                          isSelected: _selectedTemplate == PdfTemplate.minimal,
+                          isLocked: !PremiumLimits.isPremium,
+                          onTap: () {
+                            if (!PremiumLimits.isPremium) {
+                              Navigator.pop(context);
+                              QuickInvoiceMainPaywallPage.show(context);
+                              return;
+                            }
+                            setState(() => _selectedTemplate = PdfTemplate.minimal);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 12.r),
-                  Expanded(
-                    child: _TemplateOption(
-                      name: 'Modern',
-                      template: PdfTemplate.modern,
-                      isSelected: _selectedTemplate == PdfTemplate.modern,
-                      isLocked: !PremiumLimits.isPremium,
-                      onTap: () {
-                        if (!PremiumLimits.isPremium) {
-                          Navigator.pop(context);
-                          QuickInvoiceMainPaywallPage.show(context);
-                          return;
-                        }
-                        setState(() => _selectedTemplate = PdfTemplate.modern);
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 12.r),
-                  Expanded(
-                    child: _TemplateOption(
-                      name: 'Minimal',
-                      template: PdfTemplate.minimal,
-                      isSelected: _selectedTemplate == PdfTemplate.minimal,
-                      isLocked: !PremiumLimits.isPremium,
-                      onTap: () {
-                        if (!PremiumLimits.isPremium) {
-                          Navigator.pop(context);
-                          QuickInvoiceMainPaywallPage.show(context);
-                          return;
-                        }
-                        setState(() => _selectedTemplate = PdfTemplate.minimal);
-                      },
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             SizedBox(height: 24.r),
@@ -231,7 +241,12 @@ class _TemplateOption extends StatelessWidget {
                   Icon(CupertinoIcons.lock_fill, size: 12.r, color: ColorStyles.secondary),
                   SizedBox(width: 4.r),
                 ],
-                Text(name, style: TextStyles.footnoteEmphasized.copyWith(color: isLocked ? ColorStyles.secondary : null)),
+                Text(
+                  name,
+                  style: TextStyles.footnoteEmphasized.copyWith(
+                    color: isLocked ? ColorStyles.secondary : null,
+                  ),
+                ),
               ],
             ),
           ],

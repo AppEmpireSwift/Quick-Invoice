@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -13,6 +11,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../style/style.dart';
 import '../../app.dart';
 import '../common/filled_button.dart';
+import '../company/quick_invoice_company_info.dart';
 import 'widgets/terms_policy_section.dart';
 
 class QuickInvoiceOnBoardingPage extends StatefulWidget {
@@ -83,7 +82,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
       "Create invoices from scratch or use\nready-made templates",
       "Share invoices with your personal customer base,\nand send them directly from the app",
       "Choose a convenient template for work and\ntransform your invoice",
-      "Any feedback is important to us so that\nwe could improve our app!",
+      "Any feedback is impoxrtant to us so that\nwe could improve our app!",
     ];
 
     final cloudText = [
@@ -130,7 +129,6 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                       if (pageNumber == lastPageNumber) {
                         titleSection = PaywallTitle(
                           titleBuilder: (title) {
-                            log('$title');
                             final titles = title.split('\n');
                             return Text.rich(
                               TextSpan(
@@ -141,18 +139,14 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                     TextSpan(
                                       text: titles.last,
                                       style: TextStyle(
-                                        fontSize: 26.sp.clamp(0, 32),
+                                        fontSize: 26.spMin,
                                         letterSpacing: -0.4,
                                         color: CupertinoColors.black,
                                       ),
                                     ),
                                 ],
                               ),
-                              style: TextStyle(
-                                fontSize: 26.sp.clamp(0, 32),
-                                letterSpacing: -0.4,
-                                color: CupertinoColors.black,
-                              ),
+                              style: TextStyles.onboarding,
                               textAlign: TextAlign.center,
                             );
                           },
@@ -166,7 +160,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                               TextSpan(
                                 text: secondTitles[pageNumber],
                                 style: TextStyle(
-                                  fontSize: 26.sp.clamp(0, 32),
+                                  fontSize: 26.spMin,
                                   letterSpacing: -0.4,
                                   color: CupertinoColors.black,
                                 ),
@@ -339,21 +333,17 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                         page = PaywallWrapper(
                           onSkipPaywallCallback: () {
                             QIBoardingHelper.markOnBoardingAsWatched();
-
-                            //todo your router. for stage 2
                             Navigator.of(
                               context,
                               rootNavigator: true,
-                            ).pushReplacement(QIHome.route());
+                            ).pushReplacement(QuickInvoiceCompanyInfoPage.route());
                           },
                           onSuccessPurchaseCallback: () {
                             QIBoardingHelper.markOnBoardingAsWatched();
-
-                            //todo your router. for stage 2
                             Navigator.of(
                               context,
                               rootNavigator: true,
-                            ).pushReplacement(QIHome.route());
+                            ).pushReplacement(QuickInvoiceCompanyInfoPage.route());
                           },
                           paywallType: PaywallType.onboarding,
                           paywallPage: page,

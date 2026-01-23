@@ -33,16 +33,14 @@ void main() async {
       mainPaywallSettings: MainPaywallSettings(),
       onBoardingPaywallSettings: OnBoardingPaywallSettings(),
     ),
-    helperType: HelperType.fallbackBased, //TODO:
+    helperType: HelperType.apphud, 
   );
   runApp(
     DevicePreview(
-      enabled: true,
+      enabled: false,
       builder: (context) {
         return const QuickInvoiceApp();
       },
     ),
   );
 }
-
-//TODO: fix bundle id

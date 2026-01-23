@@ -1,0 +1,135 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../style/style.dart';
+import '../../../core/core.dart';
+
+class QuickInvoiceCompanyInfoPage extends StatefulWidget {
+  const QuickInvoiceCompanyInfoPage({super.key});
+
+  static Route route() => CupertinoPageRoute(builder: (_) => const QuickInvoiceCompanyInfoPage());
+
+  @override
+  State<QuickInvoiceCompanyInfoPage> createState() => _QuickInvoiceCompanyInfoPageState();
+}
+
+class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPage> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
+  final _taxIdController = TextEditingController();
+  final _websiteController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _taxIdController.dispose();
+    _websiteController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('company_name', _nameController.text.trim());
+    await prefs.setString('company_email', _emailController.text.trim());
+    await prefs.setString('company_phone', _phoneController.text.trim());
+    await prefs.setString('company_address', _addressController.text.trim());
+    await prefs.setString('company_tax_id', _taxIdController.text.trim());
+    await prefs.setString('company_website', _websiteController.text.trim());
+    await prefs.setBool('company_info_filled', true);
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pushReplacement(QIHome.route());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      backgroundColor: ColorStyles.bgSecondary,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 24.r),
+              Text('Company Info', style: TextStyles.largeTitleEmphasized),
+              SizedBox(height: 8.r),
+              Text(
+                'This information will appear on your invoices',
+                style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+              ),
+              SizedBox(height: 32.r),
+              Container(
+                padding: EdgeInsets.all(16.r),
+                decoration: BoxDecoration(
+                  color: ColorStyles.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Column(
+                  children: [
+                    _buildField('Company Name', 'Your company name', _nameController),
+                    SizedBox(height: 16.r),
+                    _buildField('Email', 'company@email.com', _emailController),
+                    SizedBox(height: 16.r),
+                    _buildField('Phone', '+1 234 567 890', _phoneController),
+                    SizedBox(height: 16.r),
+                    _buildField('Address', 'Company address', _addressController),
+                    SizedBox(height: 16.r),
+                    _buildField('Tax ID', 'Tax identification number', _taxIdController),
+                    SizedBox(height: 16.r),
+                    _buildField('Website', 'www.company.com', _websiteController),
+                  ],
+                ),
+              ),
+              SizedBox(height: 32.r),
+              CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  _save();
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 50.r,
+                  decoration: BoxDecoration(
+                    color: ColorStyles.primary,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Center(
+                    child: Text('Continue', style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildField(String label, String placeholder, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+        SizedBox(height: 8.r),
+        CupertinoTextField(
+          controller: controller,
+          placeholder: placeholder,
+          padding: EdgeInsets.all(12.r),
+          decoration: BoxDecoration(
+            color: ColorStyles.fillsTertiary,
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+        ),
+      ],
+    );
+  }
+}

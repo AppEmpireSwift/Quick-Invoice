@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -279,6 +280,8 @@ class PdfService {
                   ),
                 ),
               ],
+              if (_buildSignature(invoice, font) != null)
+                _buildSignature(invoice, font)!,
               pw.Spacer(),
               pw.Center(
                 child: pw.Text(
@@ -611,6 +614,8 @@ class PdfService {
                   ),
                 ),
               ],
+              if (_buildSignature(invoice, font) != null)
+                _buildSignature(invoice, font)!,
             ],
           );
         },
@@ -866,6 +871,8 @@ class PdfService {
                   style: pw.TextStyle(font: font, fontSize: 11),
                 ),
               ],
+              if (_buildSignature(invoice, font) != null)
+                _buildSignature(invoice, font)!,
             ],
           );
         },
@@ -910,6 +917,21 @@ class PdfService {
           pw.Text(value, style: pw.TextStyle(font: font, fontSize: 11)),
         ],
       ),
+    );
+  }
+
+  static pw.Widget? _buildSignature(Invoice invoice, pw.Font font) {
+    if (invoice.signature.isEmpty) return null;
+    final bytes = base64Decode(invoice.signature);
+    final image = pw.MemoryImage(Uint8List.fromList(bytes));
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.SizedBox(height: 30),
+        pw.Text('Signature:', style: pw.TextStyle(font: font, fontSize: 11)),
+        pw.SizedBox(height: 8),
+        pw.Image(image, width: 150, height: 75, fit: pw.BoxFit.contain),
+      ],
     );
   }
 }

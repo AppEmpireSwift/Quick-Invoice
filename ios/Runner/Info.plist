@@ -36,12 +36,12 @@
 	<dict/>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to take photos of products, receipts, and documents for your invoices.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to select images for products, company logos, and invoice attachments.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need permission to save generated invoices and documents to your photo library.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone to record voice notes and descriptions for your invoices.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need permission to save generated invoices and documents to your photo library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to select images for products, company logos, and invoice attachments.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

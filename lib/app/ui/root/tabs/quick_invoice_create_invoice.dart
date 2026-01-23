@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:ui' as ui;
+
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Divider;
@@ -36,6 +39,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   final taxController = TextEditingController();
   String status = 'pending';
   final noteController = TextEditingController();
+  List<List<Offset>> _signatureStrokes = [];
 
   double get subtotal {
     final price = double.tryParse(priceController.text) ?? 0;
@@ -67,6 +71,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       taxController.text = edit.tax > 0 ? edit.tax.toString() : '';
       status = edit.status;
       noteController.text = edit.note;
+      if (edit.signature.isNotEmpty) {
+        _loadSignatureFromBase64(edit.signature);
+      }
     } else {
       invoiceDate = DateTime.now();
       dueDate = DateTime.now().add(Duration(days: 30));
@@ -93,6 +100,34 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   String _formatDate(DateTime? date) {
     if (date == null) return 'Select date';
     return DateFormat('MMM d, yyyy').format(date);
+  }
+
+  void _loadSignatureFromBase64(String base64Str) {
+    // Signature will show as image from base64 when editing
+  }
+
+  Future<String> _encodeSignature() async {
+    if (_signatureStrokes.isEmpty) return '';
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, 300, 150));
+    final paint = Paint()
+      ..color = const Color(0xFF000000)
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    for (final stroke in _signatureStrokes) {
+      if (stroke.length < 2) continue;
+      final path = Path()..moveTo(stroke.first.dx, stroke.first.dy);
+      for (int i = 1; i < stroke.length; i++) {
+        path.lineTo(stroke[i].dx, stroke[i].dy);
+      }
+      canvas.drawPath(path, paint);
+    }
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(300, 150);
+    final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+    if (byteData == null) return '';
+    return base64Encode(byteData.buffer.asUint8List());
   }
 
   Future<void> _selectClient() async {
@@ -174,6 +209,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   }
 
   Future<void> _handleSave() async {
+    final signatureData = await _encodeSignature();
     final edit = widget.editInvoice;
     if (edit != null) {
       final updated = InvoicesCompanion(
@@ -191,6 +227,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         status: Value(status),
         totalAmount: Value(total),
         note: Value(noteController.text),
+        signature: Value(signatureData),
       );
       await AppDatabase.instance.updateInvoice(updated);
     } else {
@@ -214,6 +251,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         status: Value(status),
         totalAmount: Value(total),
         note: Value(noteController.text),
+        signature: Value(signatureData),
       );
       await AppDatabase.instance.insertInvoice(invoice);
     }
@@ -447,10 +485,11 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
       child: Row(
         children: [
-          SizedBox(
-            width: 100.r,
-            child: Text(label, style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt)),
-          ),
+        SizedBox(
+          width: 115.r,
+          child: Text(label, style: TextStyles.calloutRegular.copyWith(color: ColorStyles.primaryTxt)),
+        ),
+          SizedBox(width: 12.r),
           Expanded(
             child: Row(
               children: [
@@ -512,7 +551,152 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             ],
           ),
         ),
+        SizedBox(height: 24.r),
+        Text('SIGNATURE', style: TextStyles.caption1Regular.copyWith(color: ColorStyles.secondary, letterSpacing: 0.5)),
+        SizedBox(height: 12.r),
+        CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: _showSignatureDialog,
+          child: Container(
+            width: double.infinity,
+            constraints: BoxConstraints(minHeight: 100.r),
+            decoration: BoxDecoration(
+              color: ColorStyles.white,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: _signatureStrokes.isEmpty ? ColorStyles.separator : ColorStyles.primary),
+            ),
+            child: _signatureStrokes.isEmpty
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(CupertinoIcons.signature, size: 28.r, color: ColorStyles.secondary),
+                      SizedBox(height: 8.r),
+                      Text('Tap to add signature', style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+                    ],
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: SizedBox(
+                      height: 200.r,
+                      width: double.infinity,
+                      child: CustomPaint(
+                        painter: _SignaturePainter(_signatureStrokes),
+                      ),
+                    ),
+                  ),
+          ),
+        ),
       ],
+    );
+  }
+
+  void _showSignatureDialog() {
+    List<List<Offset>> tempStrokes = List.from(_signatureStrokes.map((s) => List<Offset>.from(s)));
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return Center(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 24.r),
+                padding: EdgeInsets.all(20.r),
+                decoration: BoxDecoration(
+                  color: ColorStyles.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Add Signature', style: TextStyles.title3Emphasized),
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            setDialogState(() => tempStrokes = []);
+                          },
+                          child: Text('Clear', style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.primary)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.r),
+                    Container(
+                      height: 200.r,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: ColorStyles.bgSecondary,
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: ColorStyles.separator),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: GestureDetector(
+                          onPanStart: (details) {
+                            setDialogState(() {
+                              tempStrokes.add([details.localPosition]);
+                            });
+                          },
+                          onPanUpdate: (details) {
+                            setDialogState(() {
+                              tempStrokes.last.add(details.localPosition);
+                            });
+                          },
+                          child: CustomPaint(
+                            painter: _SignaturePainter(tempStrokes),
+                            size: Size.infinite,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8.r),
+                    Text('Draw your signature above', style: TextStyles.caption1Regular.copyWith(color: ColorStyles.secondary)),
+                    SizedBox(height: 20.r),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () => Navigator.pop(ctx),
+                            child: Container(
+                              height: 44.r,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: ColorStyles.separator),
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Center(child: Text('Cancel', style: TextStyles.bodyRegular)),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12.r),
+                        Expanded(
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              setState(() => _signatureStrokes = tempStrokes);
+                              Navigator.pop(ctx);
+                            },
+                            child: Container(
+                              height: 44.r,
+                              decoration: BoxDecoration(
+                                color: ColorStyles.primary,
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Center(child: Text('Done', style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white))),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -528,6 +712,31 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       ),
     );
   }
+}
+
+class _SignaturePainter extends CustomPainter {
+  final List<List<Offset>> strokes;
+  _SignaturePainter(this.strokes);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF000000)
+      ..strokeWidth = 2.0
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    for (final stroke in strokes) {
+      if (stroke.length < 2) continue;
+      final path = Path()..moveTo(stroke.first.dx, stroke.first.dy);
+      for (int i = 1; i < stroke.length; i++) {
+        path.lineTo(stroke[i].dx, stroke[i].dy);
+      }
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _SignaturePainter oldDelegate) => true;
 }
 
 class _ProgressIndicator extends StatelessWidget {

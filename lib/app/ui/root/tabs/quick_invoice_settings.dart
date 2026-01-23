@@ -116,7 +116,6 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
     return CupertinoButton(
       padding: EdgeInsets.zero,
       onPressed: () {
-        debugPrint('Settings item tapped: $title');
         HapticFeedback.lightImpact();
         onTap();
       },

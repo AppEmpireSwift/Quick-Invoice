@@ -21,11 +21,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
   List<Client> _clients = [];
   List<String> _currencies = [];
 
-  final Map<String, String> _periods = {
-    'week': 'Week',
-    'month': 'Month',
-    'year': 'Year',
-  };
+  final Map<String, String> _periods = {'week': 'Week', 'month': 'Month', 'year': 'Year'};
 
   @override
   void initState() {
@@ -128,8 +124,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
   }
 
   Map<String, double> _getDailyIncome() {
-    final filtered =
-        _getFilteredInvoices().where((i) => i.status == 'paid').toList();
+    final filtered = _getFilteredInvoices().where((i) => i.status == 'paid').toList();
     final Map<String, double> dailyIncome = {};
 
     if (_selectedPeriod == 'week') {
@@ -143,8 +138,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
 
       for (var invoice in filtered) {
         final dayName = DateFormat('E').format(invoice.invoiceDate);
-        dailyIncome[dayName] =
-            (dailyIncome[dayName] ?? 0.0) + invoice.totalAmount;
+        dailyIncome[dayName] = (dailyIncome[dayName] ?? 0.0) + invoice.totalAmount;
       }
     }
 
@@ -152,8 +146,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
   }
 
   Map<String, double> _getTopClients() {
-    final filtered =
-        _getFilteredInvoices().where((i) => i.status == 'paid').toList();
+    final filtered = _getFilteredInvoices().where((i) => i.status == 'paid').toList();
     final Map<String, double> clientTotals = {};
 
     for (var invoice in filtered) {
@@ -161,32 +154,25 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
           (clientTotals[invoice.clientName] ?? 0.0) + invoice.totalAmount;
     }
 
-    final sorted =
-        clientTotals.entries.toList()
-          ..sort((a, b) => b.value.compareTo(a.value));
+    final sorted = clientTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     return Map.fromEntries(sorted.take(5));
   }
 
-  Future<void> _showClientByName(String name) async {
-    final clients = await AppDatabase.instance.getAllClients();
-    final client = clients.where((c) => c.name == name).firstOrNull;
-    if (client != null && mounted) {
-      showCupertinoSheet(
-        context: context,
-        builder: (_) => AnalyticsClientInfoSheet(client: client),
-      );
-    }
-  }
-
   String _getCurrencySymbol() {
     switch (_selectedCurrency) {
-      case 'USD': return '\$';
-      case 'EUR': return '€';
-      case 'GBP': return '£';
-      case 'JPY': return '¥';
-      case 'RUB': return '₽';
-      default: return _selectedCurrency;
+      case 'USD':
+        return '\$';
+      case 'EUR':
+        return '€';
+      case 'GBP':
+        return '£';
+      case 'JPY':
+        return '¥';
+      case 'RUB':
+        return '₽';
+      default:
+        return _selectedCurrency;
     }
   }
 
@@ -201,9 +187,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
     final dailyIncome = _getDailyIncome();
     final topClients = _getTopClients();
     final maxIncome =
-        dailyIncome.values.isEmpty
-            ? 1.0
-            : dailyIncome.values.reduce((a, b) => a > b ? a : b);
+        dailyIncome.values.isEmpty ? 1.0 : dailyIncome.values.reduce((a, b) => a > b ? a : b);
 
     return CupertinoPageScaffold(
       backgroundColor: ColorStyles.bgSecondary,
@@ -265,7 +249,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                     ),
                     SizedBox(height: 12.r),
                   ],
-AnalyticsSegmentedControl(
+                  AnalyticsSegmentedControl(
                     segments: _periods,
                     selectedValue: _selectedPeriod,
                     onValueChanged: (value) {
@@ -374,49 +358,35 @@ AnalyticsSegmentedControl(
                                   height: 120.r,
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children:
                                         dailyIncome.entries.map((entry) {
                                           final height =
                                               maxIncome > 0
-                                                  ? (entry.value / maxIncome) *
-                                                      88.r
+                                                  ? (entry.value / maxIncome) * 88.r
                                                   : 0.0;
                                           return Expanded(
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 4.r,
-                                              ),
+                                              padding: EdgeInsets.symmetric(horizontal: 4.r),
                                               child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                mainAxisAlignment: MainAxisAlignment.end,
                                                 children: [
                                                   Container(
                                                     width: double.infinity,
                                                     height: height,
                                                     decoration: BoxDecoration(
-                                                      color:
-                                                          ColorStyles.primary,
-                                                      borderRadius:
-                                                          BorderRadius.vertical(
-                                                            top:
-                                                                Radius.circular(
-                                                                  4.r,
-                                                                ),
-                                                          ),
+                                                      color: ColorStyles.primary,
+                                                      borderRadius: BorderRadius.vertical(
+                                                        top: Radius.circular(4.r),
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(height: 8.r),
                                                   Text(
                                                     entry.key,
-                                                    style: TextStyles
-                                                        .caption1Regular
-                                                        .copyWith(
-                                                          color:
-                                                              ColorStyles
-                                                                  .secondary,
-                                                        ),
+                                                    style: TextStyles.caption1Regular.copyWith(
+                                                      color: ColorStyles.secondary,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -453,10 +423,7 @@ AnalyticsSegmentedControl(
                         children:
                             topClients.entries.map((entry) {
                               final client = _clients.where((c) => c.name == entry.key).firstOrNull;
-                              return CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: () => _showClientByName(entry.key),
-                                child: Padding(
+                              return Padding(
                                   padding: EdgeInsets.only(bottom: 12.r),
                                   child: Row(
                                     children: [
@@ -468,14 +435,24 @@ AnalyticsSegmentedControl(
                                           shape: BoxShape.circle,
                                         ),
                                         child: ClipOval(
-                                          child: client?.image != null
-                                              ? Image.memory(client!.image!, width: 36.r, height: 36.r, fit: BoxFit.cover)
-                                              : Center(
-                                                  child: Text(
-                                                    entry.key.isNotEmpty ? entry.key[0].toUpperCase() : 'C',
-                                                    style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+                                          child:
+                                              client?.image != null
+                                                  ? Image.memory(
+                                                    client!.image!,
+                                                    width: 36.r,
+                                                    height: 36.r,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                  : Center(
+                                                    child: Text(
+                                                      entry.key.isNotEmpty
+                                                          ? entry.key[0].toUpperCase()
+                                                          : 'C',
+                                                      style: TextStyles.footnoteEmphasized.copyWith(
+                                                        color: ColorStyles.white,
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
                                         ),
                                       ),
                                       SizedBox(width: 12.r),
@@ -493,7 +470,6 @@ AnalyticsSegmentedControl(
                                       ),
                                     ],
                                   ),
-                                ),
                               );
                             }).toList(),
                       ),

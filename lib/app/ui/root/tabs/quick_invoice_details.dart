@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Divider;
@@ -6,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../data/database.dart';
 import '../../../../style/style.dart';
+import '../../../services/export_service.dart';
 import '../../../services/pdf_service.dart';
 import '../../../services/premium_limits.dart';
 import '../../premium/quick_invoice_main_paywall.page.dart';
@@ -268,6 +271,35 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                         ],
                       ),
                     ),
+                    if (invoice.signature.isNotEmpty) ...[
+                      SizedBox(height: 16.r),
+                      Container(
+                        padding: EdgeInsets.all(16.r),
+                        decoration: BoxDecoration(
+                          color: ColorStyles.white,
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Signature', style: TextStyles.bodyEmphasized),
+                            SizedBox(height: 12.r),
+                            Container(
+                              width: double.infinity,
+                              height: 80.r,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: ColorStyles.separator),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              child: Image.memory(
+                                base64Decode(invoice.signature),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     SizedBox(height: 24.r),
                   ],
                 ),
@@ -378,6 +410,20 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                   _editInvoice();
                 },
                 child: Text('Edit'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ExportService.shareCsv([invoice]);
+                },
+                child: Text('Export CSV'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                  ExportService.shareExcel([invoice]);
+                },
+                child: Text('Export Excel'),
               ),
               CupertinoActionSheetAction(
                 isDestructiveAction: true,

@@ -113,11 +113,15 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                             width: 40.r,
                             height: 40.r,
                             decoration: BoxDecoration(color: ColorStyles.primary, shape: BoxShape.circle),
-                            child: Center(
-                              child: Text(
-                                client.name.isNotEmpty ? client.name.substring(0, 1).toUpperCase() : 'C',
-                                style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
-                              ),
+                            child: ClipOval(
+                              child: client.image != null
+                                  ? Image.memory(client.image!, width: 40.r, height: 40.r, fit: BoxFit.cover)
+                                  : Center(
+                                      child: Text(
+                                        client.name.isNotEmpty ? client.name.substring(0, 1).toUpperCase() : 'C',
+                                        style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+                                      ),
+                                    ),
                             ),
                           ),
                           SizedBox(width: 12.r),
