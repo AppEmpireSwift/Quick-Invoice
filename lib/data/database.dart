@@ -69,7 +69,7 @@ class AppDatabase extends _$AppDatabase {
 
   // Client methods
   Future<List<Client>> getAllClients() => select(clients).get();
-  
+
   Stream<List<Client>> watchAllClients() => select(clients).watch();
 
   Future<Client?> getClientById(String id) =>
@@ -86,7 +86,7 @@ class AppDatabase extends _$AppDatabase {
 
   // Item methods
   Future<List<Item>> getAllItems() => select(items).get();
-  
+
   Stream<List<Item>> watchAllItems() => select(items).watch();
 
   Future<Item?> getItemById(String id) =>
@@ -95,15 +95,14 @@ class AppDatabase extends _$AppDatabase {
   Future<int> insertItem(ItemsCompanion item) =>
       into(items).insert(item, mode: InsertMode.insertOrReplace);
 
-  Future<bool> updateItem(ItemsCompanion item) =>
-      update(items).replace(item);
+  Future<bool> updateItem(ItemsCompanion item) => update(items).replace(item);
 
   Future<int> deleteItem(String id) =>
       (delete(items)..where((t) => t.id.equals(id))).go();
 
   // Invoice methods
   Future<List<Invoice>> getAllInvoices() => select(invoices).get();
-  
+
   Stream<List<Invoice>> watchAllInvoices() => select(invoices).watch();
 
   Future<Invoice?> getInvoiceById(String id) =>

@@ -42,7 +42,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   Widget build(BuildContext context) {
     List<String> pages;
-    switch (uiHelper.deviceType) {
+    switch (quickInvoiceUIHelper.deviceType) {
       case AppleDeviceType.iphoneSe:
         pages = [
           Assets.images.onboarding.onb1Se.path,
@@ -60,7 +60,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           Assets.images.onboarding.onb5.path,
         ];
       case AppleDeviceType.ipad:
-        if (uiHelper.isLandscape) {
+        if (quickInvoiceUIHelper.isLandscape) {
           pages = [
             Assets.images.onboarding.onb1Album.path,
             Assets.images.onboarding.onb2Album.path,
@@ -106,7 +106,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
               physics: NeverScrollableScrollPhysics(),
               children:
                   pages
-                      .map((p) => Image.asset(p, fit: BoxFit.cover, alignment: Alignment(0, -0.4)))
+                      .map(
+                        (p) => Image.asset(
+                          p,
+                          fit: BoxFit.cover,
+                          alignment: Alignment(0, -0.4),
+                        ),
+                      )
                       .toList(),
             ),
           ),
@@ -122,7 +128,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 children: [
                   ListenableBuilder(
                     listenable: _pageController,
-                    builder: (__, _) {
+                    builder: (_, _) {
                       var pageNumber = _pageController.page?.round() ?? 0;
 
                       Widget page;
@@ -192,11 +198,14 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                               TextSpan(
                                 children: [
                                   TextSpan(text: subInfo),
-                                  if (limitedButton != null) TextSpan(text: '\n'),
+                                  if (limitedButton != null)
+                                    TextSpan(text: '\n'),
                                   if (limitedButton != null)
                                     TextSpan(
                                       text: limitedButton,
-                                      recognizer: TapGestureRecognizer()..onTap = onLimitedTap,
+                                      recognizer:
+                                          TapGestureRecognizer()
+                                            ..onTap = onLimitedTap,
                                     ),
                                 ],
                               ),
@@ -249,35 +258,49 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
                       if (pageNumber == lastPageNumber) {
                         cloud = OnBoardingPaywallTrialSwitchBuilder(
-                          switchBuilder: (bool hide, bool? value, String? text, onChange) {
+                          switchBuilder: (
+                            bool hide,
+                            bool? value,
+                            String? text,
+                            onChange,
+                          ) {
                             return Container(
                               height: 48.spMin,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(100).r,
-                                color: hide ? null : Color.fromRGBO(203, 221, 255, 0.33),
+                                color:
+                                    hide
+                                        ? null
+                                        : Color.fromRGBO(203, 221, 255, 0.33),
                               ),
 
                               child:
                                   hide
                                       ? Container()
                                       : Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Padding(
                                             padding: EdgeInsets.all(12.0.spMin),
                                             child: Text(
                                               text ?? '',
-                                              style: TextStyles.subheadlineRegular.copyWith(
-                                                color: ColorStyles.black,
-                                              ),
+                                              style: TextStyles
+                                                  .subheadlineRegular
+                                                  .copyWith(
+                                                    color: ColorStyles.black,
+                                                  ),
                                             ),
                                           ),
 
                                           Padding(
-                                            padding: EdgeInsets.only(right: 10.spMin),
+                                            padding: EdgeInsets.only(
+                                              right: 10.spMin,
+                                            ),
                                             child: Switch.adaptive(
                                               value: value ?? false,
-                                              onChanged: (_) => onChange?.call(),
+                                              onChanged:
+                                                  (_) => onChange?.call(),
                                             ),
                                           ),
                                         ],
@@ -286,7 +309,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                           },
                         );
                       } else {
-                        if (cloudText.length <= pageNumber || cloudText[pageNumber].isEmpty) {
+                        if (cloudText.length <= pageNumber ||
+                            cloudText[pageNumber].isEmpty) {
                           cloud = Container(height: 48.spMin);
                         } else {
                           cloud = Container(
@@ -302,9 +326,8 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                                   padding: EdgeInsets.all(12.0.spMin),
                                   child: Text(
                                     cloudText[pageNumber],
-                                    style: TextStyles.subheadlineRegular.copyWith(
-                                      color: ColorStyles.black,
-                                    ),
+                                    style: TextStyles.subheadlineRegular
+                                        .copyWith(color: ColorStyles.black),
                                   ),
                                 ),
                               ],

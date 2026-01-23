@@ -18,7 +18,11 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
   String _selectedPeriod = 'week';
   List<Invoice> _invoices = [];
 
-  final Map<String, String> _periods = {'week': 'Week', 'month': 'Month', 'year': 'Year'};
+  final Map<String, String> _periods = {
+    'week': 'Week',
+    'month': 'Month',
+    'year': 'Year',
+  };
 
   @override
   void initState() {
@@ -112,7 +116,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
   }
 
   Map<String, double> _getDailyIncome() {
-    final filtered = _getFilteredInvoices().where((i) => i.status == 'paid').toList();
+    final filtered =
+        _getFilteredInvoices().where((i) => i.status == 'paid').toList();
     final Map<String, double> dailyIncome = {};
 
     if (_selectedPeriod == 'week') {
@@ -126,7 +131,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
 
       for (var invoice in filtered) {
         final dayName = DateFormat('E').format(invoice.invoiceDate);
-        dailyIncome[dayName] = (dailyIncome[dayName] ?? 0.0) + invoice.totalAmount;
+        dailyIncome[dayName] =
+            (dailyIncome[dayName] ?? 0.0) + invoice.totalAmount;
       }
     }
 
@@ -134,7 +140,8 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
   }
 
   Map<String, double> _getTopClients() {
-    final filtered = _getFilteredInvoices().where((i) => i.status == 'paid').toList();
+    final filtered =
+        _getFilteredInvoices().where((i) => i.status == 'paid').toList();
     final Map<String, double> clientTotals = {};
 
     for (var invoice in filtered) {
@@ -142,7 +149,9 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
           (clientTotals[invoice.clientName] ?? 0.0) + invoice.totalAmount;
     }
 
-    final sorted = clientTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sorted =
+        clientTotals.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
 
     return Map.fromEntries(sorted.take(5));
   }
@@ -152,7 +161,9 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
     if (parts.length >= 2) {
       return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
     }
-    return name.length >= 2 ? name.substring(0, 2).toUpperCase() : name.toUpperCase();
+    return name.length >= 2
+        ? name.substring(0, 2).toUpperCase()
+        : name.toUpperCase();
   }
 
   @override
@@ -165,7 +176,9 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
     final dailyIncome = _getDailyIncome();
     final topClients = _getTopClients();
     final maxIncome =
-        dailyIncome.values.isEmpty ? 1.0 : dailyIncome.values.reduce((a, b) => a > b ? a : b);
+        dailyIncome.values.isEmpty
+            ? 1.0
+            : dailyIncome.values.reduce((a, b) => a > b ? a : b);
 
     return CupertinoPageScaffold(
       backgroundColor: ColorStyles.bgSecondary,
@@ -299,35 +312,49 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                                   height: 120.r,
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children:
                                         dailyIncome.entries.map((entry) {
                                           final height =
                                               maxIncome > 0
-                                                  ? (entry.value / maxIncome) * 100.r
+                                                  ? (entry.value / maxIncome) *
+                                                      100.r
                                                   : 0.0;
                                           return Expanded(
                                             child: Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 4.r),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 4.r,
+                                              ),
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
                                                 children: [
                                                   Container(
                                                     width: double.infinity,
                                                     height: height,
                                                     decoration: BoxDecoration(
-                                                      color: ColorStyles.primary,
-                                                      borderRadius: BorderRadius.vertical(
-                                                        top: Radius.circular(4.r),
-                                                      ),
+                                                      color:
+                                                          ColorStyles.primary,
+                                                      borderRadius:
+                                                          BorderRadius.vertical(
+                                                            top:
+                                                                Radius.circular(
+                                                                  4.r,
+                                                                ),
+                                                          ),
                                                     ),
                                                   ),
                                                   SizedBox(height: 8.r),
                                                   Text(
                                                     entry.key,
-                                                    style: TextStyles.caption1Regular.copyWith(
-                                                      color: ColorStyles.secondary,
-                                                    ),
+                                                    style: TextStyles
+                                                        .caption1Regular
+                                                        .copyWith(
+                                                          color:
+                                                              ColorStyles
+                                                                  .secondary,
+                                                        ),
                                                   ),
                                                 ],
                                               ),
@@ -377,9 +404,10 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
                                       child: Center(
                                         child: Text(
                                           _getClientInitials(entry.key),
-                                          style: TextStyles.footnoteEmphasized.copyWith(
-                                            color: ColorStyles.white,
-                                          ),
+                                          style: TextStyles.footnoteEmphasized
+                                              .copyWith(
+                                                color: ColorStyles.white,
+                                              ),
                                         ),
                                       ),
                                     ),
@@ -444,13 +472,16 @@ class _AnimatedSegmentedControl extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     margin: EdgeInsets.all(2.r),
                     decoration: BoxDecoration(
-                      color: isSelected ? ColorStyles.white : Colors.transparent,
+                      color:
+                          isSelected ? ColorStyles.white : Colors.transparent,
                       borderRadius: BorderRadius.circular(6.r),
                       boxShadow:
                           isSelected
                               ? [
                                 BoxShadow(
-                                  color: ColorStyles.black.withValues(alpha: 0.1),
+                                  color: ColorStyles.black.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   blurRadius: 4,
                                   offset: Offset(0, 2),
                                 ),
@@ -461,7 +492,10 @@ class _AnimatedSegmentedControl extends StatelessWidget {
                       child: Text(
                         entry.value,
                         style: TextStyles.footnoteEmphasized.copyWith(
-                          color: isSelected ? ColorStyles.primaryTxt : ColorStyles.secondary,
+                          color:
+                              isSelected
+                                  ? ColorStyles.primaryTxt
+                                  : ColorStyles.secondary,
                         ),
                       ),
                     ),
@@ -513,7 +547,12 @@ class _MetricCard extends StatelessWidget {
           SizedBox(height: 12.r),
           Text(value, style: TextStyles.title3Emphasized),
           SizedBox(height: 4.r),
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+          Text(
+            label,
+            style: TextStyles.footnoteRegular.copyWith(
+              color: ColorStyles.secondary,
+            ),
+          ),
         ],
       ),
     );

@@ -35,7 +35,9 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
             decoration: BoxDecoration(
               color: ColorStyles.white,
               boxShadow: [
@@ -83,7 +85,8 @@ class _MainPageState extends State<MainPage> {
             style: TextStyle(
               fontSize: 10.sp,
               fontWeight: FontWeight.w500,
-              color: isActive ? ColorStyles.primary : CupertinoColors.systemGrey,
+              color:
+                  isActive ? ColorStyles.primary : CupertinoColors.systemGrey,
             ),
           ),
         ],

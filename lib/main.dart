@@ -1,24 +1,38 @@
 import 'package:device_preview_plus/device_preview_plus.dart';
 import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'app/ui/premium/main_paywall.page.dart';
 import 'app/app.dart';
 import 'app/ui/onboarding/onboarding.page.dart';
-import 'app/ui/root/main.page.dart';
 import 'app/ui/splash.page.dart';
 import 'core/core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await init();
+  runApp(
+    DevicePreview(
+      enabled: false,
+      builder: (context) {
+        return const QuickInvoiceApp();
+      },
+    ),
+  );
+}
+
+Future<void> init() async {
   await Core.init(
     config: CommonConfig(
       appName: 'Quick Invoice',
       figmaDesignSize: Size(375, 812),
       appId: '6757950869',
-      appHudKey: 'app_HorEUWWedWd1V683fWnwZwZFLfvZEr', //TODO:
+      appHudKey: 'app_ZbRW8co8oEWvQJJUMvgRo3bNCWGCQh',
       supportEmail: 'hollyreeves@murermesterdennisbotker.com',
-      supportForm: 'https://forms.gle/EH8YUddXBzfSxVR26', //TODO
+      supportForm: '',
     ),
-    home: MainPage(),
+    home: MainPaywallPage(),
+
+    ///MainPage(),
     splash: SplashPage(),
     onBoarding: OnBoardingPage(),
   );
@@ -32,13 +46,5 @@ void main() async {
       onBoardingPaywallSettings: OnBoardingPaywallSettings(),
     ),
     helperType: HelperType.fallbackBased, //TODO:
-  );
-  runApp(
-    DevicePreview(
-      enabled: false,
-      builder: (context) {
-        return const WASkeleton();
-      },
-    ),
   );
 }

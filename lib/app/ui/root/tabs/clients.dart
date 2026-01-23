@@ -31,10 +31,13 @@ class _ClientsTabState extends State<ClientsTab> {
 
   List<Client> get _filteredClients {
     if (_searchQuery.isEmpty) return _clients;
-    return _clients.where((c) => 
-      c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-      c.email.toLowerCase().contains(_searchQuery.toLowerCase())
-    ).toList();
+    return _clients
+        .where(
+          (c) =>
+              c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              c.email.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
+        .toList();
   }
 
   @override
@@ -59,10 +62,18 @@ class _ClientsTabState extends State<ClientsTab> {
                       onPressed: () {
                         HapticFeedback.lightImpact();
                         Navigator.of(context, rootNavigator: true)
-                            .push(CupertinoPageRoute(builder: (_) => const AddClientPage()))
+                            .push(
+                              CupertinoPageRoute(
+                                builder: (_) => const AddClientPage(),
+                              ),
+                            )
                             .then((_) => _loadClients());
                       },
-                      child: Icon(CupertinoIcons.plus_circle_fill, color: ColorStyles.primary, size: 28.r),
+                      child: Icon(
+                        CupertinoIcons.plus_circle_fill,
+                        color: ColorStyles.primary,
+                        size: 28.r,
+                      ),
                     ),
                   ],
                 ),
@@ -70,7 +81,9 @@ class _ClientsTabState extends State<ClientsTab> {
                 CupertinoSearchTextField(
                   placeholder: 'Search clients...',
                   style: TextStyles.bodyRegular,
-                  placeholderStyle: TextStyles.bodyRegular.copyWith(color: ColorStyles.labelsTertiary),
+                  placeholderStyle: TextStyles.bodyRegular.copyWith(
+                    color: ColorStyles.labelsTertiary,
+                  ),
                   backgroundColor: ColorStyles.fillsTertiary,
                   onChanged: (value) => setState(() => _searchQuery = value),
                 ),
@@ -78,71 +91,100 @@ class _ClientsTabState extends State<ClientsTab> {
             ),
           ),
           Expanded(
-            child: _filteredClients.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 120.r,
-                          height: 120.r,
-                          decoration: BoxDecoration(
-                            color: ColorStyles.primary.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
+            child:
+                _filteredClients.isEmpty
+                    ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 120.r,
+                            height: 120.r,
+                            decoration: BoxDecoration(
+                              color: ColorStyles.primary.withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              CupertinoIcons.person_2_fill,
+                              size: 60.r,
+                              color: ColorStyles.primary,
+                            ),
                           ),
-                          child: Icon(CupertinoIcons.person_2_fill, size: 60.r, color: ColorStyles.primary),
-                        ),
-                        SizedBox(height: 24.r),
-                        Text('No clients yet', style: TextStyles.title3Emphasized),
-                        SizedBox(height: 8.r),
-                        Text('Add your first client', style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.all(16.r),
-                    itemCount: _filteredClients.length,
-                    itemBuilder: (context, index) {
-                      final client = _filteredClients[index];
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 12.r),
-                        decoration: BoxDecoration(
-                          color: ColorStyles.white,
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: CupertinoButton(
-                          padding: EdgeInsets.all(16.r),
-                          onPressed: () {},
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 40.r,
-                                height: 40.r,
-                                decoration: BoxDecoration(color: ColorStyles.primary, shape: BoxShape.circle),
-                                child: Center(
-                                  child: Text(
-                                    client.name.isNotEmpty ? client.name[0].toUpperCase() : 'C',
-                                    style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+                          SizedBox(height: 24.r),
+                          Text(
+                            'No clients yet',
+                            style: TextStyles.title3Emphasized,
+                          ),
+                          SizedBox(height: 8.r),
+                          Text(
+                            'Add your first client',
+                            style: TextStyles.footnoteRegular.copyWith(
+                              color: ColorStyles.secondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    : ListView.builder(
+                      padding: EdgeInsets.all(16.r),
+                      itemCount: _filteredClients.length,
+                      itemBuilder: (context, index) {
+                        final client = _filteredClients[index];
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 12.r),
+                          decoration: BoxDecoration(
+                            color: ColorStyles.white,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: CupertinoButton(
+                            padding: EdgeInsets.all(16.r),
+                            onPressed: () {},
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 40.r,
+                                  height: 40.r,
+                                  decoration: BoxDecoration(
+                                    color: ColorStyles.primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      client.name.isNotEmpty
+                                          ? client.name[0].toUpperCase()
+                                          : 'C',
+                                      style: TextStyles.footnoteEmphasized
+                                          .copyWith(color: ColorStyles.white),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: 12.r),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(client.name, style: TextStyles.bodyEmphasized),
-                                    if (client.phoneNumber.isNotEmpty)
-                                      Text(client.phoneNumber, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
-                                  ],
+                                SizedBox(width: 12.r),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        client.name,
+                                        style: TextStyles.bodyEmphasized,
+                                      ),
+                                      if (client.phoneNumber.isNotEmpty)
+                                        Text(
+                                          client.phoneNumber,
+                                          style: TextStyles.footnoteRegular
+                                              .copyWith(
+                                                color: ColorStyles.secondary,
+                                              ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),
@@ -174,7 +216,7 @@ class _AddClientPageState extends State<AddClientPage> {
 
   Future<void> _saveClient() async {
     if (_nameController.text.isEmpty) return;
-    
+
     final client = ClientsCompanion(
       id: Value(const Uuid().v4()),
       name: Value(_nameController.text),
@@ -182,7 +224,7 @@ class _AddClientPageState extends State<AddClientPage> {
       phoneNumber: Value(_phoneController.text),
       address: Value(_addressController.text),
     );
-    
+
     await AppDatabase.instance.insertClient(client);
     if (mounted) Navigator.pop(context);
   }
@@ -213,11 +255,23 @@ class _AddClientPageState extends State<AddClientPage> {
                   children: [
                     _buildTextField('Name', 'Client name', _nameController),
                     SizedBox(height: 16.r),
-                    _buildTextField('Email', 'client@email.com', _emailController),
+                    _buildTextField(
+                      'Email',
+                      'client@email.com',
+                      _emailController,
+                    ),
                     SizedBox(height: 16.r),
-                    _buildTextField('Phone', '+1 234 567 890', _phoneController),
+                    _buildTextField(
+                      'Phone',
+                      '+1 234 567 890',
+                      _phoneController,
+                    ),
                     SizedBox(height: 16.r),
-                    _buildTextField('Address', 'Client address', _addressController),
+                    _buildTextField(
+                      'Address',
+                      'Client address',
+                      _addressController,
+                    ),
                   ],
                 ),
               ),
@@ -236,7 +290,12 @@ class _AddClientPageState extends State<AddClientPage> {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
-                    child: Text('Save Client', style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white)),
+                    child: Text(
+                      'Save Client',
+                      style: TextStyles.bodyEmphasized.copyWith(
+                        color: ColorStyles.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -247,11 +306,20 @@ class _AddClientPageState extends State<AddClientPage> {
     );
   }
 
-  Widget _buildTextField(String label, String placeholder, TextEditingController controller) {
+  Widget _buildTextField(
+    String label,
+    String placeholder,
+    TextEditingController controller,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+        Text(
+          label,
+          style: TextStyles.footnoteRegular.copyWith(
+            color: ColorStyles.secondary,
+          ),
+        ),
         SizedBox(height: 8.r),
         CupertinoTextField(
           controller: controller,

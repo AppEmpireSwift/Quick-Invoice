@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'style.dart';
 
-appThemeBuilder(BuildContext context) => ThemeData(
+ThemeData appThemeBuilder(BuildContext context) => ThemeData(
   textTheme: Typography.blackCupertino.apply(bodyColor: ColorStyles.black),
   colorScheme: ColorScheme.fromSeed(
     seedColor: ColorStyles.primary,
@@ -60,13 +60,14 @@ appThemeBuilder(BuildContext context) => ThemeData(
   ),
 );
 
-CupertinoThemeData cupertinoThemeBuilder(BuildContext context) => CupertinoThemeData(
-  primaryColor: ColorStyles.primary,
-  scaffoldBackgroundColor: ColorStyles.bgSecondary,
-  barBackgroundColor: ColorStyles.bgSecondary,
-  brightness: Brightness.light,
-  textTheme: CupertinoTextThemeData(
-    primaryColor: ColorStyles.primary,
-    textStyle: TextStyle(color: ColorStyles.primaryTxt),
-  ),
-);
+CupertinoThemeData cupertinoThemeBuilder(BuildContext context) =>
+    CupertinoThemeData(
+      primaryColor: ColorStyles.primary,
+      scaffoldBackgroundColor: ColorStyles.bgSecondary,
+      barBackgroundColor: ColorStyles.bgSecondary,
+      brightness: Brightness.light,
+      textTheme: CupertinoTextThemeData(
+        primaryColor: ColorStyles.primary,
+        textStyle: TextStyle(color: ColorStyles.primaryTxt),
+      ),
+    );

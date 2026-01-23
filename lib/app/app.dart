@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/material.dart' show DefaultMaterialLocalizations;
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_wa_skeleton/core/services/ui.helper.dart';
-
+import '../../core/services/ui.helper.dart';
 import '../core/core.dart';
 import '../style/style.dart';
 
-late UIHelper uiHelper;
+late QuickInvoiceUIHelper quickInvoiceUIHelper;
 
-class WASkeleton extends StatelessWidget {
-  const WASkeleton({super.key});
+class QuickInvoiceApp extends StatelessWidget {
+  const QuickInvoiceApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    uiHelper = UIHelper.of(context);
+    quickInvoiceUIHelper = QuickInvoiceUIHelper.of(context);
     return ScreenUtilInit(
       designSize: Core.config.figmaDesignSize,
       minTextAdapt: false,
@@ -25,7 +24,10 @@ class WASkeleton extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: cupertinoThemeBuilder(context),
           locale: const Locale('en'),
-          builder: (context, child) => KeyboardDismissOnTap(child: child ?? Container()),
+          localizationsDelegates: const [DefaultMaterialLocalizations.delegate],
+          builder:
+              (context, child) =>
+                  KeyboardDismissOnTap(child: child ?? Container()),
           home: const Loading(),
         );
       },

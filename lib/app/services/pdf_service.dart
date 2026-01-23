@@ -23,7 +23,10 @@ class PdfService {
     _fontBold = pw.Font.ttf(fontBoldData);
   }
 
-  static Future<Uint8List> generateInvoice(Invoice invoice, {PdfTemplate template = PdfTemplate.classic}) async {
+  static Future<Uint8List> generateInvoice(
+    Invoice invoice, {
+    PdfTemplate template = PdfTemplate.classic,
+  }) async {
     await _loadFonts();
     switch (template) {
       case PdfTemplate.classic:
@@ -35,7 +38,10 @@ class PdfService {
     }
   }
 
-  static Future<void> shareInvoice(Invoice invoice, {PdfTemplate template = PdfTemplate.classic}) async {
+  static Future<void> shareInvoice(
+    Invoice invoice, {
+    PdfTemplate template = PdfTemplate.classic,
+  }) async {
     final pdf = await generateInvoice(invoice, template: template);
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/invoice_${invoice.invoiceNumber}.pdf');
@@ -43,7 +49,10 @@ class PdfService {
     await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
   }
 
-  static Future<String> savePdfToTemp(Invoice invoice, {PdfTemplate template = PdfTemplate.classic}) async {
+  static Future<String> savePdfToTemp(
+    Invoice invoice, {
+    PdfTemplate template = PdfTemplate.classic,
+  }) async {
     final pdf = await generateInvoice(invoice, template: template);
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/invoice_${invoice.invoiceNumber}.pdf');
@@ -51,8 +60,10 @@ class PdfService {
     return file.path;
   }
 
-  static String _formatDate(DateTime date) => DateFormat('dd MMM yyyy').format(date);
-  static String _formatCurrency(double amount, String currency) => '$currency ${amount.toStringAsFixed(2)}';
+  static String _formatDate(DateTime date) =>
+      DateFormat('dd MMM yyyy').format(date);
+  static String _formatCurrency(double amount, String currency) =>
+      '$currency ${amount.toStringAsFixed(2)}';
 
   static Future<Map<String, String>> _getCompanyInfo() async {
     final prefs = await SharedPreferences.getInstance();
@@ -87,18 +98,30 @@ class PdfService {
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         if (company['name']!.isNotEmpty)
-                          pw.Text(company['name']!, style: pw.TextStyle(font: fontBold, fontSize: 18)),
+                          pw.Text(
+                            company['name']!,
+                            style: pw.TextStyle(font: fontBold, fontSize: 18),
+                          ),
                         if (company['address']!.isNotEmpty) ...[
                           pw.SizedBox(height: 4),
-                          pw.Text(company['address']!, style: pw.TextStyle(font: font, fontSize: 10)),
+                          pw.Text(
+                            company['address']!,
+                            style: pw.TextStyle(font: font, fontSize: 10),
+                          ),
                         ],
                         if (company['phone']!.isNotEmpty) ...[
                           pw.SizedBox(height: 2),
-                          pw.Text(company['phone']!, style: pw.TextStyle(font: font, fontSize: 10)),
+                          pw.Text(
+                            company['phone']!,
+                            style: pw.TextStyle(font: font, fontSize: 10),
+                          ),
                         ],
                         if (company['email']!.isNotEmpty) ...[
                           pw.SizedBox(height: 2),
-                          pw.Text(company['email']!, style: pw.TextStyle(font: font, fontSize: 10)),
+                          pw.Text(
+                            company['email']!,
+                            style: pw.TextStyle(font: font, fontSize: 10),
+                          ),
                         ],
                       ],
                     ),
@@ -106,12 +129,28 @@ class PdfService {
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
-                      pw.Text('INVOICE', style: pw.TextStyle(font: fontBold, fontSize: 32, color: PdfColors.blue800)),
+                      pw.Text(
+                        'INVOICE',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 32,
+                          color: PdfColors.blue800,
+                        ),
+                      ),
                       pw.SizedBox(height: 4),
-                      pw.Text('#${invoice.invoiceNumber}', style: pw.TextStyle(font: fontBold, fontSize: 16)),
+                      pw.Text(
+                        '#${invoice.invoiceNumber}',
+                        style: pw.TextStyle(font: fontBold, fontSize: 16),
+                      ),
                       pw.SizedBox(height: 4),
-                      pw.Text('Date: ${_formatDate(invoice.invoiceDate)}', style: pw.TextStyle(font: font, fontSize: 10)),
-                      pw.Text('Due: ${_formatDate(invoice.dueDate)}', style: pw.TextStyle(font: font, fontSize: 10)),
+                      pw.Text(
+                        'Date: ${_formatDate(invoice.invoiceDate)}',
+                        style: pw.TextStyle(font: font, fontSize: 10),
+                      ),
+                      pw.Text(
+                        'Due: ${_formatDate(invoice.dueDate)}',
+                        style: pw.TextStyle(font: font, fontSize: 10),
+                      ),
                     ],
                   ),
                 ],
@@ -130,11 +169,24 @@ class PdfService {
                       child: pw.Column(
                         crossAxisAlignment: pw.CrossAxisAlignment.start,
                         children: [
-                          pw.Text('Bill To:', style: pw.TextStyle(font: fontBold, fontSize: 12)),
+                          pw.Text(
+                            'Bill To:',
+                            style: pw.TextStyle(font: fontBold, fontSize: 12),
+                          ),
                           pw.SizedBox(height: 8),
-                          pw.Text(invoice.clientName, style: pw.TextStyle(font: font, fontSize: 14)),
+                          pw.Text(
+                            invoice.clientName,
+                            style: pw.TextStyle(font: font, fontSize: 14),
+                          ),
                           if (invoice.clientPhoneNumber.isNotEmpty)
-                            pw.Text(invoice.clientPhoneNumber, style: pw.TextStyle(font: font, fontSize: 10, color: PdfColors.grey700)),
+                            pw.Text(
+                              invoice.clientPhoneNumber,
+                              style: pw.TextStyle(
+                                font: font,
+                                fontSize: 10,
+                                color: PdfColors.grey700,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -146,7 +198,9 @@ class PdfService {
                 border: pw.TableBorder.all(color: PdfColors.grey300),
                 children: [
                   pw.TableRow(
-                    decoration: const pw.BoxDecoration(color: PdfColors.blue800),
+                    decoration: const pw.BoxDecoration(
+                      color: PdfColors.blue800,
+                    ),
                     children: [
                       _tableCell('Item', fontBold, isHeader: true),
                       _tableCell('Qty', fontBold, isHeader: true),
@@ -158,8 +212,17 @@ class PdfService {
                     children: [
                       _tableCell(invoice.itemName, font),
                       _tableCell(invoice.itemQuantity.toString(), font),
-                      _tableCell(_formatCurrency(invoice.itemPrice, invoice.currency), font),
-                      _tableCell(_formatCurrency(invoice.itemPrice * invoice.itemQuantity, invoice.currency), font),
+                      _tableCell(
+                        _formatCurrency(invoice.itemPrice, invoice.currency),
+                        font,
+                      ),
+                      _tableCell(
+                        _formatCurrency(
+                          invoice.itemPrice * invoice.itemQuantity,
+                          invoice.currency,
+                        ),
+                        font,
+                      ),
                     ],
                   ),
                 ],
@@ -171,24 +234,60 @@ class PdfService {
                   width: 200,
                   child: pw.Column(
                     children: [
-                      _summaryRow('Subtotal', _formatCurrency(invoice.itemPrice * invoice.itemQuantity, invoice.currency), font),
+                      _summaryRow(
+                        'Subtotal',
+                        _formatCurrency(
+                          invoice.itemPrice * invoice.itemQuantity,
+                          invoice.currency,
+                        ),
+                        font,
+                      ),
                       if (invoice.tax > 0)
-                        _summaryRow('Tax (${invoice.tax}%)', _formatCurrency(invoice.totalAmount - (invoice.itemPrice * invoice.itemQuantity), invoice.currency), font),
+                        _summaryRow(
+                          'Tax (${invoice.tax}%)',
+                          _formatCurrency(
+                            invoice.totalAmount -
+                                (invoice.itemPrice * invoice.itemQuantity),
+                            invoice.currency,
+                          ),
+                          font,
+                        ),
                       pw.Divider(),
-                      _summaryRow('Total', _formatCurrency(invoice.totalAmount, invoice.currency), fontBold),
+                      _summaryRow(
+                        'Total',
+                        _formatCurrency(invoice.totalAmount, invoice.currency),
+                        fontBold,
+                      ),
                     ],
                   ),
                 ),
               ),
               if (invoice.note.isNotEmpty) ...[
                 pw.SizedBox(height: 40),
-                pw.Text('Notes:', style: pw.TextStyle(font: fontBold, fontSize: 12)),
+                pw.Text(
+                  'Notes:',
+                  style: pw.TextStyle(font: fontBold, fontSize: 12),
+                ),
                 pw.SizedBox(height: 8),
-                pw.Text(invoice.note, style: pw.TextStyle(font: font, fontSize: 10, color: PdfColors.grey700)),
+                pw.Text(
+                  invoice.note,
+                  style: pw.TextStyle(
+                    font: font,
+                    fontSize: 10,
+                    color: PdfColors.grey700,
+                  ),
+                ),
               ],
               pw.Spacer(),
               pw.Center(
-                child: pw.Text('Thank you for your business!', style: pw.TextStyle(font: font, fontSize: 12, color: PdfColors.grey600)),
+                child: pw.Text(
+                  'Thank you for your business!',
+                  style: pw.TextStyle(
+                    font: font,
+                    fontSize: 12,
+                    color: PdfColors.grey600,
+                  ),
+                ),
               ),
             ],
           );
@@ -224,19 +323,40 @@ class PdfService {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('INVOICE', style: pw.TextStyle(font: fontBold, fontSize: 28, color: PdfColors.white)),
-                        pw.Text('#${invoice.invoiceNumber}', style: pw.TextStyle(font: font, fontSize: 14, color: PdfColors.white)),
+                        pw.Text(
+                          'INVOICE',
+                          style: pw.TextStyle(
+                            font: fontBold,
+                            fontSize: 28,
+                            color: PdfColors.white,
+                          ),
+                        ),
+                        pw.Text(
+                          '#${invoice.invoiceNumber}',
+                          style: pw.TextStyle(
+                            font: font,
+                            fontSize: 14,
+                            color: PdfColors.white,
+                          ),
+                        ),
                       ],
                     ),
                     pw.Container(
-                      padding: const pw.EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const pw.EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: pw.BoxDecoration(
                         color: PdfColors.white,
                         borderRadius: pw.BorderRadius.circular(20),
                       ),
                       child: pw.Text(
                         invoice.status.toUpperCase(),
-                        style: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.indigo),
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.indigo,
+                        ),
                       ),
                     ),
                   ],
@@ -250,22 +370,55 @@ class PdfService {
                     child: pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('BILL TO', style: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.grey600)),
+                        pw.Text(
+                          'BILL TO',
+                          style: pw.TextStyle(
+                            font: fontBold,
+                            fontSize: 10,
+                            color: PdfColors.grey600,
+                          ),
+                        ),
                         pw.SizedBox(height: 8),
-                        pw.Text(invoice.clientName, style: pw.TextStyle(font: fontBold, fontSize: 16)),
+                        pw.Text(
+                          invoice.clientName,
+                          style: pw.TextStyle(font: fontBold, fontSize: 16),
+                        ),
                         if (invoice.clientPhoneNumber.isNotEmpty)
-                          pw.Text(invoice.clientPhoneNumber, style: pw.TextStyle(font: font, fontSize: 11)),
+                          pw.Text(
+                            invoice.clientPhoneNumber,
+                            style: pw.TextStyle(font: font, fontSize: 11),
+                          ),
                       ],
                     ),
                   ),
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
-                      pw.Text('Invoice Date', style: pw.TextStyle(font: font, fontSize: 10, color: PdfColors.grey600)),
-                      pw.Text(_formatDate(invoice.invoiceDate), style: pw.TextStyle(font: fontBold, fontSize: 12)),
+                      pw.Text(
+                        'Invoice Date',
+                        style: pw.TextStyle(
+                          font: font,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                      ),
+                      pw.Text(
+                        _formatDate(invoice.invoiceDate),
+                        style: pw.TextStyle(font: fontBold, fontSize: 12),
+                      ),
                       pw.SizedBox(height: 12),
-                      pw.Text('Due Date', style: pw.TextStyle(font: font, fontSize: 10, color: PdfColors.grey600)),
-                      pw.Text(_formatDate(invoice.dueDate), style: pw.TextStyle(font: fontBold, fontSize: 12)),
+                      pw.Text(
+                        'Due Date',
+                        style: pw.TextStyle(
+                          font: font,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                      ),
+                      pw.Text(
+                        _formatDate(invoice.dueDate),
+                        style: pw.TextStyle(font: fontBold, fontSize: 12),
+                      ),
                     ],
                   ),
                 ],
@@ -282,14 +435,40 @@ class PdfService {
                       padding: const pw.EdgeInsets.all(12),
                       decoration: const pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        borderRadius: pw.BorderRadius.vertical(top: pw.Radius.circular(8)),
+                        borderRadius: pw.BorderRadius.vertical(
+                          top: pw.Radius.circular(8),
+                        ),
                       ),
                       child: pw.Row(
                         children: [
-                          pw.Expanded(flex: 3, child: pw.Text('Description', style: pw.TextStyle(font: fontBold, fontSize: 11))),
-                          pw.Expanded(child: pw.Text('Qty', style: pw.TextStyle(font: fontBold, fontSize: 11), textAlign: pw.TextAlign.center)),
-                          pw.Expanded(child: pw.Text('Rate', style: pw.TextStyle(font: fontBold, fontSize: 11), textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text('Amount', style: pw.TextStyle(font: fontBold, fontSize: 11), textAlign: pw.TextAlign.right)),
+                          pw.Expanded(
+                            flex: 3,
+                            child: pw.Text(
+                              'Description',
+                              style: pw.TextStyle(font: fontBold, fontSize: 11),
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              'Qty',
+                              style: pw.TextStyle(font: fontBold, fontSize: 11),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              'Rate',
+                              style: pw.TextStyle(font: fontBold, fontSize: 11),
+                              textAlign: pw.TextAlign.right,
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              'Amount',
+                              style: pw.TextStyle(font: fontBold, fontSize: 11),
+                              textAlign: pw.TextAlign.right,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -297,10 +476,40 @@ class PdfService {
                       padding: const pw.EdgeInsets.all(12),
                       child: pw.Row(
                         children: [
-                          pw.Expanded(flex: 3, child: pw.Text(invoice.itemName, style: pw.TextStyle(font: font, fontSize: 11))),
-                          pw.Expanded(child: pw.Text(invoice.itemQuantity.toString(), style: pw.TextStyle(font: font, fontSize: 11), textAlign: pw.TextAlign.center)),
-                          pw.Expanded(child: pw.Text(_formatCurrency(invoice.itemPrice, invoice.currency), style: pw.TextStyle(font: font, fontSize: 11), textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text(_formatCurrency(invoice.itemPrice * invoice.itemQuantity, invoice.currency), style: pw.TextStyle(font: font, fontSize: 11), textAlign: pw.TextAlign.right)),
+                          pw.Expanded(
+                            flex: 3,
+                            child: pw.Text(
+                              invoice.itemName,
+                              style: pw.TextStyle(font: font, fontSize: 11),
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              invoice.itemQuantity.toString(),
+                              style: pw.TextStyle(font: font, fontSize: 11),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              _formatCurrency(
+                                invoice.itemPrice,
+                                invoice.currency,
+                              ),
+                              style: pw.TextStyle(font: font, fontSize: 11),
+                              textAlign: pw.TextAlign.right,
+                            ),
+                          ),
+                          pw.Expanded(
+                            child: pw.Text(
+                              _formatCurrency(
+                                invoice.itemPrice * invoice.itemQuantity,
+                                invoice.currency,
+                              ),
+                              style: pw.TextStyle(font: font, fontSize: 11),
+                              textAlign: pw.TextAlign.right,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -320,9 +529,24 @@ class PdfService {
                     ),
                     child: pw.Column(
                       children: [
-                        _summaryRow('Subtotal', _formatCurrency(invoice.itemPrice * invoice.itemQuantity, invoice.currency), font),
+                        _summaryRow(
+                          'Subtotal',
+                          _formatCurrency(
+                            invoice.itemPrice * invoice.itemQuantity,
+                            invoice.currency,
+                          ),
+                          font,
+                        ),
                         if (invoice.tax > 0)
-                          _summaryRow('Tax (${invoice.tax}%)', _formatCurrency(invoice.totalAmount - (invoice.itemPrice * invoice.itemQuantity), invoice.currency), font),
+                          _summaryRow(
+                            'Tax (${invoice.tax}%)',
+                            _formatCurrency(
+                              invoice.totalAmount -
+                                  (invoice.itemPrice * invoice.itemQuantity),
+                              invoice.currency,
+                            ),
+                            font,
+                          ),
                         pw.SizedBox(height: 8),
                         pw.Container(
                           padding: const pw.EdgeInsets.all(8),
@@ -331,10 +555,28 @@ class PdfService {
                             borderRadius: pw.BorderRadius.circular(4),
                           ),
                           child: pw.Row(
-                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment:
+                                pw.MainAxisAlignment.spaceBetween,
                             children: [
-                              pw.Text('Total', style: pw.TextStyle(font: fontBold, fontSize: 12, color: PdfColors.white)),
-                              pw.Text(_formatCurrency(invoice.totalAmount, invoice.currency), style: pw.TextStyle(font: fontBold, fontSize: 12, color: PdfColors.white)),
+                              pw.Text(
+                                'Total',
+                                style: pw.TextStyle(
+                                  font: fontBold,
+                                  fontSize: 12,
+                                  color: PdfColors.white,
+                                ),
+                              ),
+                              pw.Text(
+                                _formatCurrency(
+                                  invoice.totalAmount,
+                                  invoice.currency,
+                                ),
+                                style: pw.TextStyle(
+                                  font: fontBold,
+                                  fontSize: 12,
+                                  color: PdfColors.white,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -355,9 +597,15 @@ class PdfService {
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('Notes', style: pw.TextStyle(font: fontBold, fontSize: 11)),
+                      pw.Text(
+                        'Notes',
+                        style: pw.TextStyle(font: fontBold, fontSize: 11),
+                      ),
                       pw.SizedBox(height: 4),
-                      pw.Text(invoice.note, style: pw.TextStyle(font: font, fontSize: 10)),
+                      pw.Text(
+                        invoice.note,
+                        style: pw.TextStyle(font: font, fontSize: 10),
+                      ),
                     ],
                   ),
                 ),
@@ -386,12 +634,25 @@ class PdfService {
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               if (company['name']!.isNotEmpty) ...[
-                pw.Text(company['name']!, style: pw.TextStyle(font: fontBold, fontSize: 20)),
+                pw.Text(
+                  company['name']!,
+                  style: pw.TextStyle(font: fontBold, fontSize: 20),
+                ),
                 pw.SizedBox(height: 8),
               ],
-              pw.Text('Invoice', style: pw.TextStyle(font: fontBold, fontSize: 36)),
+              pw.Text(
+                'Invoice',
+                style: pw.TextStyle(font: fontBold, fontSize: 36),
+              ),
               pw.SizedBox(height: 8),
-              pw.Text('#${invoice.invoiceNumber}', style: pw.TextStyle(font: font, fontSize: 14, color: PdfColors.grey600)),
+              pw.Text(
+                '#${invoice.invoiceNumber}',
+                style: pw.TextStyle(
+                  font: font,
+                  fontSize: 14,
+                  color: PdfColors.grey600,
+                ),
+              ),
               pw.SizedBox(height: 48),
               pw.Row(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -400,19 +661,42 @@ class PdfService {
                     child: pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('To', style: pw.TextStyle(font: font, fontSize: 10, color: PdfColors.grey500)),
+                        pw.Text(
+                          'To',
+                          style: pw.TextStyle(
+                            font: font,
+                            fontSize: 10,
+                            color: PdfColors.grey500,
+                          ),
+                        ),
                         pw.SizedBox(height: 4),
-                        pw.Text(invoice.clientName, style: pw.TextStyle(font: fontBold, fontSize: 14)),
+                        pw.Text(
+                          invoice.clientName,
+                          style: pw.TextStyle(font: fontBold, fontSize: 14),
+                        ),
                         if (invoice.clientPhoneNumber.isNotEmpty)
-                          pw.Text(invoice.clientPhoneNumber, style: pw.TextStyle(font: font, fontSize: 11, color: PdfColors.grey600)),
+                          pw.Text(
+                            invoice.clientPhoneNumber,
+                            style: pw.TextStyle(
+                              font: font,
+                              fontSize: 11,
+                              color: PdfColors.grey600,
+                            ),
+                          ),
                       ],
                     ),
                   ),
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.end,
                     children: [
-                      pw.Text('Date: ${_formatDate(invoice.invoiceDate)}', style: pw.TextStyle(font: font, fontSize: 11)),
-                      pw.Text('Due: ${_formatDate(invoice.dueDate)}', style: pw.TextStyle(font: font, fontSize: 11)),
+                      pw.Text(
+                        'Date: ${_formatDate(invoice.invoiceDate)}',
+                        style: pw.TextStyle(font: font, fontSize: 11),
+                      ),
+                      pw.Text(
+                        'Due: ${_formatDate(invoice.dueDate)}',
+                        style: pw.TextStyle(font: font, fontSize: 11),
+                      ),
                     ],
                   ),
                 ],
@@ -421,28 +705,99 @@ class PdfService {
               pw.Container(
                 padding: const pw.EdgeInsets.symmetric(vertical: 12),
                 decoration: const pw.BoxDecoration(
-                  border: pw.Border(bottom: pw.BorderSide(color: PdfColors.grey300)),
+                  border: pw.Border(
+                    bottom: pw.BorderSide(color: PdfColors.grey300),
+                  ),
                 ),
                 child: pw.Row(
                   children: [
-                    pw.Expanded(flex: 4, child: pw.Text('Item', style: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.grey600))),
-                    pw.Expanded(child: pw.Text('Qty', style: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.grey600), textAlign: pw.TextAlign.center)),
-                    pw.Expanded(child: pw.Text('Price', style: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.grey600), textAlign: pw.TextAlign.right)),
-                    pw.Expanded(child: pw.Text('Total', style: pw.TextStyle(font: fontBold, fontSize: 10, color: PdfColors.grey600), textAlign: pw.TextAlign.right)),
+                    pw.Expanded(
+                      flex: 4,
+                      child: pw.Text(
+                        'Item',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        'Qty',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                        textAlign: pw.TextAlign.center,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        'Price',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        'Total',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
                   ],
                 ),
               ),
               pw.Container(
                 padding: const pw.EdgeInsets.symmetric(vertical: 16),
                 decoration: const pw.BoxDecoration(
-                  border: pw.Border(bottom: pw.BorderSide(color: PdfColors.grey200)),
+                  border: pw.Border(
+                    bottom: pw.BorderSide(color: PdfColors.grey200),
+                  ),
                 ),
                 child: pw.Row(
                   children: [
-                    pw.Expanded(flex: 4, child: pw.Text(invoice.itemName, style: pw.TextStyle(font: font, fontSize: 12))),
-                    pw.Expanded(child: pw.Text(invoice.itemQuantity.toString(), style: pw.TextStyle(font: font, fontSize: 12), textAlign: pw.TextAlign.center)),
-                    pw.Expanded(child: pw.Text(_formatCurrency(invoice.itemPrice, invoice.currency), style: pw.TextStyle(font: font, fontSize: 12), textAlign: pw.TextAlign.right)),
-                    pw.Expanded(child: pw.Text(_formatCurrency(invoice.itemPrice * invoice.itemQuantity, invoice.currency), style: pw.TextStyle(font: font, fontSize: 12), textAlign: pw.TextAlign.right)),
+                    pw.Expanded(
+                      flex: 4,
+                      child: pw.Text(
+                        invoice.itemName,
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        invoice.itemQuantity.toString(),
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                        textAlign: pw.TextAlign.center,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        _formatCurrency(invoice.itemPrice, invoice.currency),
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        _formatCurrency(
+                          invoice.itemPrice * invoice.itemQuantity,
+                          invoice.currency,
+                        ),
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -454,15 +809,39 @@ class PdfService {
                     width: 180,
                     child: pw.Column(
                       children: [
-                        _summaryRow('Subtotal', _formatCurrency(invoice.itemPrice * invoice.itemQuantity, invoice.currency), font),
+                        _summaryRow(
+                          'Subtotal',
+                          _formatCurrency(
+                            invoice.itemPrice * invoice.itemQuantity,
+                            invoice.currency,
+                          ),
+                          font,
+                        ),
                         if (invoice.tax > 0)
-                          _summaryRow('Tax', _formatCurrency(invoice.totalAmount - (invoice.itemPrice * invoice.itemQuantity), invoice.currency), font),
+                          _summaryRow(
+                            'Tax',
+                            _formatCurrency(
+                              invoice.totalAmount -
+                                  (invoice.itemPrice * invoice.itemQuantity),
+                              invoice.currency,
+                            ),
+                            font,
+                          ),
                         pw.SizedBox(height: 12),
                         pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                           children: [
-                            pw.Text('Total', style: pw.TextStyle(font: fontBold, fontSize: 16)),
-                            pw.Text(_formatCurrency(invoice.totalAmount, invoice.currency), style: pw.TextStyle(font: fontBold, fontSize: 16)),
+                            pw.Text(
+                              'Total',
+                              style: pw.TextStyle(font: fontBold, fontSize: 16),
+                            ),
+                            pw.Text(
+                              _formatCurrency(
+                                invoice.totalAmount,
+                                invoice.currency,
+                              ),
+                              style: pw.TextStyle(font: fontBold, fontSize: 16),
+                            ),
                           ],
                         ),
                       ],
@@ -472,9 +851,19 @@ class PdfService {
               ),
               if (invoice.note.isNotEmpty) ...[
                 pw.SizedBox(height: 48),
-                pw.Text('Notes', style: pw.TextStyle(font: font, fontSize: 10, color: PdfColors.grey500)),
+                pw.Text(
+                  'Notes',
+                  style: pw.TextStyle(
+                    font: font,
+                    fontSize: 10,
+                    color: PdfColors.grey500,
+                  ),
+                ),
                 pw.SizedBox(height: 4),
-                pw.Text(invoice.note, style: pw.TextStyle(font: font, fontSize: 11)),
+                pw.Text(
+                  invoice.note,
+                  style: pw.TextStyle(font: font, fontSize: 11),
+                ),
               ],
             ],
           );
@@ -485,7 +874,11 @@ class PdfService {
     return pdf.save();
   }
 
-  static pw.Widget _tableCell(String text, pw.Font font, {bool isHeader = false}) {
+  static pw.Widget _tableCell(
+    String text,
+    pw.Font font, {
+    bool isHeader = false,
+  }) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(8),
       child: pw.Text(
@@ -505,7 +898,14 @@ class PdfService {
       child: pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
-          pw.Text(label, style: pw.TextStyle(font: font, fontSize: 11, color: PdfColors.grey700)),
+          pw.Text(
+            label,
+            style: pw.TextStyle(
+              font: font,
+              fontSize: 11,
+              color: PdfColors.grey700,
+            ),
+          ),
           pw.Text(value, style: pw.TextStyle(font: font, fontSize: 11)),
         ],
       ),

@@ -1,8 +1,8 @@
 import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_wa_skeleton/app/ui/premium/main_paywall.page.dart';
-import 'package:flutter_wa_skeleton/app/ui/premium/widgets/premium_banner.dart';
+import '../premium/main_paywall.page.dart';
+import '../premium/widgets/premium_banner.dart';
 
 import '../../../core/core.dart';
 import '../common/back_button.dart';
@@ -17,7 +17,11 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leadingWidth: 70, leading: WABackButton(), title: Text('Settings')),
+      appBar: AppBar(
+        leadingWidth: 70,
+        leading: WABackButton(),
+        title: Text('Settings'),
+      ),
       body: ListView(
         padding: EdgeInsets.all(16).r,
         children: [
@@ -30,14 +34,16 @@ class SettingsPage extends StatelessWidget {
                     title: 'Current plan',
                     status: snapshot.data == true ? 'Premium' : 'Basic',
                     onTap: () {
-                      //todo your router. for stage 2
-                      Navigator.of(context, rootNavigator: true).push(MainPaywallPage.route());
+                      MainPaywallPage.show(context);
                     },
                   );
                 },
               ),
 
-              SettingsTile(title: 'Current version', onTap: () => showAppVersion(context)),
+              SettingsTile(
+                title: 'Current version',
+                onTap: () => showAppVersion(context),
+              ),
               Builder(
                 builder: (context) {
                   return SettingsTile(
@@ -70,10 +76,19 @@ class SettingsPage extends StatelessWidget {
           SizedBox(height: 16.r),
           SettingsSection(
             children: [
-              SettingsTile(title: 'App update', onTap: () => checkAppUpdate(context)),
+              SettingsTile(
+                title: 'App update',
+                onTap: () => checkAppUpdate(context),
+              ),
 
-              SettingsTile(title: 'Privacy Policy', onTap: () => openPrivacyPolicy(context)),
-              SettingsTile(title: 'Terms of Use', onTap: () => openTermsOfUse(context)),
+              SettingsTile(
+                title: 'Privacy Policy',
+                onTap: () => openPrivacyPolicy(context),
+              ),
+              SettingsTile(
+                title: 'Terms of Use',
+                onTap: () => openTermsOfUse(context),
+              ),
             ],
           ),
         ],

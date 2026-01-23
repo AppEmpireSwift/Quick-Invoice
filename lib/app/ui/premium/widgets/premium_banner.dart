@@ -1,9 +1,8 @@
 import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_wa_skeleton/app/ui/premium/main_paywall.page.dart';
-import 'package:flutter_wa_skeleton/gen/assets.gen.dart';
-
+import '../main_paywall.page.dart';
+import '../../../../gen/assets.gen.dart';
 import '../../../../style/style.dart';
 
 class AutoHiddablePremiumBanner extends StatelessWidget {
@@ -26,11 +25,7 @@ class AutoHiddablePremiumBanner extends StatelessWidget {
           margin: margin,
           onTap: () {
             if (onTap != null) return onTap?.call();
-            //todo your router for state 2
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(MainPaywallPage.route());
+            MainPaywallPage.show(context);
           },
         );
       },

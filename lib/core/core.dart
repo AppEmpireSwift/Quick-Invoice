@@ -7,8 +7,6 @@ import 'services/path.dart';
 export 'utils.dart';
 export 'services/boarding.helper.dart';
 export 'services/path.dart';
-export 'ui/fab.location.dart';
-export 'ui/text.dart';
 export 'entities/config.dart';
 
 export 'ui/launch.wrapper.dart';

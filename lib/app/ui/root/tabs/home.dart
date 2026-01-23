@@ -82,8 +82,12 @@ class _HomeTabState extends State<HomeTab> {
           filtered
               .where(
                 (i) =>
-                    i.clientName.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                    i.invoiceNumber.toLowerCase().contains(_searchQuery.toLowerCase()),
+                    i.clientName.toLowerCase().contains(
+                      _searchQuery.toLowerCase(),
+                    ) ||
+                    i.invoiceNumber.toLowerCase().contains(
+                      _searchQuery.toLowerCase(),
+                    ),
               )
               .toList();
     }
@@ -178,7 +182,10 @@ class _HomeTabState extends State<HomeTab> {
                         child: _OverviewCard(
                           label: 'Paid',
                           amount: _getPaidTotal(),
-                          currency: _invoices.isNotEmpty ? _invoices.first.currency : 'GBP',
+                          currency:
+                              _invoices.isNotEmpty
+                                  ? _invoices.first.currency
+                                  : 'GBP',
                         ),
                       ),
                       SizedBox(width: 12.r),
@@ -186,7 +193,10 @@ class _HomeTabState extends State<HomeTab> {
                         child: _OverviewCard(
                           label: 'Pending',
                           amount: _getPendingTotal(),
-                          currency: _invoices.isNotEmpty ? _invoices.first.currency : 'GBP',
+                          currency:
+                              _invoices.isNotEmpty
+                                  ? _invoices.first.currency
+                                  : 'GBP',
                         ),
                       ),
                       SizedBox(width: 12.r),
@@ -194,7 +204,10 @@ class _HomeTabState extends State<HomeTab> {
                         child: _OverviewCard(
                           label: 'Overdue',
                           amount: _getOverdueTotal(),
-                          currency: _invoices.isNotEmpty ? _invoices.first.currency : 'GBP',
+                          currency:
+                              _invoices.isNotEmpty
+                                  ? _invoices.first.currency
+                                  : 'GBP',
                         ),
                       ),
                     ],
@@ -223,15 +236,24 @@ class _HomeTabState extends State<HomeTab> {
                               _filterInvoices();
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.r,
+                                vertical: 8.r,
+                              ),
                               decoration: BoxDecoration(
-                                color: isSelected ? ColorStyles.primary : ColorStyles.fillsTertiary,
+                                color:
+                                    isSelected
+                                        ? ColorStyles.primary
+                                        : ColorStyles.fillsTertiary,
                                 borderRadius: BorderRadius.circular(20.r),
                               ),
                               child: Text(
                                 entry.value,
                                 style: TextStyles.footnoteEmphasized.copyWith(
-                                  color: isSelected ? ColorStyles.white : ColorStyles.primaryTxt,
+                                  color:
+                                      isSelected
+                                          ? ColorStyles.white
+                                          : ColorStyles.primaryTxt,
                                 ),
                               ),
                             ),
@@ -264,7 +286,9 @@ class _HomeTabState extends State<HomeTab> {
                           },
                           child: Text(
                             'Clear Search',
-                            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primary),
+                            style: TextStyles.bodyEmphasized.copyWith(
+                              color: ColorStyles.primary,
+                            ),
                           ),
                         )
                         : CupertinoButton(
@@ -281,7 +305,9 @@ class _HomeTabState extends State<HomeTab> {
                             child: Center(
                               child: Text(
                                 'Create invoice',
-                                style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                                style: TextStyles.bodyEmphasized.copyWith(
+                                  color: ColorStyles.white,
+                                ),
                               ),
                             ),
                           ),
@@ -295,7 +321,9 @@ class _HomeTabState extends State<HomeTab> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => _InvoiceWidget(
                     invoice: _filteredInvoices[index],
-                    onTap: () => _navigateToInvoiceDetails(_filteredInvoices[index]),
+                    onTap:
+                        () =>
+                            _navigateToInvoiceDetails(_filteredInvoices[index]),
                   ),
                   childCount: _filteredInvoices.length,
                 ),
@@ -303,7 +331,12 @@ class _HomeTabState extends State<HomeTab> {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 92.r, left: 16.r, right: 16.r, top: 16.r),
+                padding: EdgeInsets.only(
+                  bottom: 92.r,
+                  left: 16.r,
+                  right: 16.r,
+                  top: 16.r,
+                ),
                 child: CupertinoButton(
                   padding: EdgeInsets.zero,
                   onPressed: () => _navigateToCreateInvoice(),
@@ -317,11 +350,17 @@ class _HomeTabState extends State<HomeTab> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(CupertinoIcons.add, color: ColorStyles.white, size: 20.r),
+                        Icon(
+                          CupertinoIcons.add,
+                          color: ColorStyles.white,
+                          size: 20.r,
+                        ),
                         SizedBox(width: 8.r),
                         Text(
                           'New Invoice',
-                          style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                          style: TextStyles.bodyEmphasized.copyWith(
+                            color: ColorStyles.white,
+                          ),
                         ),
                       ],
                     ),
@@ -350,7 +389,9 @@ class _HomeTabState extends State<HomeTab> {
     HapticFeedback.selectionClick();
     Navigator.of(context, rootNavigator: true).push(
       CupertinoPageRoute(
-        builder: (_) => InvoiceDetailsPage(invoice: invoice, onUpdate: _loadInvoices),
+        builder:
+            (_) =>
+                InvoiceDetailsPage(invoice: invoice, onUpdate: _loadInvoices),
       ),
     );
   }
@@ -371,15 +412,25 @@ class _EmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(CupertinoIcons.doc_text, size: 64.r, color: ColorStyles.secondary),
+            Icon(
+              CupertinoIcons.doc_text,
+              size: 64.r,
+              color: ColorStyles.secondary,
+            ),
             SizedBox(height: 16.r),
-            Text(message, textAlign: TextAlign.center, style: TextStyles.title3Emphasized),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyles.title3Emphasized,
+            ),
             if (subtitle != null) ...[
               SizedBox(height: 8.r),
               Text(
                 subtitle!,
                 textAlign: TextAlign.center,
-                style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary),
+                style: TextStyles.bodyRegular.copyWith(
+                  color: ColorStyles.secondary,
+                ),
               ),
             ],
             if (action != null) ...[SizedBox(height: 24.r), action!],
@@ -395,7 +446,11 @@ class _OverviewCard extends StatelessWidget {
   final double amount;
   final String currency;
 
-  const _OverviewCard({required this.label, required this.amount, required this.currency});
+  const _OverviewCard({
+    required this.label,
+    required this.amount,
+    required this.currency,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +463,12 @@ class _OverviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+          Text(
+            label,
+            style: TextStyles.footnoteRegular.copyWith(
+              color: ColorStyles.secondary,
+            ),
+          ),
           SizedBox(height: 8.r),
           Text(
             '${getCurrencySymbol(currency)}${amount.toStringAsFixed(0)}',
@@ -474,8 +534,12 @@ class _InvoiceWidget extends StatelessWidget {
                         ),
                         SizedBox(height: 4.r),
                         Text(
-                          invoice.itemName.isNotEmpty ? invoice.itemName : invoice.clientName,
-                          style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primaryTxt),
+                          invoice.itemName.isNotEmpty
+                              ? invoice.itemName
+                              : invoice.clientName,
+                          style: TextStyles.bodyEmphasized.copyWith(
+                            color: ColorStyles.primaryTxt,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -483,14 +547,20 @@ class _InvoiceWidget extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.r, vertical: 4.r),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.r,
+                      vertical: 4.r,
+                    ),
                     decoration: BoxDecoration(
                       color: _getStatusColor().withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Text(
-                      invoice.status.substring(0, 1).toUpperCase() + invoice.status.substring(1),
-                      style: TextStyles.caption1Regular.copyWith(color: _getStatusColor()),
+                      invoice.status.substring(0, 1).toUpperCase() +
+                          invoice.status.substring(1),
+                      style: TextStyles.caption1Regular.copyWith(
+                        color: _getStatusColor(),
+                      ),
                     ),
                   ),
                 ],
@@ -501,11 +571,15 @@ class _InvoiceWidget extends StatelessWidget {
                 children: [
                   Text(
                     _formatDate(invoice.dueDate),
-                    style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+                    style: TextStyles.footnoteRegular.copyWith(
+                      color: ColorStyles.secondary,
+                    ),
                   ),
                   Text(
                     '${getCurrencySymbol(invoice.currency)}${invoice.totalAmount.toStringAsFixed(2)}',
-                    style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primaryTxt),
+                    style: TextStyles.bodyEmphasized.copyWith(
+                      color: ColorStyles.primaryTxt,
+                    ),
                   ),
                 ],
               ),
@@ -559,7 +633,11 @@ class _SelectClientPageState extends State<SelectClientPage> {
                 .push(CupertinoPageRoute(builder: (_) => const AddClientPage()))
                 .then((_) => _loadClients());
           },
-          child: Icon(CupertinoIcons.plus_circle_fill, color: ColorStyles.primary, size: 28.r),
+          child: Icon(
+            CupertinoIcons.plus_circle_fill,
+            color: ColorStyles.primary,
+            size: 28.r,
+          ),
         ),
       ),
       child: SafeArea(
@@ -586,14 +664,20 @@ class _SelectClientPageState extends State<SelectClientPage> {
                     SizedBox(height: 8.r),
                     Text(
                       'Add your first client',
-                      style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+                      style: TextStyles.footnoteRegular.copyWith(
+                        color: ColorStyles.secondary,
+                      ),
                     ),
                     SizedBox(height: 32.r),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true)
-                            .push(CupertinoPageRoute(builder: (_) => const AddClientPage()))
+                            .push(
+                              CupertinoPageRoute(
+                                builder: (_) => const AddClientPage(),
+                              ),
+                            )
                             .then((_) => _loadClients());
                       },
                       child: Container(
@@ -606,7 +690,9 @@ class _SelectClientPageState extends State<SelectClientPage> {
                         child: Center(
                           child: Text(
                             'Add Client',
-                            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                            style: TextStyles.bodyEmphasized.copyWith(
+                              color: ColorStyles.white,
+                            ),
                           ),
                         ),
                       ),
@@ -642,7 +728,9 @@ class _SelectClientPageState extends State<SelectClientPage> {
                               child: Center(
                                 child: Text(
                                   client.name.isNotEmpty
-                                      ? client.name.substring(0, 1).toUpperCase()
+                                      ? client.name
+                                          .substring(0, 1)
+                                          .toUpperCase()
                                       : 'C',
                                   style: TextStyles.footnoteEmphasized.copyWith(
                                     color: ColorStyles.white,
@@ -655,14 +743,18 @@ class _SelectClientPageState extends State<SelectClientPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(client.name, style: TextStyles.bodyEmphasized),
+                                  Text(
+                                    client.name,
+                                    style: TextStyles.bodyEmphasized,
+                                  ),
                                   if (client.phoneNumber.isNotEmpty) ...[
                                     SizedBox(height: 4.r),
                                     Text(
                                       client.phoneNumber,
-                                      style: TextStyles.footnoteRegular.copyWith(
-                                        color: ColorStyles.secondary,
-                                      ),
+                                      style: TextStyles.footnoteRegular
+                                          .copyWith(
+                                            color: ColorStyles.secondary,
+                                          ),
                                     ),
                                   ],
                                 ],
@@ -802,7 +894,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                     child: CupertinoDatePicker(
                       mode: CupertinoDatePickerMode.date,
                       initialDateTime:
-                          isInvoiceDate ? invoiceDate ?? today : dueDate ?? invoiceDate ?? today,
+                          isInvoiceDate
+                              ? invoiceDate ?? today
+                              : dueDate ?? invoiceDate ?? today,
                       minimumDate: isInvoiceDate ? null : invoiceDate,
                       maximumDate: isInvoiceDate ? today : null,
                       onDateTimeChanged: (DateTime newDate) {
@@ -829,7 +923,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
   bool get isCurrentStepValid {
     switch (_currentStep) {
       case 0:
-        return invoiceNumberController.text.isNotEmpty && invoiceDate != null && dueDate != null;
+        return invoiceNumberController.text.isNotEmpty &&
+            invoiceDate != null &&
+            dueDate != null;
       case 1:
         return clientNameController.text.isNotEmpty &&
             itemDescriptionController.text.isNotEmpty &&
@@ -873,7 +969,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary)),
+          child: Text(
+            'Cancel',
+            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary),
+          ),
         ),
         middle: Text('New Invoice'),
         backgroundColor: ColorStyles.white,
@@ -894,7 +993,11 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 padding: EdgeInsets.all(16.r),
                 child: IndexedStack(
                   index: _currentStep,
-                  children: [_buildDetailsStep(), _buildItemsStep(), _buildReviewStep()],
+                  children: [
+                    _buildDetailsStep(),
+                    _buildItemsStep(),
+                    _buildReviewStep(),
+                  ],
                 ),
               ),
             ),
@@ -902,7 +1005,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 color: ColorStyles.white,
-                border: Border(top: BorderSide(color: ColorStyles.separator, width: 0.5)),
+                border: Border(
+                  top: BorderSide(color: ColorStyles.separator, width: 0.5),
+                ),
               ),
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
@@ -921,14 +1026,20 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: isCurrentStepValid ? ColorStyles.primary : ColorStyles.fillsTertiary,
+                    color:
+                        isCurrentStepValid
+                            ? ColorStyles.primary
+                            : ColorStyles.fillsTertiary,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   alignment: Alignment.center,
                   child: Text(
                     _currentStep < 2 ? 'Continue' : 'Save',
                     style: TextStyles.bodyEmphasized.copyWith(
-                      color: isCurrentStepValid ? ColorStyles.white : ColorStyles.secondary,
+                      color:
+                          isCurrentStepValid
+                              ? ColorStyles.white
+                              : ColorStyles.secondary,
                     ),
                   ),
                 ),
@@ -955,7 +1066,11 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           value: invoiceDate != null ? _formatDate(invoiceDate) : null,
           placeholder: 'Select date',
           onTap: () => _showDatePicker(true),
-          icon: Icon(CupertinoIcons.calendar, color: ColorStyles.secondary, size: 20.r),
+          icon: Icon(
+            CupertinoIcons.calendar,
+            color: ColorStyles.secondary,
+            size: 20.r,
+          ),
         ),
         SizedBox(height: 16.r),
         _SelectableContainer(
@@ -963,7 +1078,11 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           value: dueDate != null ? _formatDate(dueDate) : null,
           placeholder: 'Select date',
           onTap: () => _showDatePicker(false),
-          icon: Icon(CupertinoIcons.calendar, color: ColorStyles.secondary, size: 20.r),
+          icon: Icon(
+            CupertinoIcons.calendar,
+            color: ColorStyles.secondary,
+            size: 20.r,
+          ),
         ),
         SizedBox(height: 16.r),
         _SelectableContainer(
@@ -971,7 +1090,11 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
           value: currencyController.text,
           placeholder: 'Select currency',
           onTap: () => _showCurrencyPicker(),
-          icon: Icon(CupertinoIcons.money_dollar_circle, color: ColorStyles.secondary, size: 20.r),
+          icon: Icon(
+            CupertinoIcons.money_dollar_circle,
+            color: ColorStyles.secondary,
+            size: 20.r,
+          ),
         ),
       ],
     );
@@ -991,7 +1114,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.r,
+                    vertical: 12.r,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -999,7 +1125,10 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       CupertinoButton(
                         padding: EdgeInsets.zero,
                         onPressed: () => Navigator.pop(context),
-                        child: Icon(CupertinoIcons.xmark_circle_fill, color: ColorStyles.secondary),
+                        child: Icon(
+                          CupertinoIcons.xmark_circle_fill,
+                          color: ColorStyles.secondary,
+                        ),
                       ),
                     ],
                   ),
@@ -1011,16 +1140,25 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                         (context, index) => CupertinoButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            setState(() => currencyController.text = currencies[index]);
+                            setState(
+                              () => currencyController.text = currencies[index],
+                            );
                             Navigator.pop(context);
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.r,
+                              vertical: 12.r,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(currencies[index], style: TextStyles.bodyRegular),
-                                if (currencyController.text == currencies[index])
+                                Text(
+                                  currencies[index],
+                                  style: TextStyles.bodyRegular,
+                                ),
+                                if (currencyController.text ==
+                                    currencies[index])
                                   Icon(
                                     CupertinoIcons.checkmark,
                                     color: ColorStyles.primary,
@@ -1068,10 +1206,16 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                       children: [
                         Text(
                           'Choose from list',
-                          style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary),
+                          style: TextStyles.bodyRegular.copyWith(
+                            color: ColorStyles.primary,
+                          ),
                         ),
                         SizedBox(width: 4.r),
-                        Icon(CupertinoIcons.chevron_right, color: ColorStyles.primary, size: 18.r),
+                        Icon(
+                          CupertinoIcons.chevron_right,
+                          color: ColorStyles.primary,
+                          size: 18.r,
+                        ),
                       ],
                     ),
                   ],
@@ -1160,7 +1304,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
             width: 100.r,
             child: Text(
               label,
-              style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+              style: TextStyles.bodyRegular.copyWith(
+                color: ColorStyles.primaryTxt,
+              ),
             ),
           ),
           Expanded(
@@ -1169,7 +1315,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                 Expanded(
                   child: CupertinoTextField(
                     controller: controller,
-                    style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+                    style: TextStyles.bodyRegular.copyWith(
+                      color: ColorStyles.primaryTxt,
+                    ),
                     placeholder: placeholder,
                     placeholderStyle: TextStyles.bodyRegular.copyWith(
                       color: ColorStyles.secondary.withValues(alpha: 0.5),
@@ -1234,7 +1382,9 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
                   Text('Total', style: TextStyles.bodyEmphasized),
                   Text(
                     '${getCurrencySymbol(currencyController.text)}${total.toStringAsFixed(2)}',
-                    style: TextStyles.title3Emphasized.copyWith(color: ColorStyles.primary),
+                    style: TextStyles.title3Emphasized.copyWith(
+                      color: ColorStyles.primary,
+                    ),
                   ),
                 ],
               ),
@@ -1251,8 +1401,19 @@ class _CreateInvoicePageState extends State<CreateInvoicePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
-          Expanded(child: Text(value, style: TextStyles.bodyRegular, textAlign: TextAlign.end)),
+          Text(
+            label,
+            style: TextStyles.footnoteRegular.copyWith(
+              color: ColorStyles.secondary,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyles.bodyRegular,
+              textAlign: TextAlign.end,
+            ),
+          ),
         ],
       ),
     );
@@ -1280,7 +1441,8 @@ class _ProgressIndicator extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 16.h),
             height: 2.r,
-            color: currentStep > 0 ? ColorStyles.primary : ColorStyles.separator,
+            color:
+                currentStep > 0 ? ColorStyles.primary : ColorStyles.separator,
           ),
         ),
         _ProgressStep(
@@ -1293,10 +1455,16 @@ class _ProgressIndicator extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 16.h),
             height: 2.r,
-            color: currentStep > 1 ? ColorStyles.primary : ColorStyles.separator,
+            color:
+                currentStep > 1 ? ColorStyles.primary : ColorStyles.separator,
           ),
         ),
-        _ProgressStep(step: 3, label: 'Review', isCompleted: false, isActive: currentStep == 2),
+        _ProgressStep(
+          step: 3,
+          label: 'Review',
+          isCompleted: false,
+          isActive: currentStep == 2,
+        ),
       ],
     );
   }
@@ -1323,17 +1491,27 @@ class _ProgressStep extends StatelessWidget {
           width: 32.r,
           height: 32.r,
           decoration: BoxDecoration(
-            color: isCompleted || isActive ? ColorStyles.primary : ColorStyles.separator,
+            color:
+                isCompleted || isActive
+                    ? ColorStyles.primary
+                    : ColorStyles.separator,
             shape: BoxShape.circle,
           ),
           child: Center(
             child:
                 isCompleted
-                    ? Icon(CupertinoIcons.checkmark, color: ColorStyles.white, size: 16.r)
+                    ? Icon(
+                      CupertinoIcons.checkmark,
+                      color: ColorStyles.white,
+                      size: 16.r,
+                    )
                     : Text(
                       step.toString(),
                       style: TextStyles.footnoteEmphasized.copyWith(
-                        color: isActive ? ColorStyles.white : ColorStyles.secondary,
+                        color:
+                            isActive
+                                ? ColorStyles.white
+                                : ColorStyles.secondary,
                       ),
                     ),
           ),
@@ -1383,12 +1561,17 @@ class _InputWidget extends StatelessWidget {
               Expanded(
                 child: CupertinoTextField(
                   controller: controller,
-                  style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+                  style: TextStyles.bodyRegular.copyWith(
+                    color: ColorStyles.primaryTxt,
+                  ),
                   placeholder: placeholder ?? label,
                   placeholderStyle: TextStyles.bodyRegular.copyWith(
                     color: ColorStyles.secondary.withValues(alpha: 0.5),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.r,
+                    vertical: 12.r,
+                  ),
                   decoration: null,
                 ),
               ),
@@ -1459,7 +1642,11 @@ class _SelectableContainer extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(CupertinoIcons.chevron_down, color: ColorStyles.secondary, size: 20.r),
+                Icon(
+                  CupertinoIcons.chevron_down,
+                  color: ColorStyles.secondary,
+                  size: 20.r,
+                ),
               ],
             ),
           ),
@@ -1473,7 +1660,11 @@ class InvoiceDetailsPage extends StatefulWidget {
   final Invoice invoice;
   final VoidCallback onUpdate;
 
-  const InvoiceDetailsPage({super.key, required this.invoice, required this.onUpdate});
+  const InvoiceDetailsPage({
+    super.key,
+    required this.invoice,
+    required this.onUpdate,
+  });
 
   @override
   State<InvoiceDetailsPage> createState() => _InvoiceDetailsPageState();
@@ -1550,10 +1741,15 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                     onPressed: () => Navigator.pop(context),
                     child: Row(
                       children: [
-                        Icon(CupertinoIcons.chevron_back, color: ColorStyles.primary),
+                        Icon(
+                          CupertinoIcons.chevron_back,
+                          color: ColorStyles.primary,
+                        ),
                         Text(
                           'Back',
-                          style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary),
+                          style: TextStyles.bodyRegular.copyWith(
+                            color: ColorStyles.primary,
+                          ),
                         ),
                       ],
                     ),
@@ -1562,7 +1758,11 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: () => _showExportOptions(),
-                    child: Icon(CupertinoIcons.ellipsis, color: ColorStyles.primary, size: 22.r),
+                    child: Icon(
+                      CupertinoIcons.ellipsis,
+                      color: ColorStyles.primary,
+                      size: 22.r,
+                    ),
                   ),
                 ],
               ),
@@ -1675,9 +1875,15 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                         children: [
                           _buildDetailRow('Client', invoice.clientName),
                           Divider(color: ColorStyles.separator, height: 24.r),
-                          _buildDetailRow('Invoice Date', _formatDate(invoice.invoiceDate)),
+                          _buildDetailRow(
+                            'Invoice Date',
+                            _formatDate(invoice.invoiceDate),
+                          ),
                           Divider(color: ColorStyles.separator, height: 24.r),
-                          _buildDetailRow('Due Date', _formatDate(invoice.dueDate)),
+                          _buildDetailRow(
+                            'Due Date',
+                            _formatDate(invoice.dueDate),
+                          ),
                           Divider(color: ColorStyles.separator, height: 24.r),
                           _buildDetailRow('Currency', invoice.currency),
                         ],
@@ -1703,13 +1909,17 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(invoice.itemName, style: TextStyles.bodyRegular),
+                                    Text(
+                                      invoice.itemName,
+                                      style: TextStyles.bodyRegular,
+                                    ),
                                     SizedBox(height: 4.r),
                                     Text(
                                       '${invoice.itemQuantity} x ${getCurrencySymbol(invoice.currency)}${invoice.itemPrice.toStringAsFixed(2)}',
-                                      style: TextStyles.footnoteRegular.copyWith(
-                                        color: ColorStyles.secondary,
-                                      ),
+                                      style: TextStyles.footnoteRegular
+                                          .copyWith(
+                                            color: ColorStyles.secondary,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -1733,7 +1943,9 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 color: ColorStyles.white,
-                border: Border(top: BorderSide(color: ColorStyles.separator, width: 0.5)),
+                border: Border(
+                  top: BorderSide(color: ColorStyles.separator, width: 0.5),
+                ),
               ),
               child: Row(
                 children: [
@@ -1744,7 +1956,11 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                         _showTemplateSelector((template) {
                           Navigator.of(context, rootNavigator: true).push(
                             CupertinoPageRoute(
-                              builder: (_) => PdfPreviewPage(invoice: invoice, template: template),
+                              builder:
+                                  (_) => PdfPreviewPage(
+                                    invoice: invoice,
+                                    template: template,
+                                  ),
                             ),
                           );
                         });
@@ -1758,7 +1974,9 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                         child: Center(
                           child: Text(
                             'Preview',
-                            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primary),
+                            style: TextStyles.bodyEmphasized.copyWith(
+                              color: ColorStyles.primary,
+                            ),
                           ),
                         ),
                       ),
@@ -1782,7 +2000,9 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                         child: Center(
                           child: Text(
                             'Send',
-                            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                            style: TextStyles.bodyEmphasized.copyWith(
+                              color: ColorStyles.white,
+                            ),
                           ),
                         ),
                       ),
@@ -1801,7 +2021,10 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary)),
+        Text(
+          label,
+          style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary),
+        ),
         Expanded(
           child: Text(
             value,
@@ -1817,7 +2040,9 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
   void _showExportOptions() {
     _showTemplateSelector((template) {
       Navigator.of(context, rootNavigator: true).push(
-        CupertinoPageRoute(builder: (_) => PdfPreviewPage(invoice: invoice, template: template)),
+        CupertinoPageRoute(
+          builder: (_) => PdfPreviewPage(invoice: invoice, template: template),
+        ),
       );
     });
   }
@@ -1873,7 +2098,10 @@ class _TemplateSelectorModalState extends State<_TemplateSelectorModal> {
             // Title
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.r),
-              child: Text('Select Template', style: TextStyles.title3Emphasized),
+              child: Text(
+                'Select Template',
+                style: TextStyles.title3Emphasized,
+              ),
             ),
             SizedBox(height: 24.r),
             // Template options
@@ -1886,7 +2114,10 @@ class _TemplateSelectorModalState extends State<_TemplateSelectorModal> {
                       name: 'Classic',
                       template: PdfTemplate.classic,
                       isSelected: _selectedTemplate == PdfTemplate.classic,
-                      onTap: () => setState(() => _selectedTemplate = PdfTemplate.classic),
+                      onTap:
+                          () => setState(
+                            () => _selectedTemplate = PdfTemplate.classic,
+                          ),
                     ),
                   ),
                   SizedBox(width: 12.r),
@@ -1895,7 +2126,10 @@ class _TemplateSelectorModalState extends State<_TemplateSelectorModal> {
                       name: 'Modern',
                       template: PdfTemplate.modern,
                       isSelected: _selectedTemplate == PdfTemplate.modern,
-                      onTap: () => setState(() => _selectedTemplate = PdfTemplate.modern),
+                      onTap:
+                          () => setState(
+                            () => _selectedTemplate = PdfTemplate.modern,
+                          ),
                     ),
                   ),
                   SizedBox(width: 12.r),
@@ -1904,7 +2138,10 @@ class _TemplateSelectorModalState extends State<_TemplateSelectorModal> {
                       name: 'Minir',
                       template: PdfTemplate.minimal,
                       isSelected: _selectedTemplate == PdfTemplate.minimal,
-                      onTap: () => setState(() => _selectedTemplate = PdfTemplate.minimal),
+                      onTap:
+                          () => setState(
+                            () => _selectedTemplate = PdfTemplate.minimal,
+                          ),
                     ),
                   ),
                 ],
@@ -1927,7 +2164,9 @@ class _TemplateSelectorModalState extends State<_TemplateSelectorModal> {
                   child: Center(
                     child: Text(
                       'Continue',
-                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                      style: TextStyles.bodyEmphasized.copyWith(
+                        color: ColorStyles.white,
+                      ),
                     ),
                   ),
                 ),
@@ -2040,7 +2279,9 @@ class _TemplateOption extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: ColorStyles.primary,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(4.r)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(4.r),
+                  ),
                 ),
               ),
               SizedBox(height: 8.r),
@@ -2119,7 +2360,11 @@ class PdfPreviewPage extends StatefulWidget {
   final Invoice invoice;
   final PdfTemplate template;
 
-  const PdfPreviewPage({super.key, required this.invoice, required this.template});
+  const PdfPreviewPage({
+    super.key,
+    required this.invoice,
+    required this.template,
+  });
 
   @override
   State<PdfPreviewPage> createState() => _PdfPreviewPageState();
@@ -2136,10 +2381,15 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
   }
 
   Future<void> _loadPdf() async {
-    final path = await PdfService.savePdfToTemp(widget.invoice, template: widget.template);
+    final path = await PdfService.savePdfToTemp(
+      widget.invoice,
+      template: widget.template,
+    );
     if (mounted) {
       setState(() {
-        _pdfController = PdfControllerPinch(document: PdfDocument.openFile(path));
+        _pdfController = PdfControllerPinch(
+          document: PdfDocument.openFile(path),
+        );
         _loading = false;
       });
     }
@@ -2163,8 +2413,16 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
         border: null,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: () => PdfService.shareInvoice(widget.invoice, template: widget.template),
-          child: Icon(CupertinoIcons.share, color: ColorStyles.primary, size: 22.r),
+          onPressed:
+              () => PdfService.shareInvoice(
+                widget.invoice,
+                template: widget.template,
+              ),
+          child: Icon(
+            CupertinoIcons.share,
+            color: ColorStyles.primary,
+            size: 22.r,
+          ),
         ),
       ),
       child:

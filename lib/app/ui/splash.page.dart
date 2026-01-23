@@ -9,10 +9,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(Assets.images.splash.path),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: AssetImage(Assets.images.splash.path), fit: BoxFit.cover),
       ),
     );
   }

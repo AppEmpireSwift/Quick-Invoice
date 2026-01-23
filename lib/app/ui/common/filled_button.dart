@@ -7,7 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class WAFilledButton extends StatefulWidget {
   final FutureOr<void> Function()? onPressed;
   final Widget child;
-  const WAFilledButton({super.key, required this.onPressed, required this.child});
+  const WAFilledButton({
+    super.key,
+    required this.onPressed,
+    required this.child,
+  });
 
   @override
   State<WAFilledButton> createState() => _WAFilledButtonState();
@@ -47,7 +51,7 @@ class _WAFilledButtonState extends State<WAFilledButton> {
     }
   }
 
-  switchState(bool loading) {
+  void switchState(bool loading) {
     if (isLoading == loading) return;
     if (!mounted) return;
     setState(() {

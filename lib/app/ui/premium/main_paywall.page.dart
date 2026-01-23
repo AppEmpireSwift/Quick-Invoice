@@ -1,266 +1,240 @@
 import 'package:apphud_helper/apphud_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_wa_skeleton/core/services/ui.helper.dart';
-import 'package:flutter_wa_skeleton/core/ui/home_indicator_space.dart';
 
 import '../../../core/core.dart';
-import '../../../gen/assets.gen.dart';
 import '../../../style/style.dart';
-import '../../app.dart';
 import '../common/filled_button.dart';
 
 class MainPaywallPage extends StatelessWidget {
   const MainPaywallPage({super.key});
 
-  static Route route() => MaterialPageRoute(
-    fullscreenDialog: true,
-    builder: (_) => MainPaywallPage(),
-  );
+  static void show(BuildContext context) {
+    showCupertinoSheet(
+      context: context,
+      builder: (_) => const MainPaywallPage(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    String bg;
-    switch (uiHelper.deviceType) {
-      case AppleDeviceType.iphoneSe:
-        bg = Assets.images.premium.paywallSe.path;
-      case AppleDeviceType.iphoneBase:
-        bg = Assets.images.premium.paywall.path;
-      case AppleDeviceType.ipad:
-        if (uiHelper.isLandscape) {
-          bg = Assets.images.premium.paywallAlbum.path;
-        } else {
-          bg = Assets.images.premium.paywallIpad.path;
-        }
-    }
     return PaywallWrapper(
       onSkipPaywallCallback: () {
-        //todo your router for stage 2
         Navigator.pop(context);
       },
       onSuccessPurchaseCallback: () {
-        //todo your router for stage 2
         Navigator.pop(context, true);
       },
       paywallType: PaywallType.main,
-      paywallPage: Scaffold(
+      paywallPage: CupertinoPageScaffold(
         backgroundColor: ColorStyles.white,
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Positioned.fill(child: Image.asset(bg, fit: BoxFit.cover)),
-
-            Positioned(
-              // top: 10,
-              right: 10,
-              child: SafeArea(
-                child: PaywallCloseButton(
-                  buttonBuilder:
-                      (onClose) => CloseButton(
-                        onPressed: onClose,
-                        color: ColorStyles.primaryTxt,
-                      ),
+        navigationBar: CupertinoNavigationBar(
+          backgroundColor: ColorStyles.white,
+          border: null,
+          leading: const SizedBox.shrink(),
+          trailing: PaywallCloseButton(
+            buttonBuilder:
+                (onClose) => CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: onClose,
+                  child: Icon(
+                    CupertinoIcons.xmark_circle_fill,
+                    color: ColorStyles.secondary,
+                    size: 28.r,
+                  ),
                 ),
-              ),
-            ),
-
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16).r,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    PaywallActiveProductInfo(
-                      infoBuilder: (
-                        String activeProductInfo,
-                        String? limitedText,
-                        _,
-                      ) {
-                        return Text(
-                          activeProductInfo,
-                          textAlign: TextAlign.center,
-                          style: TextStyles.footnoteRegular,
-                        );
-                      },
-                    ),
-                    PaywallTitle(
-                      titleBuilder: (String title) {
-                        return Text(
-                          title.split('\n').join(' '),
-                          style: TextStyles.title1Emphasized,
-                          textAlign: TextAlign.center,
-                        );
-                      },
-                    ),
-                    SizedBox(height: 4.r),
-                    ProductsTilesBuilder(
-                      productTileBuilder: (
-                        String productName,
-                        String productSubtitle,
-                        String productPrice,
-                        bool isActive,
-                        VoidCallback onTap,
-                      ) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 4.r),
-                          child: Material(
-                            type: MaterialType.transparency,
-                            borderRadius: BorderRadius.circular(18).r,
-                            child: InkWell(
-                              onTap: onTap,
-                              borderRadius: BorderRadius.circular(18).r,
-                              child: Ink(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color:
-                                      isActive
-                                          ? ColorStyles.primaryWithOpacity
-                                          : null,
-                                  borderRadius: BorderRadius.circular(18).r,
-                                  border: Border.all(
-                                    width: isActive ? 2 : 0.5,
-                                    color: ColorStyles.primary,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.r),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 80.r,
+                        height: 80.r,
+                        decoration: BoxDecoration(
+                          color: ColorStyles.primary.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          CupertinoIcons.star_fill,
+                          size: 40.r,
+                          color: ColorStyles.primary,
+                        ),
+                      ),
+                      SizedBox(height: 24.r),
+                      PaywallTitle(
+                        titleBuilder: (String title) {
+                          return Text(
+                            title.split('\n').join(' '),
+                            style: TextStyles.title1Emphasized,
+                            textAlign: TextAlign.center,
+                          );
+                        },
+                      ),
+                      SizedBox(height: 8.r),
+                      PaywallActiveProductInfo(
+                        infoBuilder: (
+                          String activeProductInfo,
+                          String? limitedText,
+                          _,
+                        ) {
+                          return Text(
+                            activeProductInfo,
+                            textAlign: TextAlign.center,
+                            style: TextStyles.footnoteRegular.copyWith(
+                              color: ColorStyles.secondary,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                ProductsTilesBuilder(
+                  productTileBuilder: (
+                    String productName,
+                    String productSubtitle,
+                    String productPrice,
+                    bool isActive,
+                    VoidCallback onTap,
+                  ) {
+                    return GestureDetector(
+                      onTap: onTap,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 4.r),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.r,
+                          vertical: 12.r,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              isActive
+                                  ? ColorStyles.primaryWithOpacity
+                                  : ColorStyles.white,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            width: isActive ? 2 : 0.5,
+                            color:
+                                isActive
+                                    ? ColorStyles.primary
+                                    : ColorStyles.separator,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    productName,
+                                    style: TextStyles.bodyEmphasized.copyWith(
+                                      color: ColorStyles.primaryTxt,
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            productName,
-                                            style: TextStyles
-                                                .subheadlineEmphasized
-                                                .copyWith(
-                                                  color: ColorStyles.primary,
-                                                ),
+                                  if (productSubtitle.isNotEmpty)
+                                    Text(
+                                      productSubtitle,
+                                      style: TextStyles.footnoteRegular
+                                          .copyWith(
+                                            color: ColorStyles.secondary,
                                           ),
-                                          Text(
-                                            productSubtitle,
-                                            style: TextStyles.footnoteRegular
-                                                .copyWith(
-                                                  color: ColorStyles.primary
-                                                      .withAlpha(
-                                                        (255 * 0.6).toInt(),
-                                                      ),
-                                                ),
-                                          ),
-                                        ],
-                                      ),
                                     ),
-                                    Container(
-                                      height: 38,
-                                      width: 0.5,
-                                      color: ColorStyles.primary.withAlpha(
-                                        (255 * 0.6).toInt(),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        productPrice,
-                                        textAlign: TextAlign.end,
-                                        style: TextStyles.subheadlineEmphasized
-                                            .copyWith(
-                                              color: ColorStyles.primary,
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 8.r),
-                    PurchaseButtonBuilder(
-                      buttonBuilder: (String buttonText, AsyncCallback onTap) {
-                        return WAFilledButton(
-                          onPressed: onTap,
-                          child: Text(buttonText),
-                        );
-                      },
-                    ),
-                    MainPaywallTermsAndPolicySection(),
-                    HomeIndicatorSpace(),
-                  ],
+                            Text(
+                              productPrice,
+                              style: TextStyles.bodyEmphasized.copyWith(
+                                color: ColorStyles.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
+                SizedBox(height: 16.r),
+                PurchaseButtonBuilder(
+                  buttonBuilder: (String buttonText, AsyncCallback onTap) {
+                    return WAFilledButton(
+                      onPressed: onTap,
+                      child: Text(buttonText),
+                    );
+                  },
+                ),
+                SizedBox(height: 8.r),
+                _TermsSection(),
+                SizedBox(height: 8.r),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-class MainPaywallTermsAndPolicySection extends StatelessWidget {
-  const MainPaywallTermsAndPolicySection({super.key});
+class _TermsSection extends StatelessWidget {
+  const _TermsSection();
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: 0.4,
+      opacity: 0.5,
       child: Row(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          InkWell(
-            onTap: () {
+          CupertinoButton(
+            padding: EdgeInsets.symmetric(horizontal: 8.r),
+            sizeStyle: CupertinoButtonSize.small,
+            onPressed: () {
               HapticFeedback.lightImpact();
               openTermsOfUse(context);
             },
-            child: Ink(
-              height: 42.spMin,
-              padding: EdgeInsets.symmetric(horizontal: 8.r),
-              child: Center(
-                child: Text('Terms of Use', style: TextStyles.footnoteRegular),
+            child: Text(
+              'Terms',
+              style: TextStyles.caption1Regular.copyWith(
+                color: ColorStyles.secondary,
               ),
             ),
           ),
-          InkWell(
-            onTap: () {
+          CupertinoButton(
+            padding: EdgeInsets.symmetric(horizontal: 8.r),
+            sizeStyle: CupertinoButtonSize.small,
+            onPressed: () {
               HapticFeedback.lightImpact();
               openPrivacyPolicy(context);
             },
-            child: Ink(
-              height: 42.spMin,
-              padding: EdgeInsets.symmetric(horizontal: 8.r),
-              child: Center(
-                child: Text(
-                  'Privacy Policy',
-                  style: TextStyles.footnoteRegular,
-                ),
+            child: Text(
+              'Privacy',
+              style: TextStyles.caption1Regular.copyWith(
+                color: ColorStyles.secondary,
               ),
             ),
           ),
           RestorePurchaseButtonBuilder(
             buttonBuilder: (buttonText, onPressed) {
-              return InkWell(
-                onTap: () {
+              return CupertinoButton(
+                sizeStyle: CupertinoButtonSize.small,
+                padding: EdgeInsets.symmetric(horizontal: 8.r),
+                onPressed: () {
                   HapticFeedback.lightImpact();
                   onPressed.call();
                 },
-                child: Ink(
-                  height: 42.spMin,
-                  padding: EdgeInsets.symmetric(horizontal: 8.r),
-                  child: Center(
-                    child: Text(buttonText, style: TextStyles.footnoteRegular),
+                child: Text(
+                  buttonText,
+                  style: TextStyles.caption1Regular.copyWith(
+                    color: ColorStyles.secondary,
                   ),
                 ),
               );

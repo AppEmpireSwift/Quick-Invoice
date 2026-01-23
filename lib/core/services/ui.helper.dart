@@ -8,11 +8,12 @@ const _aspectRatioTolerance = 0.01;
 //ipad mini
 const _ipadMinWidth = 744;
 
-class UIHelper {
+class QuickInvoiceUIHelper {
   final BuildContext context;
   final MediaQueryData _mediaQuery;
 
-  UIHelper._internal(this.context) : _mediaQuery = MediaQuery.of(context) {
+  QuickInvoiceUIHelper._internal(this.context)
+    : _mediaQuery = MediaQuery.of(context) {
     switch (deviceType) {
       case AppleDeviceType.iphoneSe:
       case AppleDeviceType.iphoneBase:
@@ -30,7 +31,8 @@ class UIHelper {
     }
   }
 
-  static UIHelper of(BuildContext context) => UIHelper._internal(context);
+  static QuickInvoiceUIHelper of(BuildContext context) =>
+      QuickInvoiceUIHelper._internal(context);
 
   double get screenWidth => _mediaQuery.size.width;
 
