@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../core.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class QIHome extends StatelessWidget {
+  const QIHome({super.key});
 
-  static Route route() => MaterialPageRoute(builder: (_) => const Home());
+  static Route route() => MaterialPageRoute(builder: (_) => const QIHome());
 
   @override
   Widget build(BuildContext context) {
-    return Core.homePage;
+    return QICore.homePage;
   }
 }

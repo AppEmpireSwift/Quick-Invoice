@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HomeIndicatorSpace extends StatelessWidget {
-  const HomeIndicatorSpace({super.key});
+class QIHomeIndicatorSpace extends StatelessWidget {
+  const QIHomeIndicatorSpace({super.key});
 
   @override
   Widget build(BuildContext context) {

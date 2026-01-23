@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-class CommonConfig {
+class QIConfig {
   final String appName;
 
   final Size figmaDesignSize;
@@ -13,7 +13,7 @@ class CommonConfig {
 
   final String supportForm;
 
-  CommonConfig({
+  QIConfig({
     required this.appName,
     required this.figmaDesignSize,
     required this.appId,

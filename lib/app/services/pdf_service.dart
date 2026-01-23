@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/database.dart';
+import '../../core/core.dart';
 
 enum PdfTemplate { classic, modern, minimal }
 
@@ -46,7 +47,7 @@ class PdfService {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/invoice_${invoice.invoiceNumber}.pdf');
     await file.writeAsBytes(pdf);
-    await SharePlus.instance.share(ShareParams(files: [XFile(file.path)]));
+    await ShareHelper.shareFiles(files: [XFile(file.path)]);
   }
 
   static Future<String> savePdfToTemp(

@@ -6,7 +6,7 @@ import 'color.style.dart';
 extension _TextResize on TextStyle {
   TextStyle get rz {
     if (fontSize == null) return this;
-    return copyWith(fontSize: fontSize!.spMin, height: height?.spMin);
+    return copyWith(fontSize: fontSize!.sp.clamp(0, fontSize! + 6));
   }
 }
 

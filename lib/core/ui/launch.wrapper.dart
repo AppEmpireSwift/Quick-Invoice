@@ -5,14 +5,14 @@ import '../core.dart';
 
 const _loadingDelay = Duration(seconds: 2);
 
-class Loading extends StatefulWidget {
-  const Loading({super.key});
+class QILoading extends StatefulWidget {
+  const QILoading({super.key});
 
   @override
-  State<Loading> createState() => _LoadingState();
+  State<QILoading> createState() => _QILoadingState();
 }
 
-class _LoadingState extends State<Loading> {
+class _QILoadingState extends State<QILoading> {
   @override
   void initState() {
     super.initState();
@@ -20,19 +20,18 @@ class _LoadingState extends State<Loading> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!kReleaseMode) await Future.delayed(_loadingDelay);
       Route route;
-      if (OnBoardingHelper.showOnBoarding) {
-        route = Boarding.route();
+      if (QIBoardingHelper.showOnBoarding) {
+        route = QIBoarding.route();
       } else {
-        route = Home.route();
+        route = QIHome.route();
       }
       if (!mounted) return;
-      //todo your router. for stage 2
       Navigator.pushReplacement(context, route);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Core.splashPage;
+    return QICore.splashPage;
   }
 }

@@ -82,6 +82,15 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
     requiredDuringInsert: false,
     defaultValue: const Constant(''),
   );
+  static const VerificationMeta _imageMeta = const VerificationMeta('image');
+  @override
+  late final GeneratedColumn<Uint8List> image = GeneratedColumn<Uint8List>(
+    'image',
+    aliasedName,
+    true,
+    type: DriftSqlType.blob,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -103,6 +112,7 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
     fax,
     contactName,
     address,
+    image,
     createdAt,
   ];
   @override
@@ -166,6 +176,12 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
         address.isAcceptableOrUnknown(data['address']!, _addressMeta),
       );
     }
+    if (data.containsKey('image')) {
+      context.handle(
+        _imageMeta,
+        image.isAcceptableOrUnknown(data['image']!, _imageMeta),
+      );
+    }
     if (data.containsKey('created_at')) {
       context.handle(
         _createdAtMeta,
@@ -216,6 +232,10 @@ class $ClientsTable extends Clients with TableInfo<$ClientsTable, Client> {
             DriftSqlType.string,
             data['${effectivePrefix}address'],
           )!,
+      image: attachedDatabase.typeMapping.read(
+        DriftSqlType.blob,
+        data['${effectivePrefix}image'],
+      ),
       createdAt:
           attachedDatabase.typeMapping.read(
             DriftSqlType.dateTime,
@@ -238,6 +258,7 @@ class Client extends DataClass implements Insertable<Client> {
   final String fax;
   final String contactName;
   final String address;
+  final Uint8List? image;
   final DateTime createdAt;
   const Client({
     required this.id,
@@ -247,6 +268,7 @@ class Client extends DataClass implements Insertable<Client> {
     required this.fax,
     required this.contactName,
     required this.address,
+    this.image,
     required this.createdAt,
   });
   @override
@@ -259,6 +281,9 @@ class Client extends DataClass implements Insertable<Client> {
     map['fax'] = Variable<String>(fax);
     map['contact_name'] = Variable<String>(contactName);
     map['address'] = Variable<String>(address);
+    if (!nullToAbsent || image != null) {
+      map['image'] = Variable<Uint8List>(image);
+    }
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -272,6 +297,8 @@ class Client extends DataClass implements Insertable<Client> {
       fax: Value(fax),
       contactName: Value(contactName),
       address: Value(address),
+      image:
+          image == null && nullToAbsent ? const Value.absent() : Value(image),
       createdAt: Value(createdAt),
     );
   }
@@ -289,6 +316,7 @@ class Client extends DataClass implements Insertable<Client> {
       fax: serializer.fromJson<String>(json['fax']),
       contactName: serializer.fromJson<String>(json['contactName']),
       address: serializer.fromJson<String>(json['address']),
+      image: serializer.fromJson<Uint8List?>(json['image']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -303,6 +331,7 @@ class Client extends DataClass implements Insertable<Client> {
       'fax': serializer.toJson<String>(fax),
       'contactName': serializer.toJson<String>(contactName),
       'address': serializer.toJson<String>(address),
+      'image': serializer.toJson<Uint8List?>(image),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -315,6 +344,7 @@ class Client extends DataClass implements Insertable<Client> {
     String? fax,
     String? contactName,
     String? address,
+    Value<Uint8List?> image = const Value.absent(),
     DateTime? createdAt,
   }) => Client(
     id: id ?? this.id,
@@ -324,6 +354,7 @@ class Client extends DataClass implements Insertable<Client> {
     fax: fax ?? this.fax,
     contactName: contactName ?? this.contactName,
     address: address ?? this.address,
+    image: image.present ? image.value : this.image,
     createdAt: createdAt ?? this.createdAt,
   );
   Client copyWithCompanion(ClientsCompanion data) {
@@ -337,6 +368,7 @@ class Client extends DataClass implements Insertable<Client> {
       contactName:
           data.contactName.present ? data.contactName.value : this.contactName,
       address: data.address.present ? data.address.value : this.address,
+      image: data.image.present ? data.image.value : this.image,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -351,6 +383,7 @@ class Client extends DataClass implements Insertable<Client> {
           ..write('fax: $fax, ')
           ..write('contactName: $contactName, ')
           ..write('address: $address, ')
+          ..write('image: $image, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -365,6 +398,7 @@ class Client extends DataClass implements Insertable<Client> {
     fax,
     contactName,
     address,
+    $driftBlobEquality.hash(image),
     createdAt,
   );
   @override
@@ -378,6 +412,7 @@ class Client extends DataClass implements Insertable<Client> {
           other.fax == this.fax &&
           other.contactName == this.contactName &&
           other.address == this.address &&
+          $driftBlobEquality.equals(other.image, this.image) &&
           other.createdAt == this.createdAt);
 }
 
@@ -389,6 +424,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
   final Value<String> fax;
   final Value<String> contactName;
   final Value<String> address;
+  final Value<Uint8List?> image;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const ClientsCompanion({
@@ -399,6 +435,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     this.fax = const Value.absent(),
     this.contactName = const Value.absent(),
     this.address = const Value.absent(),
+    this.image = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -410,6 +447,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     this.fax = const Value.absent(),
     this.contactName = const Value.absent(),
     this.address = const Value.absent(),
+    this.image = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -422,6 +460,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     Expression<String>? fax,
     Expression<String>? contactName,
     Expression<String>? address,
+    Expression<Uint8List>? image,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -433,6 +472,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
       if (fax != null) 'fax': fax,
       if (contactName != null) 'contact_name': contactName,
       if (address != null) 'address': address,
+      if (image != null) 'image': image,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -446,6 +486,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     Value<String>? fax,
     Value<String>? contactName,
     Value<String>? address,
+    Value<Uint8List?>? image,
     Value<DateTime>? createdAt,
     Value<int>? rowid,
   }) {
@@ -457,6 +498,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
       fax: fax ?? this.fax,
       contactName: contactName ?? this.contactName,
       address: address ?? this.address,
+      image: image ?? this.image,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -486,6 +528,9 @@ class ClientsCompanion extends UpdateCompanion<Client> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (image.present) {
+      map['image'] = Variable<Uint8List>(image.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -505,6 +550,7 @@ class ClientsCompanion extends UpdateCompanion<Client> {
           ..write('fax: $fax, ')
           ..write('contactName: $contactName, ')
           ..write('address: $address, ')
+          ..write('image: $image, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -1951,6 +1997,7 @@ typedef $$ClientsTableCreateCompanionBuilder =
       Value<String> fax,
       Value<String> contactName,
       Value<String> address,
+      Value<Uint8List?> image,
       Value<DateTime> createdAt,
       Value<int> rowid,
     });
@@ -1963,6 +2010,7 @@ typedef $$ClientsTableUpdateCompanionBuilder =
       Value<String> fax,
       Value<String> contactName,
       Value<String> address,
+      Value<Uint8List?> image,
       Value<DateTime> createdAt,
       Value<int> rowid,
     });
@@ -2032,6 +2080,11 @@ class $$ClientsTableFilterComposer
 
   ColumnFilters<String> get address => $composableBuilder(
     column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<Uint8List> get image => $composableBuilder(
+    column: $table.image,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -2110,6 +2163,11 @@ class $$ClientsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<Uint8List> get image => $composableBuilder(
+    column: $table.image,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -2149,6 +2207,9 @@ class $$ClientsTableAnnotationComposer
 
   GeneratedColumn<String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get image =>
+      $composableBuilder(column: $table.image, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -2214,6 +2275,7 @@ class $$ClientsTableTableManager
                 Value<String> fax = const Value.absent(),
                 Value<String> contactName = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<Uint8List?> image = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ClientsCompanion(
@@ -2224,6 +2286,7 @@ class $$ClientsTableTableManager
                 fax: fax,
                 contactName: contactName,
                 address: address,
+                image: image,
                 createdAt: createdAt,
                 rowid: rowid,
               ),
@@ -2236,6 +2299,7 @@ class $$ClientsTableTableManager
                 Value<String> fax = const Value.absent(),
                 Value<String> contactName = const Value.absent(),
                 Value<String> address = const Value.absent(),
+                Value<Uint8List?> image = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ClientsCompanion.insert(
@@ -2246,6 +2310,7 @@ class $$ClientsTableTableManager
                 fax: fax,
                 contactName: contactName,
                 address: address,
+                image: image,
                 createdAt: createdAt,
                 rowid: rowid,
               ),

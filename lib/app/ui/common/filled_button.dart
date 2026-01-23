@@ -3,28 +3,36 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quick_invoice/style/color.style.dart';
 
-class WAFilledButton extends StatefulWidget {
+class QIFilledButton extends StatefulWidget {
   final FutureOr<void> Function()? onPressed;
   final Widget child;
-  const WAFilledButton({
-    super.key,
-    required this.onPressed,
-    required this.child,
-  });
+  const QIFilledButton({super.key, required this.onPressed, required this.child});
 
   @override
-  State<WAFilledButton> createState() => _WAFilledButtonState();
+  State<QIFilledButton> createState() => _QIFilledButtonState();
 }
 
-class _WAFilledButtonState extends State<WAFilledButton> {
+class _QIFilledButtonState extends State<QIFilledButton> {
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 52.h,
+      height: 52.h.clamp(0, 52),
       child: FilledButton(
+        style: ButtonStyle(
+          textStyle: WidgetStateProperty.all(
+            TextStyle(
+              fontSize: 16.sp.clamp(0, 24),
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.43,
+              color: ColorStyles.white,
+            ),
+          ),
+          backgroundColor: WidgetStateProperty.all(Color.fromRGBO(0, 136, 255, 1)),
+        ),
         onPressed: handleOnPressed,
         child: isLoading ? CircularProgressIndicator.adaptive() : widget.child,
       ),

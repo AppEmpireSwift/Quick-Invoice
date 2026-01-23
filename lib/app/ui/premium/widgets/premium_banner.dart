@@ -1,7 +1,7 @@
 import 'package:apphud_helper/apphud_helper.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../main_paywall.page.dart';
+import '../quick_invoice_main_paywall.page.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../style/style.dart';
 
@@ -25,7 +25,10 @@ class AutoHiddablePremiumBanner extends StatelessWidget {
           margin: margin,
           onTap: () {
             if (onTap != null) return onTap?.call();
-            MainPaywallPage.show(context);
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(CupertinoPageRoute(builder: (_) => const QuickInvoiceMainPaywallPage()));
           },
         );
       },
@@ -40,14 +43,15 @@ class PremiumBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin?.r,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18).r,
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: onTap,
+      child: Container(
+        height: 118.h,
+        margin: margin?.r,
         child: Stack(
           children: [
-            Ink(
+            Container(
               padding: EdgeInsets.all(16).r,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18).r,
@@ -59,31 +63,22 @@ class PremiumBanner extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(text: 'Upgrade '),
-                            TextSpan(
-                              text: 'to Premium!',
-                              style: TextStyle(color: ColorStyles.yellowDark),
-                            ),
-                          ],
-                        ),
-                        style: TextStyles.title3Emphasized.copyWith(
+                      Text(
+                        'GO PREMIUM',
+                        style: TextStyle(
+                          fontSize: 32.sp.clamp(0, 38),
                           color: ColorStyles.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       SizedBox(height: 4.r),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(text: 'Get unlimited access'),
-                            TextSpan(text: '\n'),
-                            TextSpan(text: 'to all application features'),
-                          ],
-                        ),
-                        style: TextStyles.footnoteRegular.copyWith(
+                      Text(
+                        'Unlock Full Access!',
+                        style: TextStyle(
+                          fontSize: 17.sp.clamp(0, 23),
+                          fontWeight: FontWeight.w400,
                           color: ColorStyles.white,
+                          letterSpacing: -0.4,
                         ),
                       ),
                     ],
@@ -98,7 +93,8 @@ class PremiumBanner extends StatelessWidget {
               right: 0,
               child: Image.asset(
                 Assets.images.premium.premiumBannerImage.path,
-                width: 200.spMin,
+                width: 118.spMin,
+                height: 118.spMin,
               ),
             ),
           ],

@@ -1,28 +1,16 @@
 import 'package:device_preview_plus/device_preview_plus.dart';
 import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/cupertino.dart';
-import 'app/ui/premium/main_paywall.page.dart';
+import 'package:quick_invoice/app/ui/root/quick_invoice_main.page.dart';
 import 'app/app.dart';
-import 'app/ui/onboarding/onboarding.page.dart';
-import 'app/ui/splash.page.dart';
+import 'app/ui/onboarding/quick_invoice_onboarding.page.dart';
+import 'app/ui/quick_invoice_splash.page.dart';
 import 'core/core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await init();
-  runApp(
-    DevicePreview(
-      enabled: false,
-      builder: (context) {
-        return const QuickInvoiceApp();
-      },
-    ),
-  );
-}
-
-Future<void> init() async {
-  await Core.init(
-    config: CommonConfig(
+  await QICore.init(
+    config: QIConfig(
       appName: 'Quick Invoice',
       figmaDesignSize: Size(375, 812),
       appId: '6757950869',
@@ -30,15 +18,15 @@ Future<void> init() async {
       supportEmail: 'hollyreeves@murermesterdennisbotker.com',
       supportForm: '',
     ),
-    home: MainPaywallPage(),
+    home: QuickInvoiceMainPage(),
 
     ///MainPage(),
-    splash: SplashPage(),
-    onBoarding: OnBoardingPage(),
+    splash: QuickInvoiceSplashPage(),
+    onBoarding: QuickInvoiceOnBoardingPage(),
   );
   ApphudHelper.configure(
     ApphudHelperConfig(
-      apiKey: Core.config.appHudKey,
+      apiKey: QICore.config.appHudKey,
       productTexts: ProductTexts(),
       dialogs: DialogTexts(),
       fallbacks: CommonFallbackTexts(restoreButtonText: 'Restore'),
@@ -47,4 +35,14 @@ Future<void> init() async {
     ),
     helperType: HelperType.fallbackBased, //TODO:
   );
+  runApp(
+    DevicePreview(
+      enabled: true,
+      builder: (context) {
+        return const QuickInvoiceApp();
+      },
+    ),
+  );
 }
+
+//TODO: fix bundle id

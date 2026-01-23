@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const _boardingKey = 'show-boarding-key';
 
-class OnBoardingHelper {
+class QIBoardingHelper {
   bool started = false;
   late SharedPreferences prefs;
 
@@ -19,9 +19,9 @@ class OnBoardingHelper {
 
   static bool get needToRequestReview => _instance.reviewFlag;
 
-  static final OnBoardingHelper _instance = OnBoardingHelper._();
+  static final QIBoardingHelper _instance = QIBoardingHelper._();
 
-  OnBoardingHelper._();
+  QIBoardingHelper._();
 
   Future<bool> _needToShowOnBoadring() async {
     if (!_instance.started) return false;
@@ -40,8 +40,8 @@ class OnBoardingHelper {
 
   static Future<void> markOnBoardingAsWatched() async {
     if (!_instance.started) return;
-    if (OnBoardingHelper.needToRequestReview) {
-      OnBoardingHelper.tryRequestReview();
+    if (QIBoardingHelper.needToRequestReview) {
+      QIBoardingHelper.tryRequestReview();
     }
     await _instance.prefs
         .setBool(_boardingKey, false)

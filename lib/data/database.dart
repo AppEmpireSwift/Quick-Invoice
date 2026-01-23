@@ -11,6 +11,7 @@ class Clients extends Table {
   TextColumn get fax => text().withDefault(const Constant(''))();
   TextColumn get contactName => text().withDefault(const Constant(''))();
   TextColumn get address => text().withDefault(const Constant(''))();
+  BlobColumn get image => blob().nullable()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
@@ -61,7 +62,16 @@ class AppDatabase extends _$AppDatabase {
   static AppDatabase get instance => _instance ??= AppDatabase._();
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        await migrator.addColumn(clients, clients.image);
+      }
+    },
+  );
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'quick_invoice.db');
@@ -119,6 +129,9 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<Invoice>> getInvoicesByStatus(String status) =>
       (select(invoices)..where((t) => t.status.equals(status))).get();
+
+  Future<List<Invoice>> getInvoicesByClientId(String clientId) =>
+      (select(invoices)..where((t) => t.clientId.equals(clientId))).get();
 
   Stream<List<Invoice>> watchInvoicesByStatus(String status) =>
       (select(invoices)..where((t) => t.status.equals(status))).watch();
