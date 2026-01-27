@@ -523,7 +523,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 controller: priceController,
                 placeholder: '0.00',
                 keyboardType: TextInputType.number,
-                suffix: Text('£', style: TextStyles.bodyRegular),
+                suffix: Text(getCurrencySymbol(currencyController.text), style: TextStyles.bodyRegular),
               ),
               Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
               _buildInlineField(

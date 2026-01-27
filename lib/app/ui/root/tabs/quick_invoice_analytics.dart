@@ -16,11 +16,11 @@ class QuickInvoiceAnalyticsTab extends StatefulWidget {
 
 class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
   String _selectedPeriod = 'week';
-  String _selectedCurrency = 'USD';
+  String _selectedCurrency = '';
   List<Invoice> _invoices = [];
   List<Client> _clients = [];
   List<String> _currencies = [];
-
+  
   final Map<String, String> _periods = {'week': 'Week', 'month': 'Month', 'year': 'Year'};
 
   @override
@@ -33,12 +33,11 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
     final invoices = await AppDatabase.instance.getAllInvoices();
     final clients = await AppDatabase.instance.getAllClients();
     final currencies = invoices.map((i) => i.currency).toSet().toList();
-    if (currencies.isEmpty) currencies.add('USD');
     setState(() {
       _invoices = invoices;
       _clients = clients;
       _currencies = currencies;
-      if (!currencies.contains(_selectedCurrency)) {
+      if (_selectedCurrency.isEmpty && currencies.isNotEmpty) {
         _selectedCurrency = currencies.first;
       }
     });
@@ -85,25 +84,25 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
   double _getTotalIncome() {
     return _getFilteredInvoices()
         .where((i) => i.status == 'paid')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   double _getPaidAmount() {
     return _getFilteredInvoices()
         .where((i) => i.status == 'paid')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   double _getPendingAmount() {
     return _getFilteredInvoices()
         .where((i) => i.status == 'pending')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   double _getOverdueAmount() {
     return _getFilteredInvoices()
         .where((i) => i.status == 'overdue')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   int _getInvoiceCount() {

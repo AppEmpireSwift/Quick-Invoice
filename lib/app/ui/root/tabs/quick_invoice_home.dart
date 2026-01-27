@@ -41,9 +41,11 @@ class QuickInvoiceHomeTab extends StatefulWidget {
 class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
   String _searchQuery = '';
   String _selectedStatus = 'all';
+  String _selectedCurrency = '';
   final _searchController = TextEditingController();
   List<Invoice> _invoices = [];
   List<Invoice> _filteredInvoices = [];
+  List<String> _currencies = [];
 
   final Map<String, String> _statuses = {
     'all': 'All',
@@ -61,8 +63,13 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
 
   Future<void> _loadInvoices() async {
     final invoices = await AppDatabase.instance.getAllInvoices();
+    final currencies = invoices.map((i) => i.currency).toSet().toList();
     setState(() {
       _invoices = invoices;
+      _currencies = currencies;
+      if (_selectedCurrency.isEmpty && currencies.isNotEmpty) {
+        _selectedCurrency = currencies.first;
+      }
       _filterInvoices();
     });
   }
@@ -86,20 +93,20 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
 
   double _getPaidTotal() {
     return _invoices
-        .where((i) => i.status == 'paid')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .where((i) => i.status == 'paid' && i.currency == _selectedCurrency)
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   double _getPendingTotal() {
     return _invoices
-        .where((i) => i.status == 'pending')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .where((i) => i.status == 'pending' && i.currency == _selectedCurrency)
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   double _getOverdueTotal() {
     return _invoices
-        .where((i) => i.status == 'overdue')
-        .fold(0.0, (sum, invoice) => sum + invoice.totalAmount);
+        .where((i) => i.status == 'overdue' && i.currency == _selectedCurrency)
+        .fold(0.0, (sum, i) => sum + i.totalAmount);
   }
 
   @override
@@ -166,7 +173,48 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Overview', style: TextStyles.title3Emphasized),
+                            Row(
+                              children: [
+                                Text('Overview', style: TextStyles.title3Emphasized),
+                                SizedBox(width: 12.r),
+                                if (_currencies.length > 1)
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 28.r,
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _currencies.length,
+                                        separatorBuilder: (_, _) => SizedBox(width: 6.r),
+                                        itemBuilder: (context, index) {
+                                          final currency = _currencies[index];
+                                          final isSelected = currency == _selectedCurrency;
+                                          return GestureDetector(
+                                            onTap: () {
+                                              HapticFeedback.selectionClick();
+                                              setState(() => _selectedCurrency = currency);
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 10.r),
+                                              decoration: BoxDecoration(
+                                                color: isSelected ? ColorStyles.primary : ColorStyles.white,
+                                                borderRadius: BorderRadius.circular(14.r),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  currency,
+                                                  style: TextStyles.caption1Regular.copyWith(
+                                                    color: isSelected ? ColorStyles.white : ColorStyles.primaryTxt,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                             SizedBox(height: 12.r),
                             Row(
                               children: [
@@ -174,9 +222,7 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                                   child: _OverviewCard(
                                     label: 'Paid',
                                     amount: _getPaidTotal(),
-                                    currency: _invoices.isNotEmpty
-                                        ? _invoices.first.currency
-                                        : 'GBP',
+                                    currency: _selectedCurrency,
                                   ),
                                 ),
                                 SizedBox(width: 12.r),
@@ -184,9 +230,7 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                                   child: _OverviewCard(
                                     label: 'Pending',
                                     amount: _getPendingTotal(),
-                                    currency: _invoices.isNotEmpty
-                                        ? _invoices.first.currency
-                                        : 'GBP',
+                                    currency: _selectedCurrency,
                                   ),
                                 ),
                                 SizedBox(width: 12.r),
@@ -194,9 +238,7 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                                   child: _OverviewCard(
                                     label: 'Overdue',
                                     amount: _getOverdueTotal(),
-                                    currency: _invoices.isNotEmpty
-                                        ? _invoices.first.currency
-                                        : 'GBP',
+                                    currency: _selectedCurrency,
                                   ),
                                 ),
                               ],
@@ -341,7 +383,7 @@ class _OverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.r),
+      padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
         color: ColorStyles.white,
         borderRadius: BorderRadius.circular(12.r),
@@ -349,11 +391,11 @@ class _OverviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
-          SizedBox(height: 8.r),
+          Text(label, style: TextStyles.caption1Regular.copyWith(color: ColorStyles.secondary)),
+          SizedBox(height: 4.r),
           Text(
             '${getCurrencySymbol(currency)}${amount.toStringAsFixed(0)}',
-            style: TextStyles.title3Emphasized,
+            style: TextStyles.bodyEmphasized,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
