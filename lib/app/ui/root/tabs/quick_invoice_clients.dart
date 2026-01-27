@@ -74,7 +74,11 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                         onPressed: () {
                           HapticFeedback.lightImpact();
                           Navigator.of(context, rootNavigator: true)
-                              .push(CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()))
+                              .push(
+                                CupertinoPageRoute(
+                                  builder: (_) => const QuickInvoiceAddClientPage(),
+                                ),
+                              )
                               .then((_) => _loadClients());
                         },
                         child: Icon(
@@ -133,7 +137,11 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                             onPressed: () {
                               HapticFeedback.lightImpact();
                               Navigator.of(context, rootNavigator: true)
-                                  .push(CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()))
+                                  .push(
+                                    CupertinoPageRoute(
+                                      builder: (_) => const QuickInvoiceAddClientPage(),
+                                    ),
+                                  )
                                   .then((_) => _loadClients());
                             },
                             child: Container(
@@ -173,7 +181,12 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(client.name, style: TextStyles.bodyEmphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
+                                      Text(
+                                        client.name,
+                                        style: TextStyles.bodyEmphasized,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                       if (client.phoneNumber.isNotEmpty)
                                         Text(
                                           client.phoneNumber,
@@ -186,7 +199,11 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                                     ],
                                   ),
                                 ),
-                                Icon(CupertinoIcons.chevron_right, color: ColorStyles.secondary, size: 16.r),
+                                Icon(
+                                  CupertinoIcons.chevron_right,
+                                  color: ColorStyles.secondary,
+                                  size: 16.r,
+                                ),
                               ],
                             ),
                           ),
@@ -212,19 +229,17 @@ class _ClientAvatar extends StatelessWidget {
     return Container(
       width: size.r,
       height: size.r,
-      decoration: BoxDecoration(
-        color: ColorStyles.primary,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: ColorStyles.primary, shape: BoxShape.circle),
       child: ClipOval(
-        child: imageData != null
-            ? Image.memory(imageData!, width: size.r, height: size.r, fit: BoxFit.cover)
-            : Center(
-                child: Text(
-                  name.isNotEmpty ? name[0].toUpperCase() : 'C',
-                  style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+        child:
+            imageData != null
+                ? Image.memory(imageData!, width: size.r, height: size.r, fit: BoxFit.cover)
+                : Center(
+                  child: Text(
+                    name.isNotEmpty ? name[0].toUpperCase() : 'C',
+                    style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+                  ),
                 ),
-              ),
       ),
     );
   }
@@ -257,23 +272,24 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
   Future<void> _pickImage() async {
     final source = await showCupertinoModalPopup<ImageSource>(
       context: context,
-      builder: (_) => CupertinoActionSheet(
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () => Navigator.pop(context, ImageSource.camera),
-            child: Text('Camera'),
+      builder:
+          (_) => CupertinoActionSheet(
+            actions: [
+              CupertinoActionSheetAction(
+                onPressed: () => Navigator.pop(context, ImageSource.camera),
+                child: Text('Camera'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () => Navigator.pop(context, ImageSource.gallery),
+                child: Text('Gallery'),
+              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
           ),
-          CupertinoActionSheetAction(
-            onPressed: () => Navigator.pop(context, ImageSource.gallery),
-            child: Text('Gallery'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
-        ),
-      ),
     );
     if (source == null) return;
     final picker = ImagePicker();
@@ -329,7 +345,10 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
             HapticFeedback.lightImpact();
             _saveClient();
           },
-          child: Text('Save', style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primary)),
+          child: Text(
+            'Save',
+            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primary),
+          ),
         ),
         backgroundColor: ColorStyles.white,
         automaticBackgroundVisibility: false,
@@ -351,9 +370,19 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: _imageData != null
-                        ? Image.memory(_imageData!, width: 80.r, height: 80.r, fit: BoxFit.cover)
-                        : Icon(CupertinoIcons.camera_fill, color: ColorStyles.primary, size: 32.r),
+                    child:
+                        _imageData != null
+                            ? Image.memory(
+                              _imageData!,
+                              width: 80.r,
+                              height: 80.r,
+                              fit: BoxFit.cover,
+                            )
+                            : Icon(
+                              CupertinoIcons.camera_fill,
+                              color: ColorStyles.primary,
+                              size: 32.r,
+                            ),
                   ),
                 ),
               ),
@@ -405,11 +434,21 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
     );
   }
 
-  Widget _buildTextField(String label, String placeholder, TextEditingController controller, {bool hasError = false}) {
+  Widget _buildTextField(
+    String label,
+    String placeholder,
+    TextEditingController controller, {
+    bool hasError = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyles.footnoteRegular.copyWith(color: hasError ? ColorStyles.pink : ColorStyles.secondary)),
+        Text(
+          label,
+          style: TextStyles.footnoteRegular.copyWith(
+            color: hasError ? ColorStyles.pink : ColorStyles.secondary,
+          ),
+        ),
         SizedBox(height: 8.r),
         CupertinoTextField(
           controller: controller,
@@ -476,7 +515,13 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
               SizedBox(height: 16.r),
               _ClientAvatar(imageData: widget.client.image, name: widget.client.name, size: 80),
               SizedBox(height: 16.r),
-              Text(widget.client.name, style: TextStyles.title3Emphasized, maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center),
+              Text(
+                widget.client.name,
+                style: TextStyles.title3Emphasized,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
               SizedBox(height: 24.r),
               Container(
                 width: double.infinity,
@@ -493,7 +538,8 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                     ],
                     if (widget.client.phoneNumber.isNotEmpty) ...[
                       _infoRow('Phone', widget.client.phoneNumber),
-                      if (widget.client.address.isNotEmpty) Divider(color: ColorStyles.separator, height: 24.r),
+                      if (widget.client.address.isNotEmpty)
+                        Divider(color: ColorStyles.separator, height: 24.r),
                     ],
                     if (widget.client.address.isNotEmpty)
                       _infoRow('Address', widget.client.address),
@@ -507,36 +553,45 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                   child: Text('Invoices', style: TextStyles.bodyEmphasized),
                 ),
                 SizedBox(height: 12.r),
-                ..._invoices.map((invoice) => Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(bottom: 8.r),
-                  padding: EdgeInsets.all(12.r),
-                  decoration: BoxDecoration(
-                    color: ColorStyles.bgSecondary,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('#${invoice.invoiceNumber}', style: TextStyles.bodyEmphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
-                            SizedBox(height: 4.r),
-                            Text(
-                              invoice.status[0].toUpperCase() + invoice.status.substring(1),
-                              style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
-                            ),
-                          ],
+                ..._invoices.map(
+                  (invoice) => Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(bottom: 8.r),
+                    padding: EdgeInsets.all(12.r),
+                    decoration: BoxDecoration(
+                      color: ColorStyles.bgSecondary,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '#${invoice.invoiceNumber}',
+                                style: TextStyles.bodyEmphasized,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.r),
+                              Text(
+                                invoice.status[0].toUpperCase() + invoice.status.substring(1),
+                                style: TextStyles.footnoteRegular.copyWith(
+                                  color: ColorStyles.secondary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        '\$${invoice.totalAmount.toStringAsFixed(2)}',
-                        style: TextStyles.bodyEmphasized,
-                      ),
-                    ],
+                        Text(
+                          '\$${invoice.totalAmount.toStringAsFixed(2)}',
+                          style: TextStyles.bodyEmphasized,
+                        ),
+                      ],
+                    ),
                   ),
-                )),
+                ),
               ],
               SizedBox(height: 24.r),
               CupertinoButton(
@@ -544,14 +599,23 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                 onPressed: () async {
                   final confirm = await showCupertinoDialog<bool>(
                     context: context,
-                    builder: (_) => CupertinoAlertDialog(
-                      title: Text('Delete Client'),
-                      content: Text('Are you sure you want to delete this client?'),
-                      actions: [
-                        CupertinoDialogAction(isDefaultAction: true, child: Text('Cancel'), onPressed: () => Navigator.pop(context, false)),
-                        CupertinoDialogAction(isDestructiveAction: true, child: Text('Delete'), onPressed: () => Navigator.pop(context, true)),
-                      ],
-                    ),
+                    builder:
+                        (_) => CupertinoAlertDialog(
+                          title: Text('Delete Client'),
+                          content: Text('Are you sure you want to delete this client?'),
+                          actions: [
+                            CupertinoDialogAction(
+                              isDefaultAction: true,
+                              child: Text('Cancel'),
+                              onPressed: () => Navigator.pop(context, false),
+                            ),
+                            CupertinoDialogAction(
+                              isDestructiveAction: true,
+                              child: Text('Delete'),
+                              onPressed: () => Navigator.pop(context, true),
+                            ),
+                          ],
+                        ),
                   );
                   if (confirm == true) {
                     await AppDatabase.instance.deleteClient(widget.client.id);
@@ -588,7 +652,13 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
         Text(label, style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary)),
         SizedBox(width: 16.r),
         Expanded(
-          child: Text(value, style: TextStyles.bodyRegular, textAlign: TextAlign.end, maxLines: 2, overflow: TextOverflow.ellipsis),
+          child: Text(
+            value,
+            style: TextStyles.bodyRegular,
+            textAlign: TextAlign.end,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

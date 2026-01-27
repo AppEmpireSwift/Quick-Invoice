@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum AppleDeviceType { iphoneSe, iphoneBase, ipad }
+enum DeviceType { iphoneSe, iphoneBase, ipad }
 
 const _aspectRatioTolerance = 0.01;
 
@@ -12,16 +12,15 @@ class QuickInvoiceUIHelper {
   final BuildContext context;
   final MediaQueryData _mediaQuery;
 
-  QuickInvoiceUIHelper._internal(this.context)
-    : _mediaQuery = MediaQuery.of(context) {
+  QuickInvoiceUIHelper._internal(this.context) : _mediaQuery = MediaQuery.of(context) {
     switch (deviceType) {
-      case AppleDeviceType.iphoneSe:
-      case AppleDeviceType.iphoneBase:
+      case DeviceType.iphoneSe:
+      case DeviceType.iphoneBase:
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.portraitUp,
           DeviceOrientation.portraitDown,
         ]);
-      case AppleDeviceType.ipad:
+      case DeviceType.ipad:
         SystemChrome.setPreferredOrientations([
           DeviceOrientation.portraitUp,
           DeviceOrientation.portraitDown,
@@ -31,8 +30,7 @@ class QuickInvoiceUIHelper {
     }
   }
 
-  static QuickInvoiceUIHelper of(BuildContext context) =>
-      QuickInvoiceUIHelper._internal(context);
+  static QuickInvoiceUIHelper of(BuildContext context) => QuickInvoiceUIHelper._internal(context);
 
   double get screenWidth => _mediaQuery.size.width;
 
@@ -46,18 +44,18 @@ class QuickInvoiceUIHelper {
 
   double get aspectRatio => _mediaQuery.size.aspectRatio;
 
-  AppleDeviceType get deviceType {
+  DeviceType get deviceType {
     final width = shortestSide;
 
     if (width >= _ipadMinWidth) {
-      return AppleDeviceType.ipad;
+      return DeviceType.ipad;
     }
 
     if (isAspectRatio9by16) {
-      return AppleDeviceType.iphoneSe;
+      return DeviceType.iphoneSe;
     }
 
-    return AppleDeviceType.iphoneBase;
+    return DeviceType.iphoneBase;
   }
 
   bool get isAspectRatio9by16 {
@@ -66,9 +64,9 @@ class QuickInvoiceUIHelper {
     return (aspectRatio - targetRatio).abs() <= _aspectRatioTolerance;
   }
 
-  bool get isIpad => deviceType == AppleDeviceType.ipad;
-  bool get isIphoneSe => deviceType == AppleDeviceType.iphoneSe;
-  bool get isBaseIphone => deviceType == AppleDeviceType.iphoneBase;
+  bool get isIpad => deviceType == DeviceType.ipad;
+  bool get isIphoneSe => deviceType == DeviceType.iphoneSe;
+  bool get isBaseIphone => deviceType == DeviceType.iphoneBase;
   bool get isPortrait => orientation == Orientation.portrait;
   bool get isLandscape => orientation == Orientation.landscape;
 }

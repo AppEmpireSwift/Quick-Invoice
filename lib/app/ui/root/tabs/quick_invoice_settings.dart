@@ -1,18 +1,42 @@
+import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/core.dart';
 import '../../../../data/database.dart';
 import '../../../../style/style.dart';
 import '../../premium/widgets/premium_banner.dart';
+import '../../premium/quick_invoice_main_paywall.page.dart';
 import '../../../services/export_service.dart';
 
-class QuickInvoiceSettingsTab extends StatelessWidget {
+class QuickInvoiceSettingsTab extends StatefulWidget {
   const QuickInvoiceSettingsTab({super.key});
+
+  @override
+  State<QuickInvoiceSettingsTab> createState() => _QuickInvoiceSettingsTabState();
+}
+
+class _QuickInvoiceSettingsTabState extends State<QuickInvoiceSettingsTab> {
+  String _appVersion = '1.0.0';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = packageInfo.version;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +64,7 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
                 children: [
                   AutoHiddablePremiumBanner(margin: EdgeInsets.only(bottom: 16)),
                   _buildSection([
-                    _buildItem(
-                      context,
-                      'Company Info',
-                      () => _openCompanyInfo(context),
-                    ),
+                    _buildItem(context, 'Company Info', () => _openCompanyInfo(context)),
                   ]),
                   SizedBox(height: 16.r),
                   _buildSection([
@@ -53,28 +73,23 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
                   ]),
                   SizedBox(height: 16.r),
                   _buildSection([
+                    _buildCurrentPlanItem(context),
+                    _buildItem(context, 'Support', () => _openSupport()),
+                  ]),
+                  SizedBox(height: 16.r),
+                  _buildSection([
                     _buildItem(context, 'Share App', () => _shareApp(context)),
                     _buildItem(context, 'Rate Us', () => _openAppStore()),
                   ]),
                   SizedBox(height: 16.r),
                   _buildSection([
-                    _buildItem(
-                      context,
-                      'Privacy Policy',
-                      () => _openPrivacyPolicy(context),
-                    ),
-                    _buildItem(
-                      context,
-                      'Terms of Use',
-                      () => _openTermsOfUse(context),
-                    ),
+                    _buildItem(context, 'Privacy Policy', () => _openPrivacyPolicy(context)),
+                    _buildItem(context, 'Terms of Use', () => _openTermsOfUse(context)),
                   ]),
                   SizedBox(height: 24.r),
                   Text(
-                    '${QICore.config.appName} v1.0.0',
-                    style: TextStyles.footnoteRegular.copyWith(
-                      color: ColorStyles.secondary,
-                    ),
+                    '${QICore.config.appName} v$_appVersion',
+                    style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
                   ),
                   SizedBox(height: 100.r),
                 ],
@@ -99,12 +114,7 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
               return Column(
                 children: [
                   e.value,
-                  if (!isLast)
-                    Divider(
-                      height: 1,
-                      indent: 16.r,
-                      color: ColorStyles.separator,
-                    ),
+                  if (!isLast) Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
                 ],
               );
             }).toList(),
@@ -126,19 +136,52 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyles.bodyRegular.copyWith(
-                  color: ColorStyles.primaryTxt,
-                ),
+                style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
               ),
             ),
-            Icon(
-              CupertinoIcons.chevron_right,
-              color: ColorStyles.secondary,
-              size: 18.r,
-            ),
+            Icon(CupertinoIcons.chevron_right, color: ColorStyles.secondary, size: 18.r),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCurrentPlanItem(BuildContext context) {
+    return StreamBuilder<bool?>(
+      stream: ApphudHelper.service.hasPremiumStream,
+      builder: (context, snapshot) {
+        final isPremium = snapshot.data ?? false;
+        final planText = isPremium ? 'Premium' : 'Free';
+
+        return CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            HapticFeedback.lightImpact();
+            _openCurrentPlan(context);
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 14.r),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Current Plan',
+                    style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+                  ),
+                ),
+                Text(
+                  planText,
+                  style: TextStyles.bodyRegular.copyWith(
+                    color: isPremium ? ColorStyles.primary : ColorStyles.secondary,
+                  ),
+                ),
+                SizedBox(width: 8.r),
+                Icon(CupertinoIcons.chevron_right, color: ColorStyles.secondary, size: 18.r),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -175,10 +218,7 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
   void _openPrivacyPolicy(BuildContext context) {
     showCupertinoSheet(
       context: context,
-      builder: (_) => _PolicyPage(
-        title: 'Privacy Policy',
-        content: _privacyPolicyText,
-      ),
+      builder: (_) => _PolicyPage(title: 'Privacy Policy', content: _privacyPolicyText),
     );
   }
 
@@ -193,6 +233,17 @@ class QuickInvoiceSettingsTab extends StatelessWidget {
     Navigator.of(
       context,
     ).push(CupertinoPageRoute(builder: (_) => const QuickInvoiceCompanyInfoPage()));
+  }
+
+  void _openCurrentPlan(BuildContext context) {
+    QuickInvoiceMainPaywallPage.show(context);
+  }
+
+  Future<void> _openSupport() async {
+    final uri = Uri(scheme: 'mailto', path: QICore.config.supportEmail);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 
   static String get _privacyPolicyText => '''
@@ -422,9 +473,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
                   child: Center(
                     child: Text(
                       'Save',
-                      style: TextStyles.bodyEmphasized.copyWith(
-                        color: ColorStyles.white,
-                      ),
+                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
                     ),
                   ),
                 ),
@@ -447,12 +496,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyles.footnoteRegular.copyWith(
-            color: ColorStyles.secondary,
-          ),
-        ),
+        Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
         SizedBox(height: 8.r),
         Container(
           decoration: BoxDecoration(
@@ -461,9 +505,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
           ),
           child: CupertinoTextField(
             controller: controller,
-            style: TextStyles.bodyRegular.copyWith(
-              color: ColorStyles.primaryTxt,
-            ),
+            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
             placeholder: placeholder,
             placeholderStyle: TextStyles.bodyRegular.copyWith(
               color: ColorStyles.secondary.withValues(alpha: 0.5),
@@ -505,9 +547,7 @@ class _PolicyPage extends StatelessWidget {
           padding: EdgeInsets.all(16.r),
           child: Text(
             content,
-            style: TextStyles.bodyRegular.copyWith(
-              color: ColorStyles.primaryTxt,
-            ),
+            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
           ),
         ),
       ),

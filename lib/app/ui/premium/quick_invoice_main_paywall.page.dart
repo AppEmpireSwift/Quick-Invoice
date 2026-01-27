@@ -2,10 +2,10 @@ import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart' hide DeviceType;
 
 import '../../../core/core.dart';
-import '../../../core/services/ui.helper.dart';
+import '../../../core/services/quick_invoice_ui_helper.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../style/style.dart';
 import '../common/filled_button.dart';
@@ -25,11 +25,11 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
     final uiHelper = QuickInvoiceUIHelper.of(context);
     String bg;
     switch (uiHelper.deviceType) {
-      case AppleDeviceType.iphoneSe:
+      case DeviceType.iphoneSe:
         bg = Assets.images.premium.paywallSe.path;
-      case AppleDeviceType.iphoneBase:
+      case DeviceType.iphoneBase:
         bg = Assets.images.premium.paywall.path;
-      case AppleDeviceType.ipad:
+      case DeviceType.ipad:
         if (uiHelper.isLandscape) {
           bg = Assets.images.premium.paywallAlbum.path;
         } else {
@@ -56,16 +56,15 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                 right: 10,
                 child: SafeArea(
                   child: PaywallCloseButton(
-                    buttonBuilder:
-                        (onClose) => CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: onClose,
-                          child: Icon(
-                            CupertinoIcons.xmark_circle_fill,
-                            color: ColorStyles.secondary,
-                            size: 28.r,
-                          ),
-                        ),
+                    buttonBuilder: (onClose) => CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: onClose,
+                      child: Icon(
+                        CupertinoIcons.xmark_circle_fill,
+                        color: ColorStyles.secondary,
+                        size: 28.r,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -109,85 +108,94 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                       ),
                       SizedBox(height: 4.r),
                       ProductsTilesBuilder(
-                        productTileBuilder: (
-                          String productName,
-                          String productSubtitle,
-                          String productPrice,
-                          bool isActive,
-                          VoidCallback onTap,
-                        ) {
-                          return GestureDetector(
-                            onTap: onTap,
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 4.h),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16.h,
-                                vertical: 8.h.clamp(0, 8),
-                              ),
-                              decoration: BoxDecoration(
-                                color:
-                                    isActive
+                        productTileBuilder:
+                            (
+                              String productName,
+                              String productSubtitle,
+                              String productPrice,
+                              bool isActive,
+                              VoidCallback onTap,
+                            ) {
+                              return GestureDetector(
+                                onTap: onTap,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 16.h,
+                                    vertical: 8.h.clamp(0, 8),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isActive
                                         ? Color.fromRGBO(0, 136, 255, 1)
                                         : Color.fromRGBO(238, 244, 255, 1),
-                                borderRadius: BorderRadius.circular(18.r),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          productName,
+                                    borderRadius: BorderRadius.circular(18.r),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 3,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              productName,
+                                              style: TextStyle(
+                                                fontSize: 15.sp.clamp(0, 15),
+                                                fontWeight: FontWeight.w700,
+                                                color: isActive
+                                                    ? ColorStyles.white
+                                                    : ColorStyles.primaryTxt,
+                                              ),
+                                            ),
+                                            Text(
+                                              productSubtitle,
+                                              style: TextStyle(
+                                                fontSize: 13.sp.clamp(0, 13),
+                                                fontWeight: FontWeight.w400,
+                                                letterSpacing: -0.04,
+                                                color: isActive
+                                                    ? ColorStyles.white
+                                                    : Color.fromRGBO(60, 60, 67, 0.6),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          productPrice,
+                                          textAlign: TextAlign.end,
                                           style: TextStyle(
                                             fontSize: 15.sp.clamp(0, 15),
                                             fontWeight: FontWeight.w700,
-                                            color:
-                                                isActive
-                                                    ? ColorStyles.white
-                                                    : ColorStyles.primaryTxt,
+                                            color: isActive
+                                                ? ColorStyles.white
+                                                : ColorStyles.primaryTxt,
+                                            letterSpacing: -0.23,
                                           ),
                                         ),
-                                        Text(
-                                          productSubtitle,
-                                          style: TextStyle(
-                                            fontSize: 13.sp.clamp(0, 13),
-                                            fontWeight: FontWeight.w400,
-                                            letterSpacing: -0.04,
-                                            color:
-                                                isActive
-                                                    ? ColorStyles.white
-                                                    : Color.fromRGBO(60, 60, 67, 0.6),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      productPrice,
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        fontSize: 15.sp.clamp(0, 15),
-                                        fontWeight: FontWeight.w700,
-                                        color:
-                                            isActive ? ColorStyles.white : ColorStyles.primaryTxt,
-                                        letterSpacing: -0.23,
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                                ),
+                              );
+                            },
                       ),
                       SizedBox(height: 8.r),
                       PurchaseButtonBuilder(
                         buttonBuilder: (String buttonText, AsyncCallback onTap) {
-                          return QIFilledButton(onPressed: onTap, child: Text(buttonText));
+                          return QIFilledButton(
+                            onPressed: onTap,
+                            child: Text(
+                              buttonText,
+                              style: TextStyle(
+                                fontSize: 20.sp.clamp(0, 26),
+                                fontWeight: FontWeight.w600,
+                                color: ColorStyles.white,
+                              ),
+                            ),
+                          );
                         },
                       ),
                       _TermsSection(),

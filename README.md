@@ -29,7 +29,7 @@
   "title": "Unlimited",
   "subTitle": "access!",
   "limitedButton": "Or proceed with limited version",
-  "tryFreeButton": "Try free & subscribe",
+  "tryFreeButton": "Continue",
   "continueButton": "Continue",
   "products": [
     {
@@ -60,7 +60,7 @@
       "periodly": "one-time"
     },
     {
-      "id": "com.QuickInvoicea23p.appMonth",
+      "id": "com.QuickInvoicea23p.appMonth",>
       "title": "Popular",
       "periodly": "month"
     },

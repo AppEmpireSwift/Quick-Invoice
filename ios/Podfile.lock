@@ -5,8 +5,6 @@ PODS:
   - ApphudSDK (3.6.2)
   - bundle_resources_loader (0.0.1):
     - Flutter
-  - device_info_plus (0.0.1):
-    - Flutter
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
@@ -59,7 +57,6 @@ PODS:
 DEPENDENCIES:
   - apphud (from `.symlinks/plugins/apphud/ios`)
   - bundle_resources_loader (from `.symlinks/plugins/bundle_resources_loader/ios`)
-  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
@@ -83,8 +80,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/apphud/ios"
   bundle_resources_loader:
     :path: ".symlinks/plugins/bundle_resources_loader/ios"
-  device_info_plus:
-    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
@@ -114,7 +109,6 @@ SPEC CHECKSUMS:
   apphud: a7a8e61480b886ec89e28cd5cc35b5438d7a1cc8
   ApphudSDK: 787b3f4f41427a07f4f8d02590470f31f567cfdf
   bundle_resources_loader: 8abaa1e748900f234631592afaed2afa59a8f640
-  device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
   flutter_native_splash: c32d145d68aeda5502d5f543ee38c192065986cf

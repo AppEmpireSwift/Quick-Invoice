@@ -25,7 +25,7 @@ class _QIFilledButtonState extends State<QIFilledButton> {
         style: ButtonStyle(
           textStyle: WidgetStateProperty.all(
             TextStyle(
-              fontSize: 16.sp.clamp(0, 24),
+              fontSize: 20.sp.clamp(0, 26),
               fontWeight: FontWeight.w600,
               letterSpacing: -0.43,
               color: ColorStyles.white,

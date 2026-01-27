@@ -1,18 +1,14 @@
 import 'package:flutter/widgets.dart';
-
+import 'package:quick_invoice/core/services/quick_invoice_boarding.helper.dart';
 import 'entities/config.dart';
-import 'services/boarding.helper.dart';
-import 'services/path.dart';
-
 export 'utils.dart';
-export 'services/boarding.helper.dart';
-export 'services/path.dart';
+export 'services/quick_invoice_boarding.helper.dart';
 export 'services/share.helper.dart';
 export 'entities/config.dart';
 
 export 'ui/launch.wrapper.dart';
-export 'ui/root.wrapper.dart';
-export 'ui/onboarding.wrapper.dart';
+export 'ui/quick_invoice_root_wrapper.dart';
+export 'ui/quick_invoice_onboarding_wrapper.dart';
 
 class QICore {
   static late final QIConfig config;
@@ -36,7 +32,6 @@ class QICore {
     QICore.homePage = home;
     QICore.splashPage = splash;
     QICore.boardingPage = onBoarding;
-    await initDirPath();
     await QIBoardingHelper.init();
     _initialized = true;
   }

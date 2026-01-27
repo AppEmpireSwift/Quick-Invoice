@@ -76,9 +76,9 @@ class AnalyticsMetricCard extends StatelessWidget {
             child: Icon(icon, color: iconColor, size: 20.r),
           ),
           SizedBox(height: 12.r),
-          Text(value, style: TextStyles.title3Emphasized),
+          Text(value, style: TextStyles.title3Emphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
           SizedBox(height: 4.r),
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary), maxLines: 1, overflow: TextOverflow.ellipsis),
         ],
       ),
     );

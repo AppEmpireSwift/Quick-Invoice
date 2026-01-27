@@ -76,15 +76,30 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
                   children: [
                     _buildField('Company Name', 'Your company name', _nameController),
                     SizedBox(height: 16.r),
-                    _buildField('Email', 'company@email.com', _emailController),
+                    _buildField(
+                      'Email',
+                      'company@email.com',
+                      _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
                     SizedBox(height: 16.r),
-                    _buildField('Phone', '+1 234 567 890', _phoneController),
+                    _buildField(
+                      'Phone',
+                      '+1 234 567 890',
+                      _phoneController,
+                      keyboardType: TextInputType.phone,
+                    ),
                     SizedBox(height: 16.r),
                     _buildField('Address', 'Company address', _addressController),
                     SizedBox(height: 16.r),
                     _buildField('Tax ID', 'Tax identification number', _taxIdController),
                     SizedBox(height: 16.r),
-                    _buildField('Website', 'www.company.com', _websiteController),
+                    _buildField(
+                      'Website',
+                      'www.company.com',
+                      _websiteController,
+                      keyboardType: TextInputType.url,
+                    ),
                   ],
                 ),
               ),
@@ -103,7 +118,10 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
-                    child: Text('Continue', style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white)),
+                    child: Text(
+                      'Continue',
+                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                    ),
                   ),
                 ),
               ),
@@ -114,7 +132,12 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
     );
   }
 
-  Widget _buildField(String label, String placeholder, TextEditingController controller) {
+  Widget _buildField(
+    String label,
+    String placeholder,
+    TextEditingController controller, {
+    TextInputType keyboardType = TextInputType.text,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,6 +147,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
           controller: controller,
           placeholder: placeholder,
           padding: EdgeInsets.all(12.r),
+          keyboardType: keyboardType,
           decoration: BoxDecoration(
             color: ColorStyles.fillsTertiary,
             borderRadius: BorderRadius.circular(8.r),

@@ -2,10 +2,10 @@ import 'package:apphud_helper/apphud_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart' hide DeviceType;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../core/core.dart';
-import '../../../core/services/ui.helper.dart';
+import '../../../core/services/quick_invoice_ui_helper.dart';
 import '../../../core/ui/home_indicator_space.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../style/style.dart';
@@ -40,7 +40,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
   Widget build(BuildContext context) {
     List<String> pages;
     switch (quickInvoiceUIHelper.deviceType) {
-      case AppleDeviceType.iphoneSe:
+      case DeviceType.iphoneSe:
         pages = [
           Assets.images.onboarding.onb1Se.path,
           Assets.images.onboarding.onb2Se.path,
@@ -48,7 +48,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
           Assets.images.onboarding.onb4Se.path,
           Assets.images.onboarding.onb5Se.path,
         ];
-      case AppleDeviceType.iphoneBase:
+      case DeviceType.iphoneBase:
         pages = [
           Assets.images.onboarding.onb1.path,
           Assets.images.onboarding.onb2.path,
@@ -56,7 +56,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
           Assets.images.onboarding.onb4.path,
           Assets.images.onboarding.onb5.path,
         ];
-      case AppleDeviceType.ipad:
+      case DeviceType.ipad:
         if (quickInvoiceUIHelper.isLandscape) {
           pages = [
             Assets.images.onboarding.onb1Album.path,
@@ -101,10 +101,9 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
             child: PageView(
               controller: _pageController,
               physics: NeverScrollableScrollPhysics(),
-              children:
-                  pages
-                      .map((p) => Image.asset(p, fit: BoxFit.cover, alignment: Alignment(0, -0.4)))
-                      .toList(),
+              children: pages
+                  .map((p) => Image.asset(p, fit: BoxFit.cover, alignment: Alignment(0, -0.4)))
+                  .toList(),
             ),
           ),
           Positioned(
@@ -139,7 +138,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                     TextSpan(
                                       text: titles.last,
                                       style: TextStyle(
-                                        fontSize: 26.spMin,
+                                        fontSize: 22.spMin,
                                         letterSpacing: -0.4,
                                         color: CupertinoColors.black,
                                       ),
@@ -160,7 +159,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                               TextSpan(
                                 text: secondTitles[pageNumber],
                                 style: TextStyle(
-                                  fontSize: 26.spMin,
+                                  fontSize: 24.spMin,
                                   letterSpacing: -0.4,
                                   color: CupertinoColors.black,
                                 ),
@@ -176,39 +175,36 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
 
                       if (pageNumber == lastPageNumber) {
                         descriptionSection = OnBoardingPaywallActiveProductInfo(
-                          infoBuilder: (
-                            String subInfo,
-                            String? limitedButton,
-                            VoidCallback? onLimitedTap,
-                          ) {
-                            return Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(text: subInfo),
-                                  if (limitedButton != null) TextSpan(text: '\n'),
-                                  if (limitedButton != null)
-                                    TextSpan(
-                                      text: limitedButton,
-                                      recognizer: TapGestureRecognizer()..onTap = onLimitedTap,
-                                    ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 15.sp.clamp(0, 21),
-                                letterSpacing: -0.23,
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromRGBO(60, 60, 67, 0.6),
-                              ),
-                            );
-                          },
+                          infoBuilder:
+                              (String subInfo, String? limitedButton, VoidCallback? onLimitedTap) {
+                                return Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(text: subInfo),
+                                      if (limitedButton != null) TextSpan(text: '\n'),
+                                      if (limitedButton != null)
+                                        TextSpan(
+                                          text: limitedButton,
+                                          recognizer: TapGestureRecognizer()..onTap = onLimitedTap,
+                                        ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 13.sp.clamp(0, 19),
+                                    letterSpacing: -0.23,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color.fromRGBO(60, 60, 67, 0.6),
+                                  ),
+                                );
+                              },
                         );
                       } else {
                         descriptionSection = Text(
                           descriptions[pageNumber],
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 15.sp.clamp(0, 21),
+                            fontSize: 13.sp.clamp(0, 19),
                             letterSpacing: -0.23,
                             fontWeight: FontWeight.w400,
                             color: Color.fromRGBO(60, 60, 67, 0.6),
@@ -222,7 +218,16 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                           buttonBuilder: (buttonText, onPressed) {
                             return QIFilledButton(
                               onPressed: onPressed,
-                              child: Center(child: Text(buttonText)),
+                              child: Center(
+                                child: Text(
+                                  buttonText,
+                                  style: TextStyle(
+                                    fontSize: 18.sp.clamp(0, 24),
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorStyles.white,
+                                  ),
+                                ),
+                              ),
                             );
                           },
                         );
@@ -231,7 +236,16 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                           onPressed: () {
                             _pageController.jumpToPage((_pageController.page?.round() ?? 0) + 1);
                           },
-                          child: Center(child: Text('Continue')),
+                          child: Center(
+                            child: Text(
+                              'Continue',
+                              style: TextStyle(
+                                fontSize: 18.sp.clamp(0, 24),
+                                fontWeight: FontWeight.w600,
+                                color: ColorStyles.white,
+                              ),
+                            ),
+                          ),
                         );
                       }
 
@@ -247,31 +261,30 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                 color: hide ? null : Color.fromRGBO(203, 221, 255, 0.33),
                               ),
 
-                              child:
-                                  hide
-                                      ? Container()
-                                      : Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(12.0.spMin),
-                                            child: Text(
-                                              text ?? '',
-                                              style: TextStyles.subheadlineRegular.copyWith(
-                                                color: ColorStyles.black,
-                                              ),
+                              child: hide
+                                  ? Container()
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(12.0.spMin),
+                                          child: Text(
+                                            text ?? '',
+                                            style: TextStyles.subheadlineRegular.copyWith(
+                                              color: ColorStyles.black,
                                             ),
                                           ),
+                                        ),
 
-                                          Padding(
-                                            padding: EdgeInsets.only(right: 10.spMin),
-                                            child: Switch.adaptive(
-                                              value: value ?? false,
-                                              onChanged: (_) => onChange?.call(),
-                                            ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 10.spMin),
+                                          child: Switch.adaptive(
+                                            value: value ?? false,
+                                            onChanged: (_) => onChange?.call(),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
+                                    ),
                             );
                           },
                         );
@@ -319,13 +332,12 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                               count: pages.length,
                             ),
                           ),
-                          SizedBox(height: 8.h),
                           titleSection,
-                          SizedBox(height: 12.h),
+                          SizedBox(height: 6.h.clamp(0, 6)),
                           descriptionSection,
-                          SizedBox(height: 8.h),
+                          SizedBox(height: 8.h.clamp(0, 8)),
                           cloud,
-                          SizedBox(height: 6.h),
+                          SizedBox(height: 6.h.clamp(0, 6)),
                           button,
                         ],
                       );

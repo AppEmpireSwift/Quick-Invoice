@@ -33,7 +33,7 @@ void main() async {
       mainPaywallSettings: MainPaywallSettings(),
       onBoardingPaywallSettings: OnBoardingPaywallSettings(),
     ),
-    helperType: HelperType.apphud, 
+    helperType: HelperType.fallbackBased, 
   );
   runApp(
     DevicePreview(

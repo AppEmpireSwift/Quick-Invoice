@@ -26,25 +26,7 @@ class TermsAndPolicySection extends StatelessWidget {
             child: Ink(
               height: 42.spMin,
               padding: EdgeInsets.symmetric(horizontal: 8.r),
-              child: Center(
-                child: Text('Terms of Use', style: TextStyles.footnoteRegular),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              HapticFeedback.lightImpact();
-              openPrivacyPolicy(context);
-            },
-            child: Ink(
-              height: 42.spMin,
-              padding: EdgeInsets.symmetric(horizontal: 8.r),
-              child: Center(
-                child: Text(
-                  'Privacy Policy',
-                  style: TextStyles.footnoteRegular,
-                ),
-              ),
+              child: Center(child: Text('Terms of Use', style: TextStyles.footnoteRegular)),
             ),
           ),
           SeparateRestorePurchaseButtonBuilder(
@@ -57,12 +39,21 @@ class TermsAndPolicySection extends StatelessWidget {
                 child: Ink(
                   height: 42.spMin,
                   padding: EdgeInsets.symmetric(horizontal: 8.r),
-                  child: Center(
-                    child: Text(buttonText, style: TextStyles.footnoteRegular),
-                  ),
+                  child: Center(child: Text(buttonText, style: TextStyles.footnoteRegular)),
                 ),
               );
             },
+          ),
+          InkWell(
+            onTap: () {
+              HapticFeedback.lightImpact();
+              openPrivacyPolicy(context);
+            },
+            child: Ink(
+              height: 42.spMin,
+              padding: EdgeInsets.symmetric(horizontal: 8.r),
+              child: Center(child: Text('Privacy Policy', style: TextStyles.footnoteRegular)),
+            ),
           ),
         ],
       ),

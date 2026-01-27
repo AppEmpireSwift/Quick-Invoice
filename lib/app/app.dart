@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show DefaultMaterialLocalizations;
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/services/ui.helper.dart';
+import '../../core/services/quick_invoice_ui_helper.dart';
 import '../core/core.dart';
 import '../style/style.dart';
 
