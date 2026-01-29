@@ -24,6 +24,23 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
   final _websiteController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _loadSavedCompanyInfo();
+  }
+
+  Future<void> _loadSavedCompanyInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
+    _nameController.text = prefs.getString('company_name') ?? '';
+    _emailController.text = prefs.getString('company_email') ?? '';
+    _phoneController.text = prefs.getString('company_phone') ?? '';
+    _addressController.text = prefs.getString('company_address') ?? '';
+    _taxIdController.text = prefs.getString('company_tax_id') ?? '';
+    _websiteController.text = prefs.getString('company_website') ?? '';
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
@@ -63,7 +80,9 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
               SizedBox(height: 8.r),
               Text(
                 'This information will appear on your invoices',
-                style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
+                style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                  color: QuickInvoiceColorStyles.secondary,
+                ),
               ),
               SizedBox(height: 32.r),
               Container(
@@ -120,7 +139,9 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
                   child: Center(
                     child: Text(
                       'Continue',
-                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
+                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(
+                        color: QuickInvoiceColorStyles.white,
+                      ),
                     ),
                   ),
                 ),
@@ -141,7 +162,12 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
+        Text(
+          label,
+          style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+            color: QuickInvoiceColorStyles.secondary,
+          ),
+        ),
         SizedBox(height: 8.r),
         CupertinoTextField(
           controller: controller,
