@@ -220,6 +220,18 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
 
   Future<void> _handleSave() async {
     final signatureData = await _encodeSignature();
+    
+    // Save client if entered manually (not selected from list)
+    if (selectedClient == null && clientNameController.text.isNotEmpty) {
+      final clientId = DateTime.now().millisecondsSinceEpoch.toString();
+      final newClient = ClientsCompanion(
+        id: Value(clientId),
+        name: Value(clientNameController.text),
+        phoneNumber: Value(clientPhoneController.text),
+      );
+      await AppDatabase.instance.insertClient(newClient);
+    }
+    
     final edit = widget.editInvoice;
     if (edit != null) {
       final updated = InvoicesCompanion(
