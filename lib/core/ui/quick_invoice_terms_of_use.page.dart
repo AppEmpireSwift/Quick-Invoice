@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../style/style.dart';
+import '../../style/quick_invoice_style.dart';
 import '../core.dart';
 
 class QuickInvoiceTermsOfUsePage extends StatelessWidget {
@@ -10,22 +10,22 @@ class QuickInvoiceTermsOfUsePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.white,
+      backgroundColor: QuickInvoiceThemeColors.pageBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Terms of Use'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         transitionBetweenRoutes: false,
         automaticBackgroundVisibility: false,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.xmark, size: 20.r, color: ColorStyles.secondary),
+          child: Icon(CupertinoIcons.xmark, size: 20.r, color: QuickInvoiceColorStyles.secondary),
         ),
       ),
       child: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16).r,
-        child: Text('''
+          child: Text('''
 These terms and conditions apply to the ${QICore.config.appName} app (hereby referred to as "Application") for mobile devices that was created by The Developer (hereby referred to as "Service Provider") as a Freemium service.
 
 Upon downloading or utilizing the Application, you are automatically agreeing to the following terms. It is strongly advised that you thoroughly read and understand these terms prior to using the Application. Unauthorized copying, modification of the Application, any part of the Application, or our trademarks is strictly prohibited. Any attempts to extract the source code of the Application, translate the Application into other languages, or create derivative versions are not permitted. All trademarks, copyrights, database rights, and other intellectual property rights related to the Application remain the property of the Service Provider.

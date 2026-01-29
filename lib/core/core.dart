@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:quick_invoice/core/services/quick_invoice_boarding.helper.dart';
-import 'entities/config.dart';
+import 'entities/qi_config.dart';
 export 'utils.dart';
 export 'services/quick_invoice_boarding.helper.dart';
-export 'services/share.helper.dart';
-export 'entities/config.dart';
+export 'services/qi_share.helper.dart';
+export 'entities/qi_config.dart';
 
-export 'ui/launch.wrapper.dart';
+export 'ui/quick_invoice_loading.dart';
 export 'ui/quick_invoice_root_wrapper.dart';
 export 'ui/quick_invoice_onboarding_wrapper.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdfx/pdfx.dart';
 
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import '../../../../data/database.dart';
 import '../../../services/pdf_service.dart';
 import '../../../services/premium_limits.dart';
@@ -50,17 +50,17 @@ class _QuickInvoicePdfPreviewPageState extends State<QuickInvoicePdfPreviewPage>
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       navigationBar: CupertinoNavigationBar(
         middle: const Text('Preview'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         automaticBackgroundVisibility: false,
         transitionBetweenRoutes: false,
         border: null,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => PdfService.shareInvoice(widget.invoice, template: widget.template),
-          child: Icon(CupertinoIcons.share, color: ColorStyles.primary, size: 22.r),
+          child: Icon(CupertinoIcons.share, color: QuickInvoiceColorStyles.primary, size: 22.r),
         ),
       ),
       child: SafeArea(
@@ -89,7 +89,7 @@ class _TemplateSelectorModalState extends State<TemplateSelectorModal> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: ColorStyles.white,
+        color: QuickInvoiceColorStyles.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: SafeArea(
@@ -102,13 +102,13 @@ class _TemplateSelectorModalState extends State<TemplateSelectorModal> {
               width: 40.r,
               height: 4.r,
               decoration: BoxDecoration(
-                color: ColorStyles.separator,
+                color: QuickInvoiceColorStyles.separator,
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.r),
-              child: Text('Select Template', style: TextStyles.title3Emphasized),
+              child: Text('Select Template', style: QuickInvoiceTextStyles.title3Emphasized),
             ),
             SizedBox(height: 24.r),
             Padding(
@@ -175,13 +175,13 @@ class _TemplateSelectorModalState extends State<TemplateSelectorModal> {
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: ColorStyles.primary,
+                    color: QuickInvoiceColorStyles.primary,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
                     child: Text(
                       'Continue',
-                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                     ),
                   ),
                 ),
@@ -216,10 +216,10 @@ class _TemplateOption extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
-          color: ColorStyles.white,
+          color: QuickInvoiceColorStyles.white,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: isSelected ? ColorStyles.primary : ColorStyles.separator,
+            color: isSelected ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -228,7 +228,7 @@ class _TemplateOption extends StatelessWidget {
             Container(
               height: 100.r,
               decoration: BoxDecoration(
-                color: ColorStyles.bgSecondary,
+                color: QuickInvoiceColorStyles.bgSecondary,
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: _buildTemplatePreview(template),
@@ -238,13 +238,13 @@ class _TemplateOption extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (isLocked) ...[
-                  Icon(CupertinoIcons.lock_fill, size: 12.r, color: ColorStyles.secondary),
+                  Icon(CupertinoIcons.lock_fill, size: 12.r, color: QuickInvoiceColorStyles.secondary),
                   SizedBox(width: 4.r),
                 ],
                 Text(
                   name,
-                  style: TextStyles.footnoteEmphasized.copyWith(
-                    color: isLocked ? ColorStyles.secondary : null,
+                  style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
+                    color: isLocked ? QuickInvoiceColorStyles.secondary : null,
                   ),
                 ),
               ],
@@ -267,7 +267,7 @@ class _TemplateOption extends StatelessWidget {
                 height: 8.r,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: ColorStyles.primary,
+                  color: QuickInvoiceColorStyles.primary,
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -276,7 +276,7 @@ class _TemplateOption extends StatelessWidget {
                 height: 20.r,
                 width: 40.r,
                 decoration: BoxDecoration(
-                  color: ColorStyles.separator,
+                  color: QuickInvoiceColorStyles.separator,
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -289,7 +289,7 @@ class _TemplateOption extends StatelessWidget {
                     height: 4.r,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: ColorStyles.separator,
+                      color: QuickInvoiceColorStyles.separator,
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
@@ -308,7 +308,7 @@ class _TemplateOption extends StatelessWidget {
                 height: 12.r,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: ColorStyles.primary,
+                  color: QuickInvoiceColorStyles.primary,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(4.r)),
                 ),
               ),
@@ -319,7 +319,7 @@ class _TemplateOption extends StatelessWidget {
                     child: Container(
                       height: 20.r,
                       decoration: BoxDecoration(
-                        color: ColorStyles.separator,
+                        color: QuickInvoiceColorStyles.separator,
                         borderRadius: BorderRadius.circular(2.r),
                       ),
                     ),
@@ -329,7 +329,7 @@ class _TemplateOption extends StatelessWidget {
                     child: Container(
                       height: 20.r,
                       decoration: BoxDecoration(
-                        color: ColorStyles.separator,
+                        color: QuickInvoiceColorStyles.separator,
                         borderRadius: BorderRadius.circular(2.r),
                       ),
                     ),
@@ -341,7 +341,7 @@ class _TemplateOption extends StatelessWidget {
                 height: 30.r,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: ColorStyles.separator,
+                  color: QuickInvoiceColorStyles.separator,
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -358,7 +358,7 @@ class _TemplateOption extends StatelessWidget {
                 height: 8.r,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: ColorStyles.black,
+                  color: QuickInvoiceColorStyles.black,
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -371,7 +371,7 @@ class _TemplateOption extends StatelessWidget {
                     height: 4.r,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: ColorStyles.separator,
+                      color: QuickInvoiceColorStyles.separator,
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),

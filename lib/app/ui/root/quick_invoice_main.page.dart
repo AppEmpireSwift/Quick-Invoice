@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../style/style.dart';
+import '../../../style/quick_invoice_style.dart';
 import 'tabs/quick_invoice_home.dart';
 import 'tabs/quick_invoice_clients.dart';
 import 'tabs/quick_invoice_analytics.dart';
@@ -26,7 +26,7 @@ class _QuickInvoiceMainPageState extends State<QuickInvoiceMainPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       child: Column(
         children: [
           Expanded(
@@ -45,10 +45,10 @@ class _QuickInvoiceMainPageState extends State<QuickInvoiceMainPage> {
               bottom: MediaQuery.of(context).padding.bottom,
             ),
             decoration: BoxDecoration(
-              color: ColorStyles.white,
+              color: QuickInvoiceColorStyles.white,
               boxShadow: [
                 BoxShadow(
-                  color: ColorStyles.black.withValues(alpha: 0.08),
+                  color: QuickInvoiceColorStyles.black.withValues(alpha: 0.08),
                   blurRadius: 8,
                   offset: Offset(0, -2),
                 ),
@@ -116,7 +116,7 @@ class _TabItem extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: isActive ? ColorStyles.primary : CupertinoColors.systemGrey2,
+            color: isActive ? QuickInvoiceColorStyles.primary : CupertinoColors.systemGrey2,
             size: 24.r,
           ),
           SizedBox(height: 2.r),
@@ -125,7 +125,7 @@ class _TabItem extends StatelessWidget {
             style: TextStyle(
               fontSize: 10.sp.clamp(0, 16),
               fontWeight: FontWeight.w500,
-              color: isActive ? ColorStyles.primary : CupertinoColors.systemGrey,
+              color: isActive ? QuickInvoiceColorStyles.primary : CupertinoColors.systemGrey,
             ),
           ),
         ],

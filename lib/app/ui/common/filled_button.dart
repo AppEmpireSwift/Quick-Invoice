@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quick_invoice/style/color.style.dart';
+import 'package:quick_invoice/style/quick_invoice_color_style.dart';
 
 class QIFilledButton extends StatefulWidget {
   final FutureOr<void> Function()? onPressed;
@@ -28,7 +28,7 @@ class _QIFilledButtonState extends State<QIFilledButton> {
               fontSize: 20.sp.clamp(0, 26),
               fontWeight: FontWeight.w600,
               letterSpacing: -0.43,
-              color: ColorStyles.white,
+              color: QuickInvoiceColorStyles.white,
             ),
           ),
           backgroundColor: WidgetStateProperty.all(Color.fromRGBO(0, 136, 255, 1)),

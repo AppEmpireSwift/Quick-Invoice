@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../style/style.dart';
+import '../../../style/quick_invoice_style.dart';
 import '../../../core/core.dart';
 
 class QuickInvoiceCompanyInfoPage extends StatefulWidget {
@@ -51,7 +51,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       child: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.r),
@@ -59,17 +59,17 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 24.r),
-              Text('Company Info', style: TextStyles.largeTitleEmphasized),
+              Text('Company Info', style: QuickInvoiceTextStyles.largeTitleEmphasized),
               SizedBox(height: 8.r),
               Text(
                 'This information will appear on your invoices',
-                style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+                style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
               ),
               SizedBox(height: 32.r),
               Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: ColorStyles.white,
+                  color: QuickInvoiceColorStyles.white,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -114,13 +114,13 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: ColorStyles.primary,
+                    color: QuickInvoiceColorStyles.primary,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
                     child: Text(
                       'Continue',
-                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                     ),
                   ),
                 ),
@@ -141,7 +141,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+        Text(label, style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
         SizedBox(height: 8.r),
         CupertinoTextField(
           controller: controller,
@@ -149,7 +149,7 @@ class _QuickInvoiceCompanyInfoPageState extends State<QuickInvoiceCompanyInfoPag
           padding: EdgeInsets.all(12.r),
           keyboardType: keyboardType,
           decoration: BoxDecoration(
-            color: ColorStyles.fillsTertiary,
+            color: QuickInvoiceColorStyles.fillsTertiary,
             borderRadius: BorderRadius.circular(8.r),
           ),
         ),

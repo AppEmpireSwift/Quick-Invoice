@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../style/style.dart';
+import '../../style/quick_invoice_style.dart';
 import '../core.dart';
 
 class QuickInvoicePrivacyPolicyPage extends StatelessWidget {
@@ -10,16 +10,16 @@ class QuickInvoicePrivacyPolicyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.white,
+      backgroundColor: QuickInvoiceColorStyles.white,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Privacy Policy'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         transitionBetweenRoutes: false,
         automaticBackgroundVisibility: false,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.xmark, size: 20.r, color: ColorStyles.secondary),
+          child: Icon(CupertinoIcons.xmark, size: 20.r, color: QuickInvoiceColorStyles.secondary),
         ),
       ),
       child: SafeArea(

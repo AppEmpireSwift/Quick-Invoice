@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import '../../../services/premium_limits.dart';
 import '../../premium/quick_invoice_main_paywall.page.dart';
 
@@ -54,11 +54,11 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       child: Column(
         children: [
           Container(
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +67,7 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Clients', style: TextStyles.largeTitleEmphasized),
+                    Text('Clients', style: QuickInvoiceTextStyles.largeTitleEmphasized),
                     if (_clients.isNotEmpty)
                       CupertinoButton(
                         padding: EdgeInsets.zero,
@@ -83,7 +83,7 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                         },
                         child: Icon(
                           CupertinoIcons.plus_circle_fill,
-                          color: ColorStyles.primary,
+                          color: QuickInvoiceColorStyles.primary,
                           size: 28.r,
                         ),
                       ),
@@ -92,11 +92,11 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                 SizedBox(height: 16.r),
                 CupertinoSearchTextField(
                   placeholder: 'Search clients...',
-                  style: TextStyles.bodyRegular,
-                  placeholderStyle: TextStyles.bodyRegular.copyWith(
-                    color: ColorStyles.labelsTertiary,
+                  style: QuickInvoiceTextStyles.bodyRegular,
+                  placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                    color: QuickInvoiceColorStyles.labelsTertiary,
                   ),
-                  backgroundColor: ColorStyles.fillsTertiary,
+                  backgroundColor: QuickInvoiceColorStyles.fillsTertiary,
                   onChanged: (value) => setState(() => _searchQuery = value),
                 ),
               ],
@@ -113,22 +113,22 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                             width: 120.r,
                             height: 120.r,
                             decoration: BoxDecoration(
-                              color: ColorStyles.primary.withValues(alpha: 0.1),
+                              color: QuickInvoiceColorStyles.primary.withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               CupertinoIcons.person_2_fill,
                               size: 60.r,
-                              color: ColorStyles.primary,
+                              color: QuickInvoiceColorStyles.primary,
                             ),
                           ),
                           SizedBox(height: 24.r),
-                          Text('No clients yet', style: TextStyles.title3Emphasized),
+                          Text('No clients yet', style: QuickInvoiceTextStyles.title3Emphasized),
                           SizedBox(height: 8.r),
                           Text(
                             'Add your first client',
-                            style: TextStyles.footnoteRegular.copyWith(
-                              color: ColorStyles.secondary,
+                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                              color: QuickInvoiceColorStyles.secondary,
                             ),
                           ),
                           SizedBox(height: 20.r),
@@ -147,12 +147,12 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 24.r, vertical: 12.r),
                               decoration: BoxDecoration(
-                                color: ColorStyles.primary,
+                                color: QuickInvoiceColorStyles.primary,
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Text(
                                 'Add Client',
-                                style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                                style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                               ),
                             ),
                           ),
@@ -167,7 +167,7 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                         return Container(
                           margin: EdgeInsets.only(bottom: 12.r),
                           decoration: BoxDecoration(
-                            color: ColorStyles.white,
+                            color: QuickInvoiceColorStyles.white,
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: CupertinoButton(
@@ -183,15 +183,15 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                                     children: [
                                       Text(
                                         client.name,
-                                        style: TextStyles.bodyEmphasized,
+                                        style: QuickInvoiceTextStyles.bodyEmphasized,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       if (client.phoneNumber.isNotEmpty)
                                         Text(
                                           client.phoneNumber,
-                                          style: TextStyles.footnoteRegular.copyWith(
-                                            color: ColorStyles.secondary,
+                                          style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                                            color: QuickInvoiceColorStyles.secondary,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -201,7 +201,7 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
                                 ),
                                 Icon(
                                   CupertinoIcons.chevron_right,
-                                  color: ColorStyles.secondary,
+                                  color: QuickInvoiceColorStyles.secondary,
                                   size: 16.r,
                                 ),
                               ],
@@ -229,7 +229,7 @@ class _ClientAvatar extends StatelessWidget {
     return Container(
       width: size.r,
       height: size.r,
-      decoration: BoxDecoration(color: ColorStyles.primary, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: QuickInvoiceColorStyles.primary, shape: BoxShape.circle),
       child: ClipOval(
         child:
             imageData != null
@@ -237,7 +237,7 @@ class _ClientAvatar extends StatelessWidget {
                 : Center(
                   child: Text(
                     name.isNotEmpty ? name[0].toUpperCase() : 'C',
-                    style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+                    style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                   ),
                 ),
       ),
@@ -331,12 +331,12 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary)),
+          child: Text('Cancel', style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primary)),
         ),
         middle: Text('New Client'),
         trailing: CupertinoButton(
@@ -347,10 +347,10 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
           },
           child: Text(
             'Save',
-            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primary),
+            style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.primary),
           ),
         ),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         automaticBackgroundVisibility: false,
         transitionBetweenRoutes: false,
         border: null,
@@ -366,7 +366,7 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
                   width: 80.r,
                   height: 80.r,
                   decoration: BoxDecoration(
-                    color: ColorStyles.primary.withValues(alpha: 0.1),
+                    color: QuickInvoiceColorStyles.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
@@ -380,7 +380,7 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
                             )
                             : Icon(
                               CupertinoIcons.camera_fill,
-                              color: ColorStyles.primary,
+                              color: QuickInvoiceColorStyles.primary,
                               size: 32.r,
                             ),
                   ),
@@ -390,7 +390,7 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
               Container(
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: ColorStyles.white,
+                  color: QuickInvoiceColorStyles.white,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -416,13 +416,13 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: ColorStyles.primary,
+                    color: QuickInvoiceColorStyles.primary,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
                     child: Text(
                       'Save Client',
-                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                     ),
                   ),
                 ),
@@ -445,8 +445,8 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
       children: [
         Text(
           label,
-          style: TextStyles.footnoteRegular.copyWith(
-            color: hasError ? ColorStyles.pink : ColorStyles.secondary,
+          style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+            color: hasError ? QuickInvoiceColorStyles.pink : QuickInvoiceColorStyles.secondary,
           ),
         ),
         SizedBox(height: 8.r),
@@ -458,9 +458,9 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
             if (hasError) setState(() => _nameError = false);
           },
           decoration: BoxDecoration(
-            color: ColorStyles.fillsTertiary,
+            color: QuickInvoiceColorStyles.fillsTertiary,
             borderRadius: BorderRadius.circular(8.r),
-            border: hasError ? Border.all(color: ColorStyles.pink) : null,
+            border: hasError ? Border.all(color: QuickInvoiceColorStyles.pink) : null,
           ),
         ),
       ],
@@ -495,16 +495,16 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.white,
+      backgroundColor: QuickInvoiceColorStyles.white,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Client'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         transitionBetweenRoutes: false,
         automaticBackgroundVisibility: false,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.xmark, size: 20.r, color: ColorStyles.secondary),
+          child: Icon(CupertinoIcons.xmark, size: 20.r, color: QuickInvoiceColorStyles.secondary),
         ),
       ),
       child: SafeArea(
@@ -517,7 +517,7 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
               SizedBox(height: 16.r),
               Text(
                 widget.client.name,
-                style: TextStyles.title3Emphasized,
+                style: QuickInvoiceTextStyles.title3Emphasized,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
@@ -527,19 +527,19 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                 width: double.infinity,
                 padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
-                  color: ColorStyles.bgSecondary,
+                  color: QuickInvoiceColorStyles.bgSecondary,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
                   children: [
                     if (widget.client.email.isNotEmpty) ...[
                       _infoRow('Email', widget.client.email),
-                      Divider(color: ColorStyles.separator, height: 24.r),
+                      Divider(color: QuickInvoiceColorStyles.separator, height: 24.r),
                     ],
                     if (widget.client.phoneNumber.isNotEmpty) ...[
                       _infoRow('Phone', widget.client.phoneNumber),
                       if (widget.client.address.isNotEmpty)
-                        Divider(color: ColorStyles.separator, height: 24.r),
+                        Divider(color: QuickInvoiceColorStyles.separator, height: 24.r),
                     ],
                     if (widget.client.address.isNotEmpty)
                       _infoRow('Address', widget.client.address),
@@ -550,7 +550,7 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                 SizedBox(height: 24.r),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Invoices', style: TextStyles.bodyEmphasized),
+                  child: Text('Invoices', style: QuickInvoiceTextStyles.bodyEmphasized),
                 ),
                 SizedBox(height: 12.r),
                 ..._invoices.map(
@@ -559,7 +559,7 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                     margin: EdgeInsets.only(bottom: 8.r),
                     padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
-                      color: ColorStyles.bgSecondary,
+                      color: QuickInvoiceColorStyles.bgSecondary,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Row(
@@ -570,15 +570,15 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                             children: [
                               Text(
                                 '#${invoice.invoiceNumber}',
-                                style: TextStyles.bodyEmphasized,
+                                style: QuickInvoiceTextStyles.bodyEmphasized,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               SizedBox(height: 4.r),
                               Text(
                                 invoice.status[0].toUpperCase() + invoice.status.substring(1),
-                                style: TextStyles.footnoteRegular.copyWith(
-                                  color: ColorStyles.secondary,
+                                style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                                  color: QuickInvoiceColorStyles.secondary,
                                 ),
                               ),
                             ],
@@ -586,7 +586,7 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                         ),
                         Text(
                           '\$${invoice.totalAmount.toStringAsFixed(2)}',
-                          style: TextStyles.bodyEmphasized,
+                          style: QuickInvoiceTextStyles.bodyEmphasized,
                         ),
                       ],
                     ),
@@ -627,13 +627,13 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                   width: double.infinity,
                   height: 50.r,
                   decoration: BoxDecoration(
-                    color: ColorStyles.pink,
+                    color: QuickInvoiceColorStyles.pink,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Center(
                     child: Text(
                       'Delete Client',
-                      style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                     ),
                   ),
                 ),
@@ -649,12 +649,12 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary)),
+        Text(label, style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
         SizedBox(width: 16.r),
         Expanded(
           child: Text(
             value,
-            style: TextStyles.bodyRegular,
+            style: QuickInvoiceTextStyles.bodyRegular,
             textAlign: TextAlign.end,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

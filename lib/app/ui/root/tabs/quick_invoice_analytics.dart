@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import 'analytics_widgets.dart';
 
 class QuickInvoiceAnalyticsTab extends StatefulWidget {
@@ -189,18 +189,18 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
         dailyIncome.values.isEmpty ? 1.0 : dailyIncome.values.reduce((a, b) => a > b ? a : b);
 
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       child: Column(
         children: [
           Container(
             width: double.infinity,
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 50.r),
-                Text('Analytics', style: TextStyles.largeTitleEmphasized),
+                Text('Analytics', style: QuickInvoiceTextStyles.largeTitleEmphasized),
               ],
             ),
           ),
@@ -230,14 +230,14 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                               duration: const Duration(milliseconds: 200),
                               padding: EdgeInsets.symmetric(horizontal: 16.r),
                               decoration: BoxDecoration(
-                                color: isSelected ? ColorStyles.primary : ColorStyles.white,
+                                color: isSelected ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.white,
                                 borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: Center(
                                 child: Text(
                                   currency,
-                                  style: TextStyles.footnoteEmphasized.copyWith(
-                                    color: isSelected ? ColorStyles.white : ColorStyles.primaryTxt,
+                                  style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
+                                    color: isSelected ? QuickInvoiceColorStyles.white : QuickInvoiceColorStyles.primaryTxt,
                                   ),
                                 ),
                               ),
@@ -262,7 +262,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                     width: double.infinity,
                     padding: EdgeInsets.all(20.r),
                     decoration: BoxDecoration(
-                      color: ColorStyles.primary,
+                      color: QuickInvoiceColorStyles.primary,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Column(
@@ -270,23 +270,23 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                       children: [
                         Text(
                           'Total Income',
-                          style: TextStyles.footnoteRegular.copyWith(
-                            color: ColorStyles.white.withValues(alpha: 0.8),
+                          style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                            color: QuickInvoiceColorStyles.white.withValues(alpha: 0.8),
                           ),
                         ),
                         SizedBox(height: 8.r),
                         Text(
                           '$sym${totalIncome.toStringAsFixed(2)}',
-                          style: TextStyles.largeTitleEmphasized.copyWith(
-                            color: ColorStyles.white,
+                          style: QuickInvoiceTextStyles.largeTitleEmphasized.copyWith(
+                            color: QuickInvoiceColorStyles.white,
                             fontSize: 32.sp.clamp(0, 38),
                           ),
                         ),
                         SizedBox(height: 4.r),
                         Text(
                           _getPeriodLabel(),
-                          style: TextStyles.footnoteRegular.copyWith(
-                            color: ColorStyles.white.withValues(alpha: 0.8),
+                          style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                            color: QuickInvoiceColorStyles.white.withValues(alpha: 0.8),
                           ),
                         ),
                       ],
@@ -301,7 +301,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                           icon: CupertinoIcons.checkmark_circle_fill,
                           value: '$sym${paidAmount.toStringAsFixed(0)}',
                           label: 'Paid',
-                          iconColor: ColorStyles.primary,
+                          iconColor: QuickInvoiceColorStyles.primary,
                         ),
                       ),
                       SizedBox(width: 12.r),
@@ -310,7 +310,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                           icon: CupertinoIcons.clock_fill,
                           value: '$sym${pendingAmount.toStringAsFixed(0)}',
                           label: 'Pending',
-                          iconColor: ColorStyles.primary,
+                          iconColor: QuickInvoiceColorStyles.primary,
                         ),
                       ),
                     ],
@@ -323,7 +323,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                           icon: CupertinoIcons.exclamationmark_circle_fill,
                           value: '$sym${overdueAmount.toStringAsFixed(0)}',
                           label: 'Overdue',
-                          iconColor: ColorStyles.primary,
+                          iconColor: QuickInvoiceColorStyles.primary,
                           isSquare: true,
                         ),
                       ),
@@ -333,7 +333,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                           icon: CupertinoIcons.doc_text_fill,
                           value: invoiceCount.toString(),
                           label: 'Invoices',
-                          iconColor: ColorStyles.primary,
+                          iconColor: QuickInvoiceColorStyles.primary,
                           isSquare: true,
                         ),
                       ),
@@ -341,12 +341,12 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                   ),
                   SizedBox(height: 24.r),
                   // Income Overview
-                  Text('Income Overview', style: TextStyles.title3Emphasized),
+                  Text('Income Overview', style: QuickInvoiceTextStyles.title3Emphasized),
                   SizedBox(height: 16.r),
                   Container(
                     padding: EdgeInsets.all(16.r),
                     decoration: BoxDecoration(
-                      color: ColorStyles.white,
+                      color: QuickInvoiceColorStyles.white,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child:
@@ -374,7 +374,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                                                     width: double.infinity,
                                                     height: height,
                                                     decoration: BoxDecoration(
-                                                      color: ColorStyles.primary,
+                                                      color: QuickInvoiceColorStyles.primary,
                                                       borderRadius: BorderRadius.vertical(
                                                         top: Radius.circular(4.r),
                                                       ),
@@ -383,8 +383,8 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                                                   SizedBox(height: 8.r),
                                                   Text(
                                                     entry.key,
-                                                    style: TextStyles.caption1Regular.copyWith(
-                                                      color: ColorStyles.secondary,
+                                                    style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+                                                      color: QuickInvoiceColorStyles.secondary,
                                                     ),
                                                   ),
                                                 ],
@@ -401,8 +401,8 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                               child: Center(
                                 child: Text(
                                   'Chart available for week view',
-                                  style: TextStyles.bodyRegular.copyWith(
-                                    color: ColorStyles.secondary,
+                                  style: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                                    color: QuickInvoiceColorStyles.secondary,
                                   ),
                                 ),
                               ),
@@ -410,12 +410,12 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                   ),
                   if (topClients.isNotEmpty) ...[
                     SizedBox(height: 24.r),
-                    Text('Top Clients', style: TextStyles.title3Emphasized),
+                    Text('Top Clients', style: QuickInvoiceTextStyles.title3Emphasized),
                     SizedBox(height: 16.r),
                     Container(
                       padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
-                        color: ColorStyles.white,
+                        color: QuickInvoiceColorStyles.white,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
@@ -430,7 +430,7 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                                         width: 36.r,
                                         height: 36.r,
                                         decoration: BoxDecoration(
-                                          color: ColorStyles.primary,
+                                          color: QuickInvoiceColorStyles.primary,
                                           shape: BoxShape.circle,
                                         ),
                                         child: ClipOval(
@@ -447,8 +447,8 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                                                       entry.key.isNotEmpty
                                                           ? entry.key[0].toUpperCase()
                                                           : 'C',
-                                                      style: TextStyles.footnoteEmphasized.copyWith(
-                                                        color: ColorStyles.white,
+                                                      style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
+                                                        color: QuickInvoiceColorStyles.white,
                                                       ),
                                                     ),
                                                   ),
@@ -458,14 +458,14 @@ class QuickInvoiceAnalyticsTabState extends State<QuickInvoiceAnalyticsTab> {
                                       Expanded(
                                         child: Text(
                                           entry.key,
-                                          style: TextStyles.bodyRegular,
+                                          style: QuickInvoiceTextStyles.bodyRegular,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       Text(
                                         '$sym${entry.value.toStringAsFixed(0)}',
-                                        style: TextStyles.bodyEmphasized,
+                                        style: QuickInvoiceTextStyles.bodyEmphasized,
                                       ),
                                     ],
                                   ),

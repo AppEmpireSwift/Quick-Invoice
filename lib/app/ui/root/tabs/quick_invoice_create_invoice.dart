@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import '../../../services/premium_limits.dart';
 import '../../premium/quick_invoice_main_paywall.page.dart';
 import 'quick_invoice_home.dart';
@@ -78,6 +78,10 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
     priceController.addListener(() => setState(() {}));
     quantityController.addListener(() => setState(() {}));
     taxController.addListener(() => setState(() {}));
+    invoiceNumberController.addListener(() => setState(() {}));
+    currencyController.addListener(() => setState(() {}));
+    clientNameController.addListener(() => setState(() {}));
+    itemDescriptionController.addListener(() => setState(() {}));
   }
 
   @override
@@ -149,7 +153,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         height: 300.r,
         padding: EdgeInsets.only(top: 6.r),
         decoration: BoxDecoration(
-          color: ColorStyles.white,
+          color: QuickInvoiceColorStyles.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
         ),
         child: SafeArea(
@@ -267,15 +271,15 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary)),
+          child: Text('Cancel', style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primary)),
         ),
         middle: Text(widget.editInvoice != null ? 'Edit Invoice' : 'New Invoice'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         automaticBackgroundVisibility: false,
         transitionBetweenRoutes: false,
         border: null,
@@ -298,7 +302,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             ),
             Container(
               padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(color: ColorStyles.white),
+              decoration: BoxDecoration(color: QuickInvoiceColorStyles.white),
               child: SafeArea(
                 top: false,
                 child: CupertinoButton(
@@ -317,14 +321,14 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     width: double.infinity,
                     height: 50.r,
                     decoration: BoxDecoration(
-                      color: isCurrentStepValid ? ColorStyles.primary : ColorStyles.fillsTertiary,
+                      color: isCurrentStepValid ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.fillsTertiary,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       _currentStep < 2 ? 'Continue' : 'Save',
-                      style: TextStyles.bodyEmphasized.copyWith(
-                        color: isCurrentStepValid ? ColorStyles.white : ColorStyles.secondary,
+                      style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(
+                        color: isCurrentStepValid ? QuickInvoiceColorStyles.white : QuickInvoiceColorStyles.secondary,
                       ),
                     ),
                   ),
@@ -352,7 +356,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
           value: invoiceDate != null ? _formatDate(invoiceDate) : null,
           placeholder: 'Select date',
           onTap: () => _showDatePicker(true),
-          icon: Icon(CupertinoIcons.calendar, color: ColorStyles.secondary, size: 20.r),
+          icon: Icon(CupertinoIcons.calendar, color: QuickInvoiceColorStyles.secondary, size: 20.r),
         ),
         SizedBox(height: 16.r),
         _SelectableContainer(
@@ -360,7 +364,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
           value: dueDate != null ? _formatDate(dueDate) : null,
           placeholder: 'Select date',
           onTap: () => _showDatePicker(false),
-          icon: Icon(CupertinoIcons.calendar, color: ColorStyles.secondary, size: 20.r),
+          icon: Icon(CupertinoIcons.calendar, color: QuickInvoiceColorStyles.secondary, size: 20.r),
         ),
         SizedBox(height: 16.r),
         _SelectableContainer(
@@ -372,8 +376,8 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
               ? null
               : Text(
                   getCurrencySymbol(currencyController.text),
-                  style: TextStyles.bodyEmphasized.copyWith(
-                    color: ColorStyles.secondary,
+                  style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(
+                    color: QuickInvoiceColorStyles.secondary,
                     fontSize: 20.sp.clamp(0, 26),
                   ),
                 ),
@@ -389,7 +393,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       builder: (context) => Container(
         height: 400.h,
         decoration: BoxDecoration(
-          color: ColorStyles.white,
+          color: QuickInvoiceColorStyles.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
         ),
         child: SafeArea(
@@ -401,11 +405,11 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Select Currency', style: TextStyles.bodyEmphasized),
+                    Text('Select Currency', style: QuickInvoiceTextStyles.bodyEmphasized),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => Navigator.pop(context),
-                      child: Icon(CupertinoIcons.xmark_circle_fill, color: ColorStyles.secondary),
+                      child: Icon(CupertinoIcons.xmark_circle_fill, color: QuickInvoiceColorStyles.secondary),
                     ),
                   ],
                 ),
@@ -425,9 +429,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(currencies[index], style: TextStyles.bodyRegular),
+                          Text(currencies[index], style: QuickInvoiceTextStyles.bodyRegular),
                           if (currencyController.text == currencies[index])
-                            Icon(CupertinoIcons.checkmark, color: ColorStyles.primary, size: 20.r),
+                            Icon(CupertinoIcons.checkmark, color: QuickInvoiceColorStyles.primary, size: 20.r),
                         ],
                       ),
                     ),
@@ -447,15 +451,15 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       children: [
         Text(
           'CLIENT',
-          style: TextStyles.caption1Regular.copyWith(
-            color: ColorStyles.secondary,
+          style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+            color: QuickInvoiceColorStyles.secondary,
             letterSpacing: 0.5,
           ),
         ),
         SizedBox(height: 12.r),
         Container(
           decoration: BoxDecoration(
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Column(
@@ -466,27 +470,27 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Select Client', style: TextStyles.bodyRegular),
+                    Text('Select Client', style: QuickInvoiceTextStyles.bodyRegular),
                     Row(
                       children: [
                         Text(
                           'Choose from list',
-                          style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary),
+                          style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primary),
                         ),
                         SizedBox(width: 4.r),
-                        Icon(CupertinoIcons.chevron_right, color: ColorStyles.primary, size: 18.r),
+                        Icon(CupertinoIcons.chevron_right, color: QuickInvoiceColorStyles.primary, size: 18.r),
                       ],
                     ),
                   ],
                 ),
               ),
-              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
               _buildInlineField(
                 label: 'Client Name',
                 controller: clientNameController,
                 placeholder: 'Enter name',
               ),
-              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
               _buildInlineField(
                 label: 'Phone',
                 controller: clientPhoneController,
@@ -499,15 +503,15 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         SizedBox(height: 24.r),
         Text(
           'ITEM / SERVICE',
-          style: TextStyles.caption1Regular.copyWith(
-            color: ColorStyles.secondary,
+          style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+            color: QuickInvoiceColorStyles.secondary,
             letterSpacing: 0.5,
           ),
         ),
         SizedBox(height: 12.r),
         Container(
           decoration: BoxDecoration(
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Column(
@@ -517,28 +521,28 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 controller: itemDescriptionController,
                 placeholder: 'What are you billing',
               ),
-              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
               _buildInlineField(
                 label: 'Price',
                 controller: priceController,
                 placeholder: '0.00',
                 keyboardType: TextInputType.number,
-                suffix: Text(getCurrencySymbol(currencyController.text), style: TextStyles.bodyRegular),
+                suffix: Text(getCurrencySymbol(currencyController.text), style: QuickInvoiceTextStyles.bodyRegular),
               ),
-              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
               _buildInlineField(
                 label: 'Quantity',
                 controller: quantityController,
                 placeholder: '1',
                 keyboardType: TextInputType.number,
               ),
-              Divider(height: 1, indent: 16.r, color: ColorStyles.separator),
+              Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
               _buildInlineField(
                 label: 'Tax',
                 controller: taxController,
                 placeholder: '0',
                 keyboardType: TextInputType.number,
-                suffix: Text('%', style: TextStyles.bodyRegular),
+                suffix: Text('%', style: QuickInvoiceTextStyles.bodyRegular),
               ),
             ],
           ),
@@ -562,7 +566,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             width: 115.r,
             child: Text(
               label,
-              style: TextStyles.calloutRegular.copyWith(color: ColorStyles.primaryTxt),
+              style: QuickInvoiceTextStyles.calloutRegular.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
             ),
           ),
           SizedBox(width: 12.r),
@@ -572,10 +576,10 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 Expanded(
                   child: CupertinoTextField(
                     controller: controller,
-                    style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+                    style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
                     placeholder: placeholder,
-                    placeholderStyle: TextStyles.bodyRegular.copyWith(
-                      color: ColorStyles.secondary.withValues(alpha: 0.5),
+                    placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                      color: QuickInvoiceColorStyles.secondary.withValues(alpha: 0.5),
                     ),
                     padding: EdgeInsets.zero,
                     decoration: null,
@@ -597,8 +601,8 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       children: [
         Text(
           'REVIEW',
-          style: TextStyles.caption1Regular.copyWith(
-            color: ColorStyles.secondary,
+          style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+            color: QuickInvoiceColorStyles.secondary,
             letterSpacing: 0.5,
           ),
         ),
@@ -606,40 +610,40 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         Container(
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildReviewRow('Invoice Number', invoiceNumberController.text),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow('Invoice Date', _formatDate(invoiceDate)),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow('Due Date', _formatDate(dueDate)),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow('Client', clientNameController.text),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow('Description', itemDescriptionController.text),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow(
                 'Price',
                 '${getCurrencySymbol(currencyController.text)}${priceController.text}',
               ),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow('Quantity', quantityController.text),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               _buildReviewRow('Tax', '${taxController.text}%'),
-              Divider(color: ColorStyles.separator),
+              Divider(color: QuickInvoiceColorStyles.separator),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(child: Text('Total', style: TextStyles.bodyEmphasized)),
+                  Flexible(child: Text('Total', style: QuickInvoiceTextStyles.bodyEmphasized)),
                   Flexible(
                     flex: 5,
                     child: Text(
                       '${getCurrencySymbol(currencyController.text)}${total.toStringAsFixed(2)}',
-                      style: TextStyles.title3Emphasized.copyWith(color: ColorStyles.primary),
+                      style: QuickInvoiceTextStyles.title3Emphasized.copyWith(color: QuickInvoiceColorStyles.primary),
                     ),
                   ),
                 ],
@@ -650,8 +654,8 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         SizedBox(height: 24.r),
         Text(
           'SIGNATURE',
-          style: TextStyles.caption1Regular.copyWith(
-            color: ColorStyles.secondary,
+          style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+            color: QuickInvoiceColorStyles.secondary,
             letterSpacing: 0.5,
           ),
         ),
@@ -663,21 +667,21 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             width: double.infinity,
             constraints: BoxConstraints(minHeight: 100.r),
             decoration: BoxDecoration(
-              color: ColorStyles.white,
+              color: QuickInvoiceColorStyles.white,
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: _signatureStrokes.isEmpty ? ColorStyles.separator : ColorStyles.primary,
+                color: _signatureStrokes.isEmpty ? QuickInvoiceColorStyles.separator : QuickInvoiceColorStyles.primary,
               ),
             ),
             child: _signatureStrokes.isEmpty
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(CupertinoIcons.signature, size: 28.r, color: ColorStyles.secondary),
+                      Icon(CupertinoIcons.signature, size: 28.r, color: QuickInvoiceColorStyles.secondary),
                       SizedBox(height: 8.r),
                       Text(
                         'Tap to add signature',
-                        style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+                        style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
                       ),
                     ],
                   )
@@ -708,7 +712,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 margin: EdgeInsets.symmetric(horizontal: 24.r),
                 padding: EdgeInsets.all(20.r),
                 decoration: BoxDecoration(
-                  color: ColorStyles.white,
+                  color: QuickInvoiceColorStyles.white,
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Column(
@@ -717,7 +721,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Add Signature', style: TextStyles.title3Emphasized),
+                        Text('Add Signature', style: QuickInvoiceTextStyles.title3Emphasized),
                         CupertinoButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
@@ -725,7 +729,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                           },
                           child: Text(
                             'Clear',
-                            style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.primary),
+                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.primary),
                           ),
                         ),
                       ],
@@ -735,9 +739,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                       height: 200.r,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: ColorStyles.bgSecondary,
+                        color: QuickInvoiceColorStyles.bgSecondary,
                         borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(color: ColorStyles.separator),
+                        border: Border.all(color: QuickInvoiceColorStyles.separator),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12.r),
@@ -762,7 +766,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     SizedBox(height: 8.r),
                     Text(
                       'Draw your signature above',
-                      style: TextStyles.caption1Regular.copyWith(color: ColorStyles.secondary),
+                      style: QuickInvoiceTextStyles.caption1Regular.copyWith(color: QuickInvoiceColorStyles.secondary),
                     ),
                     SizedBox(height: 20.r),
                     Row(
@@ -774,10 +778,10 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                             child: Container(
                               height: 44.r,
                               decoration: BoxDecoration(
-                                border: Border.all(color: ColorStyles.separator),
+                                border: Border.all(color: QuickInvoiceColorStyles.separator),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
-                              child: Center(child: Text('Cancel', style: TextStyles.bodyRegular)),
+                              child: Center(child: Text('Cancel', style: QuickInvoiceTextStyles.bodyRegular)),
                             ),
                           ),
                         ),
@@ -792,14 +796,14 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                             child: Container(
                               height: 44.r,
                               decoration: BoxDecoration(
-                                color: ColorStyles.primary,
+                                color: QuickInvoiceColorStyles.primary,
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               child: Center(
                                 child: Text(
                                   'Done',
-                                  style: TextStyles.bodyEmphasized.copyWith(
-                                    color: ColorStyles.white,
+                                  style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(
+                                    color: QuickInvoiceColorStyles.white,
                                   ),
                                 ),
                               ),
@@ -824,9 +828,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+          Text(label, style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
           Expanded(
-            child: Text(value, style: TextStyles.bodyRegular, textAlign: TextAlign.end),
+            child: Text(value, style: QuickInvoiceTextStyles.bodyRegular, textAlign: TextAlign.end),
           ),
         ],
       ),
@@ -880,7 +884,7 @@ class _ProgressIndicator extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 16.h),
             height: 2.r,
-            color: currentStep > 0 ? ColorStyles.primary : ColorStyles.separator,
+            color: currentStep > 0 ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
           ),
         ),
         _ProgressStep(
@@ -893,7 +897,7 @@ class _ProgressIndicator extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 16.h),
             height: 2.r,
-            color: currentStep > 1 ? ColorStyles.primary : ColorStyles.separator,
+            color: currentStep > 1 ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
           ),
         ),
         _ProgressStep(step: 3, label: 'Review', isCompleted: false, isActive: currentStep == 2),
@@ -923,16 +927,16 @@ class _ProgressStep extends StatelessWidget {
           width: 32.r,
           height: 32.r,
           decoration: BoxDecoration(
-            color: isCompleted || isActive ? ColorStyles.primary : ColorStyles.separator,
+            color: isCompleted || isActive ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
             shape: BoxShape.circle,
           ),
           child: Center(
             child: isCompleted
-                ? Icon(CupertinoIcons.checkmark, color: ColorStyles.white, size: 16.r)
+                ? Icon(CupertinoIcons.checkmark, color: QuickInvoiceColorStyles.white, size: 16.r)
                 : Text(
                     step.toString(),
-                    style: TextStyles.footnoteEmphasized.copyWith(
-                      color: isActive ? ColorStyles.white : ColorStyles.secondary,
+                    style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
+                      color: isActive ? QuickInvoiceColorStyles.white : QuickInvoiceColorStyles.secondary,
                     ),
                   ),
           ),
@@ -940,8 +944,8 @@ class _ProgressStep extends StatelessWidget {
         SizedBox(height: 4.r),
         Text(
           label,
-          style: TextStyles.caption1Regular.copyWith(
-            color: isActive ? ColorStyles.primary : ColorStyles.secondary,
+          style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+            color: isActive ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.secondary,
           ),
         ),
       ],
@@ -964,8 +968,8 @@ class _InputWidget extends StatelessWidget {
         if (label != null) ...[
           Text(
             label!,
-            style: TextStyles.caption1Regular.copyWith(
-              color: ColorStyles.secondary,
+            style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+              color: QuickInvoiceColorStyles.secondary,
               letterSpacing: 0.5,
             ),
           ),
@@ -973,7 +977,7 @@ class _InputWidget extends StatelessWidget {
         ],
         Container(
           decoration: BoxDecoration(
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Row(
@@ -981,10 +985,10 @@ class _InputWidget extends StatelessWidget {
               Expanded(
                 child: CupertinoTextField(
                   controller: controller,
-                  style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primaryTxt),
+                  style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
                   placeholder: placeholder ?? label,
-                  placeholderStyle: TextStyles.bodyRegular.copyWith(
-                    color: ColorStyles.secondary.withValues(alpha: 0.5),
+                  placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                    color: QuickInvoiceColorStyles.secondary.withValues(alpha: 0.5),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
                   decoration: null,
@@ -1023,8 +1027,8 @@ class _SelectableContainer extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8.r),
             child: Text(
               label,
-              style: TextStyles.caption1Regular.copyWith(
-                color: ColorStyles.secondary,
+              style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+                color: QuickInvoiceColorStyles.secondary,
                 letterSpacing: 0.5,
               ),
             ),
@@ -1039,7 +1043,7 @@ class _SelectableContainer extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.all(16.r),
             decoration: BoxDecoration(
-              color: ColorStyles.white,
+              color: QuickInvoiceColorStyles.white,
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Row(
@@ -1048,14 +1052,14 @@ class _SelectableContainer extends StatelessWidget {
                 Expanded(
                   child: Text(
                     value ?? placeholder ?? 'Select',
-                    style: TextStyles.bodyRegular.copyWith(
+                    style: QuickInvoiceTextStyles.bodyRegular.copyWith(
                       color: value != null
-                          ? ColorStyles.primaryTxt
-                          : ColorStyles.secondary.withValues(alpha: 0.8),
+                          ? QuickInvoiceColorStyles.primaryTxt
+                          : QuickInvoiceColorStyles.secondary.withValues(alpha: 0.8),
                     ),
                   ),
                 ),
-                Icon(CupertinoIcons.chevron_down, color: ColorStyles.secondary, size: 20.r),
+                Icon(CupertinoIcons.chevron_down, color: QuickInvoiceColorStyles.secondary, size: 20.r),
               ],
             ),
           ),

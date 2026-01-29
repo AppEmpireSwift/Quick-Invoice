@@ -48,7 +48,7 @@ class PdfService {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/invoice_${invoice.invoiceNumber}.pdf');
     await file.writeAsBytes(pdf);
-    await ShareHelper.shareFiles(files: [XFile(file.path)]);
+    await QIShareHelper.shareFiles(files: [XFile(file.path)]);
   }
 
   static Future<String> savePdfToTemp(

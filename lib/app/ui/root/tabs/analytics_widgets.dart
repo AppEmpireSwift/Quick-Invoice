@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' show Colors;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 
 class AnalyticsSegmentedControl extends StatelessWidget {
   final Map<String, String> segments;
@@ -16,7 +16,7 @@ class AnalyticsSegmentedControl extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 36.r,
-      decoration: BoxDecoration(color: ColorStyles.searchBg, borderRadius: BorderRadius.circular(8.r)),
+      decoration: BoxDecoration(color: QuickInvoiceColorStyles.searchBg, borderRadius: BorderRadius.circular(8.r)),
       child: Row(
         children: segments.entries.map((entry) {
           final isSelected = selectedValue == entry.key;
@@ -27,16 +27,16 @@ class AnalyticsSegmentedControl extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 margin: EdgeInsets.all(2.r),
                 decoration: BoxDecoration(
-                  color: isSelected ? ColorStyles.white : Colors.transparent,
+                  color: isSelected ? QuickInvoiceColorStyles.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(6.r),
                   boxShadow: isSelected
-                      ? [BoxShadow(color: ColorStyles.black.withValues(alpha: 0.1), blurRadius: 4, offset: Offset(0, 2))]
+                      ? [BoxShadow(color: QuickInvoiceColorStyles.black.withValues(alpha: 0.1), blurRadius: 4, offset: Offset(0, 2))]
                       : null,
                 ),
                 child: Center(
                   child: Text(
                     entry.value,
-                    style: TextStyles.footnoteEmphasized.copyWith(color: isSelected ? ColorStyles.primaryTxt : ColorStyles.secondary),
+                    style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(color: isSelected ? QuickInvoiceColorStyles.primaryTxt : QuickInvoiceColorStyles.secondary),
                   ),
                 ),
               ),
@@ -61,7 +61,7 @@ class AnalyticsMetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(color: ColorStyles.white, borderRadius: BorderRadius.circular(12.r)),
+      decoration: BoxDecoration(color: QuickInvoiceColorStyles.white, borderRadius: BorderRadius.circular(12.r)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -76,9 +76,9 @@ class AnalyticsMetricCard extends StatelessWidget {
             child: Icon(icon, color: iconColor, size: 20.r),
           ),
           SizedBox(height: 12.r),
-          Text(value, style: TextStyles.title3Emphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(value, style: QuickInvoiceTextStyles.title3Emphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
           SizedBox(height: 4.r),
-          Text(label, style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(label, style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary), maxLines: 1, overflow: TextOverflow.ellipsis),
         ],
       ),
     );
@@ -93,16 +93,16 @@ class AnalyticsClientInfoSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.white,
+      backgroundColor: QuickInvoiceColorStyles.white,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Client'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         transitionBetweenRoutes: false,
         automaticBackgroundVisibility: false,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Icon(CupertinoIcons.xmark, size: 20.r, color: ColorStyles.secondary),
+          child: Icon(CupertinoIcons.xmark, size: 20.r, color: QuickInvoiceColorStyles.secondary),
         ),
       ),
       child: SafeArea(
@@ -111,7 +111,7 @@ class AnalyticsClientInfoSheet extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(height: 16.r),
-              Text(client.name, style: TextStyles.title3Emphasized, textAlign: TextAlign.center),
+              Text(client.name, style: QuickInvoiceTextStyles.title3Emphasized, textAlign: TextAlign.center),
               SizedBox(height: 24.r),
               if (client.email.isNotEmpty) _infoRow('Email', client.email),
               if (client.phoneNumber.isNotEmpty) _infoRow('Phone', client.phoneNumber),
@@ -128,9 +128,9 @@ class AnalyticsClientInfoSheet extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 12.r),
       child: Row(
         children: [
-          Text(label, style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary)),
+          Text(label, style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
           SizedBox(width: 16.r),
-          Expanded(child: Text(value, style: TextStyles.bodyRegular, textAlign: TextAlign.end, maxLines: 2, overflow: TextOverflow.ellipsis)),
+          Expanded(child: Text(value, style: QuickInvoiceTextStyles.bodyRegular, textAlign: TextAlign.end, maxLines: 2, overflow: TextOverflow.ellipsis)),
         ],
       ),
     );

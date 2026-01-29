@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart' hide DeviceType;
 import '../../../core/core.dart';
 import '../../../core/services/quick_invoice_ui_helper.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../style/style.dart';
+import '../../../style/quick_invoice_style.dart';
 import '../common/filled_button.dart';
 
 class QuickInvoiceMainPaywallPage extends StatelessWidget {
@@ -45,7 +45,7 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
       },
       paywallType: PaywallType.main,
       paywallPage: CupertinoPageScaffold(
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         child: SafeArea(
           top: false,
           child: Stack(
@@ -61,7 +61,7 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                       onPressed: onClose,
                       child: Icon(
                         CupertinoIcons.xmark_circle_fill,
-                        color: ColorStyles.secondary,
+                        color: QuickInvoiceColorStyles.secondary,
                         size: 28.r,
                       ),
                     ),
@@ -143,8 +143,8 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                                                 fontSize: 15.sp.clamp(0, 15),
                                                 fontWeight: FontWeight.w700,
                                                 color: isActive
-                                                    ? ColorStyles.white
-                                                    : ColorStyles.primaryTxt,
+                                                    ? QuickInvoiceColorStyles.white
+                                                    : QuickInvoiceColorStyles.primaryTxt,
                                               ),
                                             ),
                                             Text(
@@ -154,7 +154,7 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                                                 fontWeight: FontWeight.w400,
                                                 letterSpacing: -0.04,
                                                 color: isActive
-                                                    ? ColorStyles.white
+                                                    ? QuickInvoiceColorStyles.white
                                                     : Color.fromRGBO(60, 60, 67, 0.6),
                                               ),
                                             ),
@@ -170,8 +170,8 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                                             fontSize: 15.sp.clamp(0, 15),
                                             fontWeight: FontWeight.w700,
                                             color: isActive
-                                                ? ColorStyles.white
-                                                : ColorStyles.primaryTxt,
+                                                ? QuickInvoiceColorStyles.white
+                                                : QuickInvoiceColorStyles.primaryTxt,
                                             letterSpacing: -0.23,
                                           ),
                                         ),
@@ -190,10 +190,10 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                             child: Text(
                               buttonText,
                               style: TextStyle(
-                                fontSize: 20.sp.clamp(0, 26),
+                                fontSize: 20,
                                 fontWeight: FontWeight.w600,
-                                color: ColorStyles.white,
-                              ),
+                                color: QuickInvoiceColorStyles.white,
+                              ).rz,
                             ),
                           );
                         },

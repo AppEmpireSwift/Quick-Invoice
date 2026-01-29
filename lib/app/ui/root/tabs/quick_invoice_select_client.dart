@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import 'quick_invoice_clients.dart';
 
 class QuickInvoiceSelectClientPage extends StatefulWidget {
@@ -31,10 +31,10 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       navigationBar: CupertinoNavigationBar(
         middle: Text('Select Client'),
-        backgroundColor: ColorStyles.white,
+        backgroundColor: QuickInvoiceColorStyles.white,
         automaticBackgroundVisibility: false,
         transitionBetweenRoutes: false,
         border: null,
@@ -45,7 +45,7 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                 .push(CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()))
                 .then((_) => _loadClients());
           },
-          child: Icon(CupertinoIcons.plus_circle_fill, color: ColorStyles.primary, size: 28.r),
+          child: Icon(CupertinoIcons.plus_circle_fill, color: QuickInvoiceColorStyles.primary, size: 28.r),
         ),
       ),
       child: SafeArea(
@@ -58,15 +58,15 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                     width: 120.r,
                     height: 120.r,
                     decoration: BoxDecoration(
-                      color: ColorStyles.primary.withValues(alpha: 0.1),
+                      color: QuickInvoiceColorStyles.primary.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(CupertinoIcons.person_2_fill, size: 60.r, color: ColorStyles.primary),
+                    child: Icon(CupertinoIcons.person_2_fill, size: 60.r, color: QuickInvoiceColorStyles.primary),
                   ),
                   SizedBox(height: 24.r),
-                  Text('No clients yet', style: TextStyles.title3Emphasized),
+                  Text('No clients yet', style: QuickInvoiceTextStyles.title3Emphasized),
                   SizedBox(height: 8.r),
-                  Text('Add your first client', style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary)),
+                  Text('Add your first client', style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
                   SizedBox(height: 32.r),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
@@ -79,11 +79,11 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                       width: 200.r,
                       height: 50.r,
                       decoration: BoxDecoration(
-                        color: ColorStyles.primary,
+                        color: QuickInvoiceColorStyles.primary,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Center(
-                        child: Text('Add Client', style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white)),
+                        child: Text('Add Client', style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white)),
                       ),
                     ),
                   ),
@@ -98,7 +98,7 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                   return Container(
                     margin: EdgeInsets.only(bottom: 12.r),
                     decoration: BoxDecoration(
-                      color: ColorStyles.white,
+                      color: QuickInvoiceColorStyles.white,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: CupertinoButton(
@@ -112,14 +112,14 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                           Container(
                             width: 40.r,
                             height: 40.r,
-                            decoration: BoxDecoration(color: ColorStyles.primary, shape: BoxShape.circle),
+                            decoration: BoxDecoration(color: QuickInvoiceColorStyles.primary, shape: BoxShape.circle),
                             child: ClipOval(
                               child: client.image != null
                                   ? Image.memory(client.image!, width: 40.r, height: 40.r, fit: BoxFit.cover)
                                   : Center(
                                       child: Text(
                                         client.name.isNotEmpty ? client.name.substring(0, 1).toUpperCase() : 'C',
-                                        style: TextStyles.footnoteEmphasized.copyWith(color: ColorStyles.white),
+                                        style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                                       ),
                                     ),
                             ),
@@ -129,12 +129,12 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(client.name, style: TextStyles.bodyEmphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
+                                Text(client.name, style: QuickInvoiceTextStyles.bodyEmphasized, maxLines: 1, overflow: TextOverflow.ellipsis),
                                 if (client.phoneNumber.isNotEmpty) ...[
                                   SizedBox(height: 4.r),
                                   Text(
                                     client.phoneNumber,
-                                    style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+                                    style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -142,7 +142,7 @@ class _QuickInvoiceSelectClientPageState extends State<QuickInvoiceSelectClientP
                               ],
                             ),
                           ),
-                          Icon(CupertinoIcons.chevron_right, color: ColorStyles.secondary, size: 18.r),
+                          Icon(CupertinoIcons.chevron_right, color: QuickInvoiceColorStyles.secondary, size: 18.r),
                         ],
                       ),
                     ),

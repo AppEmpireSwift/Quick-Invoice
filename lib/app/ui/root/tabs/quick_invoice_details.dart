@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import '../../../services/export_service.dart';
 import '../../../services/pdf_service.dart';
 import '../../../services/premium_limits.dart';
@@ -42,13 +42,13 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
   Color _getStatusColor() {
     switch (invoice.status) {
       case 'paid':
-        return ColorStyles.green;
+        return QuickInvoiceColorStyles.green;
       case 'pending':
-        return ColorStyles.orange;
+        return QuickInvoiceColorStyles.orange;
       case 'overdue':
-        return ColorStyles.pink;
+        return QuickInvoiceColorStyles.pink;
       default:
-        return ColorStyles.secondary;
+        return QuickInvoiceColorStyles.secondary;
     }
   }
 
@@ -82,14 +82,14 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       child: SafeArea(
         top: false,
         bottom: false,
         child: Column(
           children: [
             Container(
-              color: ColorStyles.white.withValues(alpha: 0.9),
+              color: QuickInvoiceColorStyles.white.withValues(alpha: 0.9),
               padding: EdgeInsets.symmetric(horizontal: 8.r, vertical: 8.r),
               child: SafeArea(
                 bottom: false,
@@ -101,19 +101,19 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                       onPressed: () => Navigator.pop(context),
                       child: Row(
                         children: [
-                          Icon(CupertinoIcons.chevron_back, color: ColorStyles.primary),
+                          Icon(CupertinoIcons.chevron_back, color: QuickInvoiceColorStyles.primary),
                           Text(
                             'Back',
-                            style: TextStyles.bodyRegular.copyWith(color: ColorStyles.primary),
+                            style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primary),
                           ),
                         ],
                       ),
                     ),
-                    Text('Invoice', style: TextStyles.bodyEmphasized),
+                    Text('Invoice', style: QuickInvoiceTextStyles.bodyEmphasized),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => _showExportOptions(),
-                      child: Icon(CupertinoIcons.ellipsis, color: ColorStyles.primary, size: 22.r),
+                      child: Icon(CupertinoIcons.ellipsis, color: QuickInvoiceColorStyles.primary, size: 22.r),
                     ),
                   ],
                 ),
@@ -129,7 +129,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                       width: double.infinity,
                       padding: EdgeInsets.all(20.r),
                       decoration: BoxDecoration(
-                        color: ColorStyles.primary,
+                        color: QuickInvoiceColorStyles.primary,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
@@ -137,8 +137,8 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                         children: [
                           Text(
                             invoice.invoiceNumber,
-                            style: TextStyles.footnoteRegular.copyWith(
-                              color: ColorStyles.white.withValues(alpha: 0.9),
+                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                              color: QuickInvoiceColorStyles.white.withValues(alpha: 0.9),
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -146,16 +146,16 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                           SizedBox(height: 8.r),
                           Text(
                             '${getCurrencySymbol(invoice.currency)}${invoice.totalAmount.toStringAsFixed(2)}',
-                            style: TextStyles.largeTitleEmphasized.copyWith(
-                              color: ColorStyles.white,
+                            style: QuickInvoiceTextStyles.largeTitleEmphasized.copyWith(
+                              color: QuickInvoiceColorStyles.white,
                               fontSize: 32.sp.clamp(0, 38),
                             ),
                           ),
                           SizedBox(height: 8.r),
                           Text(
                             'Due ${_formatDate(invoice.dueDate)}',
-                            style: TextStyles.footnoteRegular.copyWith(
-                              color: ColorStyles.white.withValues(alpha: 0.9),
+                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                              color: QuickInvoiceColorStyles.white.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
@@ -165,7 +165,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                     Container(
                       padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
-                        color: ColorStyles.white,
+                        color: QuickInvoiceColorStyles.white,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
@@ -179,7 +179,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                             ),
                             child: Icon(
                               CupertinoIcons.checkmark,
-                              color: ColorStyles.white,
+                              color: QuickInvoiceColorStyles.white,
                               size: 14.r,
                             ),
                           ),
@@ -190,15 +190,15 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                               children: [
                                 Text(
                                   'Status',
-                                  style: TextStyles.footnoteRegular.copyWith(
-                                    color: ColorStyles.secondary,
+                                  style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                                    color: QuickInvoiceColorStyles.secondary,
                                   ),
                                 ),
                                 SizedBox(height: 2.r),
                                 Text(
                                   invoice.status.substring(0, 1).toUpperCase() +
                                       invoice.status.substring(1),
-                                  style: TextStyles.bodyEmphasized.copyWith(
+                                  style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(
                                     color: _getStatusColor(),
                                   ),
                                 ),
@@ -208,7 +208,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                           CupertinoSwitch(
                             value: invoice.status == 'paid',
                             onChanged: (value) => _updateStatus(value ? 'paid' : 'pending'),
-                            activeTrackColor: ColorStyles.green,
+                            activeTrackColor: QuickInvoiceColorStyles.green,
                           ),
                         ],
                       ),
@@ -217,17 +217,17 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                     Container(
                       padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
-                        color: ColorStyles.white,
+                        color: QuickInvoiceColorStyles.white,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
                         children: [
                           _buildDetailRow('Client', invoice.clientName),
-                          Divider(color: ColorStyles.separator, height: 24.r),
+                          Divider(color: QuickInvoiceColorStyles.separator, height: 24.r),
                           _buildDetailRow('Invoice Date', _formatDate(invoice.invoiceDate)),
-                          Divider(color: ColorStyles.separator, height: 24.r),
+                          Divider(color: QuickInvoiceColorStyles.separator, height: 24.r),
                           _buildDetailRow('Due Date', _formatDate(invoice.dueDate)),
-                          Divider(color: ColorStyles.separator, height: 24.r),
+                          Divider(color: QuickInvoiceColorStyles.separator, height: 24.r),
                           _buildDetailRow('Currency', invoice.currency),
                         ],
                       ),
@@ -236,13 +236,13 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                     Container(
                       padding: EdgeInsets.all(16.r),
                       decoration: BoxDecoration(
-                        color: ColorStyles.white,
+                        color: QuickInvoiceColorStyles.white,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Items', style: TextStyles.bodyEmphasized),
+                          Text('Items', style: QuickInvoiceTextStyles.bodyEmphasized),
                           SizedBox(height: 16.r),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,12 +251,12 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(invoice.itemName, style: TextStyles.bodyRegular),
+                                    Text(invoice.itemName, style: QuickInvoiceTextStyles.bodyRegular),
                                     SizedBox(height: 4.r),
                                     Text(
                                       '${invoice.itemQuantity} x ${getCurrencySymbol(invoice.currency)}${invoice.itemPrice.toStringAsFixed(2)}',
-                                      style: TextStyles.footnoteRegular.copyWith(
-                                        color: ColorStyles.secondary,
+                                      style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                                        color: QuickInvoiceColorStyles.secondary,
                                       ),
                                     ),
                                   ],
@@ -264,7 +264,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                               ),
                               Text(
                                 '${getCurrencySymbol(invoice.currency)}${(invoice.itemPrice * invoice.itemQuantity).toStringAsFixed(2)}',
-                                style: TextStyles.bodyEmphasized,
+                                style: QuickInvoiceTextStyles.bodyEmphasized,
                               ),
                             ],
                           ),
@@ -276,19 +276,19 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                       Container(
                         padding: EdgeInsets.all(16.r),
                         decoration: BoxDecoration(
-                          color: ColorStyles.white,
+                          color: QuickInvoiceColorStyles.white,
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Signature', style: TextStyles.bodyEmphasized),
+                            Text('Signature', style: QuickInvoiceTextStyles.bodyEmphasized),
                             SizedBox(height: 12.r),
                             Container(
                               width: double.infinity,
                               height: 80.r,
                               decoration: BoxDecoration(
-                                border: Border.all(color: ColorStyles.separator),
+                                border: Border.all(color: QuickInvoiceColorStyles.separator),
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               child: Image.memory(
@@ -307,7 +307,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
             ),
             Container(
               padding: EdgeInsets.all(16.r),
-              decoration: BoxDecoration(color: ColorStyles.white),
+              decoration: BoxDecoration(color: QuickInvoiceColorStyles.white),
               child: SafeArea(
                 top: false,
                 child: Row(
@@ -331,13 +331,13 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                         child: Container(
                           height: 50.r,
                           decoration: BoxDecoration(
-                            border: Border.all(color: ColorStyles.primary),
+                            border: Border.all(color: QuickInvoiceColorStyles.primary),
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Center(
                             child: Text(
                               'Preview',
-                              style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primary),
+                              style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.primary),
                             ),
                           ),
                         ),
@@ -359,13 +359,13 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                         child: Container(
                           height: 50.r,
                           decoration: BoxDecoration(
-                            color: ColorStyles.primary,
+                            color: QuickInvoiceColorStyles.primary,
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Center(
                             child: Text(
                               'Send',
-                              style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                              style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                             ),
                           ),
                         ),
@@ -385,11 +385,11 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary)),
+        Text(label, style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
         Expanded(
           child: Text(
             value,
-            style: TextStyles.bodyRegular,
+            style: QuickInvoiceTextStyles.bodyRegular,
             textAlign: TextAlign.end,
             overflow: TextOverflow.ellipsis,
           ),

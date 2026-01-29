@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../data/database.dart';
-import '../../../../style/style.dart';
+import '../../../../style/quick_invoice_style.dart';
 import 'quick_invoice_create_invoice.dart';
 import 'quick_invoice_details.dart';
 
@@ -118,11 +118,11 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      backgroundColor: ColorStyles.bgSecondary,
+      backgroundColor: QuickInvoiceColorStyles.bgSecondary,
       child: Column(
         children: [
           Container(
-            color: ColorStyles.white,
+            color: QuickInvoiceColorStyles.white,
             padding: EdgeInsets.symmetric(horizontal: 16.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,13 +131,13 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Invoices', style: TextStyles.largeTitleEmphasized),
+                    Text('Invoices', style: QuickInvoiceTextStyles.largeTitleEmphasized),
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: _navigateToCreateInvoice,
                       child: Icon(
                         CupertinoIcons.plus_circle_fill,
-                        color: ColorStyles.primary,
+                        color: QuickInvoiceColorStyles.primary,
                         size: 28.r,
                       ),
                     ),
@@ -147,11 +147,11 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                 CupertinoSearchTextField(
                   controller: _searchController,
                   placeholder: 'Search invoices...',
-                  style: TextStyles.bodyRegular,
-                  placeholderStyle: TextStyles.bodyRegular.copyWith(
-                    color: ColorStyles.labelsTertiary,
+                  style: QuickInvoiceTextStyles.bodyRegular,
+                  placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                    color: QuickInvoiceColorStyles.labelsTertiary,
                   ),
-                  backgroundColor: ColorStyles.fillsTertiary,
+                  backgroundColor: QuickInvoiceColorStyles.fillsTertiary,
                   onChanged: (value) {
                     setState(() => _searchQuery = value);
                     _filterInvoices();
@@ -175,7 +175,7 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                           children: [
                             Row(
                               children: [
-                                Text('Overview', style: TextStyles.title3Emphasized),
+                                Text('Overview', style: QuickInvoiceTextStyles.title3Emphasized),
                                 SizedBox(width: 12.r),
                                 if (_currencies.length > 1)
                                   Expanded(
@@ -196,14 +196,14 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                                             child: Container(
                                               padding: EdgeInsets.symmetric(horizontal: 10.r),
                                               decoration: BoxDecoration(
-                                                color: isSelected ? ColorStyles.primary : ColorStyles.white,
+                                                color: isSelected ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.white,
                                                 borderRadius: BorderRadius.circular(14.r),
                                               ),
                                               child: Center(
                                                 child: Text(
                                                   currency,
-                                                  style: TextStyles.caption1Regular.copyWith(
-                                                    color: isSelected ? ColorStyles.white : ColorStyles.primaryTxt,
+                                                  style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+                                                    color: isSelected ? QuickInvoiceColorStyles.white : QuickInvoiceColorStyles.primaryTxt,
                                                   ),
                                                 ),
                                               ),
@@ -268,16 +268,16 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                                     padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
                                     decoration: BoxDecoration(
                                       color: isSelected
-                                          ? ColorStyles.primary
-                                          : ColorStyles.fillsTertiary,
+                                          ? QuickInvoiceColorStyles.primary
+                                          : QuickInvoiceColorStyles.fillsTertiary,
                                       borderRadius: BorderRadius.circular(20.r),
                                     ),
                                     child: Text(
                                       entry.value,
-                                      style: TextStyles.footnoteEmphasized.copyWith(
+                                      style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
                                         color: isSelected
-                                            ? ColorStyles.white
-                                            : ColorStyles.primaryTxt,
+                                            ? QuickInvoiceColorStyles.white
+                                            : QuickInvoiceColorStyles.primaryTxt,
                                       ),
                                     ),
                                   ),
@@ -296,7 +296,7 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                             padding: EdgeInsets.only(bottom: 80.r),
                             child: Text(
                               _searchQuery.isNotEmpty ? 'No invoices found' : 'No invoices',
-                              style: TextStyles.bodyRegular.copyWith(color: ColorStyles.secondary),
+                              style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
                             ),
                           ),
                         ),
@@ -329,17 +329,17 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
                       width: double.infinity,
                       height: 50.r,
                       decoration: BoxDecoration(
-                        color: ColorStyles.primary,
+                        color: QuickInvoiceColorStyles.primary,
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(CupertinoIcons.add, color: ColorStyles.white, size: 20.r),
+                          Icon(CupertinoIcons.add, color: QuickInvoiceColorStyles.white, size: 20.r),
                           SizedBox(width: 8.r),
                           Text(
                             'New Invoice',
-                            style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.white),
+                            style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
                           ),
                         ],
                       ),
@@ -385,17 +385,17 @@ class _OverviewCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: ColorStyles.white,
+        color: QuickInvoiceColorStyles.white,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyles.caption1Regular.copyWith(color: ColorStyles.secondary)),
+          Text(label, style: QuickInvoiceTextStyles.caption1Regular.copyWith(color: QuickInvoiceColorStyles.secondary)),
           SizedBox(height: 4.r),
           Text(
             '${getCurrencySymbol(currency)}${amount.toStringAsFixed(0)}',
-            style: TextStyles.bodyEmphasized,
+            style: QuickInvoiceTextStyles.bodyEmphasized,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -414,13 +414,13 @@ class _InvoiceWidget extends StatelessWidget {
   Color _getStatusColor() {
     switch (invoice.status) {
       case 'paid':
-        return ColorStyles.green;
+        return QuickInvoiceColorStyles.green;
       case 'pending':
-        return ColorStyles.orange;
+        return QuickInvoiceColorStyles.orange;
       case 'overdue':
-        return ColorStyles.pink;
+        return QuickInvoiceColorStyles.pink;
       default:
-        return ColorStyles.secondary;
+        return QuickInvoiceColorStyles.secondary;
     }
   }
 
@@ -429,7 +429,7 @@ class _InvoiceWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 12.r),
       decoration: BoxDecoration(
-        color: ColorStyles.white,
+        color: QuickInvoiceColorStyles.white,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: CupertinoButton(
@@ -449,8 +449,8 @@ class _InvoiceWidget extends StatelessWidget {
                       children: [
                         Text(
                           invoice.invoiceNumber,
-                          style: TextStyles.footnoteEmphasized.copyWith(
-                            color: ColorStyles.secondary,
+                          style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
+                            color: QuickInvoiceColorStyles.secondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -458,7 +458,7 @@ class _InvoiceWidget extends StatelessWidget {
                         SizedBox(height: 4.r),
                         Text(
                           invoice.itemName.isNotEmpty ? invoice.itemName : invoice.clientName,
-                          style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primaryTxt),
+                          style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -473,7 +473,7 @@ class _InvoiceWidget extends StatelessWidget {
                     ),
                     child: Text(
                       invoice.status.substring(0, 1).toUpperCase() + invoice.status.substring(1),
-                      style: TextStyles.caption1Regular.copyWith(color: _getStatusColor()),
+                      style: QuickInvoiceTextStyles.caption1Regular.copyWith(color: _getStatusColor()),
                     ),
                   ),
                 ],
@@ -484,11 +484,11 @@ class _InvoiceWidget extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat('MMM d, yyyy').format(invoice.dueDate),
-                    style: TextStyles.footnoteRegular.copyWith(color: ColorStyles.secondary),
+                    style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
                   ),
                   Text(
                     '${getCurrencySymbol(invoice.currency)}${invoice.totalAmount.toStringAsFixed(2)}',
-                    style: TextStyles.bodyEmphasized.copyWith(color: ColorStyles.primaryTxt),
+                    style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
                   ),
                 ],
               ),

@@ -4,7 +4,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/services/quick_invoice_ui_helper.dart';
 import '../core/core.dart';
-import '../style/style.dart';
+import '../style/quick_invoice_style.dart';
 
 late QuickInvoiceUIHelper quickInvoiceUIHelper;
 

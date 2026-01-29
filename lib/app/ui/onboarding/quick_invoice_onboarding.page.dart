@@ -8,11 +8,11 @@ import '../../../core/core.dart';
 import '../../../core/services/quick_invoice_ui_helper.dart';
 import '../../../core/ui/home_indicator_space.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../style/style.dart';
+import '../../../style/quick_invoice_style.dart';
 import '../../app.dart';
 import '../common/filled_button.dart';
 import '../company/quick_invoice_company_info.dart';
-import 'widgets/terms_policy_section.dart';
+import 'widgets/quick_invoice_terms_policy_section.dart';
 
 class QuickInvoiceOnBoardingPage extends StatefulWidget {
   const QuickInvoiceOnBoardingPage({super.key});
@@ -94,7 +94,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
 
     final lastPageNumber = pages.length - 1;
     return Scaffold(
-      backgroundColor: ColorStyles.white,
+      backgroundColor: QuickInvoiceColorStyles.white,
       body: Stack(
         children: [
           Positioned.fill(
@@ -145,7 +145,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                     ),
                                 ],
                               ),
-                              style: TextStyles.onboarding,
+                              style: QuickInvoiceTextStyles.onboarding,
                               textAlign: TextAlign.center,
                             );
                           },
@@ -166,7 +166,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                               ),
                             ],
                           ),
-                          style: TextStyles.onboarding,
+                          style: QuickInvoiceTextStyles.onboarding,
                           textAlign: TextAlign.center,
                         );
                       }
@@ -222,10 +222,10 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                 child: Text(
                                   buttonText,
                                   style: TextStyle(
-                                    fontSize: 18.sp.clamp(0, 24),
+                                    fontSize: 20,
                                     fontWeight: FontWeight.w600,
-                                    color: ColorStyles.white,
-                                  ),
+                                    color: QuickInvoiceColorStyles.white,
+                                  ).rz,
                                 ),
                               ),
                             );
@@ -240,10 +240,10 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                             child: Text(
                               'Continue',
                               style: TextStyle(
-                                fontSize: 18.sp.clamp(0, 24),
+                                fontSize: 20,
                                 fontWeight: FontWeight.w600,
-                                color: ColorStyles.white,
-                              ),
+                                color: QuickInvoiceColorStyles.white,
+                              ).rz,
                             ),
                           ),
                         );
@@ -270,9 +270,8 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                           padding: EdgeInsets.all(12.0.spMin),
                                           child: Text(
                                             text ?? '',
-                                            style: TextStyles.subheadlineRegular.copyWith(
-                                              color: ColorStyles.black,
-                                            ),
+                                            style: QuickInvoiceTextStyles.subheadlineRegular
+                                                .copyWith(color: QuickInvoiceColorStyles.black),
                                           ),
                                         ),
 
@@ -305,8 +304,8 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                                   padding: EdgeInsets.all(12.0.spMin),
                                   child: Text(
                                     cloudText[pageNumber],
-                                    style: TextStyles.subheadlineRegular.copyWith(
-                                      color: ColorStyles.black,
+                                    style: QuickInvoiceTextStyles.subheadlineRegular.copyWith(
+                                      color: QuickInvoiceColorStyles.black,
                                     ),
                                   ),
                                 ),
@@ -321,8 +320,8 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                             height: 26.r,
                             child: SmoothPageIndicator(
                               effect: ExpandingDotsEffect(
-                                dotColor: ColorStyles.primaryWithOpacity,
-                                activeDotColor: ColorStyles.primary,
+                                dotColor: QuickInvoiceColorStyles.primaryWithOpacity,
+                                activeDotColor: QuickInvoiceColorStyles.primary,
                                 dotHeight: 6.r,
                                 dotWidth: 6.r,
                                 expansionFactor: 4,
@@ -365,7 +364,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                       return page;
                     },
                   ),
-                  TermsAndPolicySection(),
+                  QuickInvoiceTermsAndPolicySection(),
                   QIHomeIndicatorSpace(),
                 ],
               ),

@@ -12,7 +12,7 @@ class ExportService {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/invoices.csv');
     await file.writeAsString(csv);
-    await ShareHelper.shareFiles(files: [XFile(file.path)]);
+    await QIShareHelper.shareFiles(files: [XFile(file.path)]);
   }
 
   static Future<void> shareExcel(List<Invoice> invoices) async {
@@ -20,7 +20,7 @@ class ExportService {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/invoices.xls');
     await file.writeAsString(html);
-    await ShareHelper.shareFiles(files: [XFile(file.path)]);
+    await QIShareHelper.shareFiles(files: [XFile(file.path)]);
   }
 
   static String _buildCsv(List<Invoice> invoices) {
