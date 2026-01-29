@@ -1,0 +1,43 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    instance_type: mac_mini_m2
+    max_build_duration: 120
+    integrations:
+      app_store_connect: QuickInvoiceApp763APIKey
+    environment:
+      flutter: "3.35.7"
+      xcode: "16.2"
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.QuickInvoicea23p.app
+      vars:
+        APP_ID: 6757950869
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Install Flutter dependencies
+        script: flutter pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Build IPA for distribution with obfuscation
+        script: |
+          flutter build ipa --release \
+            --obfuscate --split-debug-info=build/debug_info \
+            --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      email:
+        recipients:
+          - hollyreeves@murermesterdennisbotker.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
