@@ -160,6 +160,23 @@ class _TemplateSelectorModalState extends State<TemplateSelectorModal> {
                           },
                         ),
                       ),
+                      SizedBox(width: 12.r),
+                      Expanded(
+                        child: _TemplateOption(
+                          name: 'Bold',
+                          template: PdfTemplate.bold,
+                          isSelected: _selectedTemplate == PdfTemplate.bold,
+                          isLocked: !PremiumLimits.isPremium,
+                          onTap: () {
+                            if (!PremiumLimits.isPremium) {
+                              Navigator.pop(context);
+                              QuickInvoiceMainPaywallPage.show(context);
+                              return;
+                            }
+                            setState(() => _selectedTemplate = PdfTemplate.bold);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -375,6 +392,59 @@ class _TemplateOption extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
+                ),
+              ),
+            ],
+          ),
+        );
+      case PdfTemplate.bold:
+        return Padding(
+          padding: EdgeInsets.all(8.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 16.r,
+                width: double.infinity,
+                color: QuickInvoiceColorStyles.black,
+              ),
+              SizedBox(height: 8.r),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 12.r,
+                      decoration: BoxDecoration(
+                        color: QuickInvoiceColorStyles.separator,
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 4.r),
+                  Expanded(
+                    child: Container(
+                      height: 12.r,
+                      decoration: BoxDecoration(
+                        color: QuickInvoiceColorStyles.separator,
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.r),
+              Container(
+                height: 8.r,
+                width: double.infinity,
+                color: QuickInvoiceColorStyles.black,
+              ),
+              SizedBox(height: 4.r),
+              Container(
+                height: 20.r,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: QuickInvoiceColorStyles.separator,
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
             ],

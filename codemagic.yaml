@@ -24,6 +24,8 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Build IPA for distribution with obfuscation
         script: |
+          flutter clean
+          flutter pub get
           flutter build ipa --release \
             --obfuscate --split-debug-info=build/debug_info \
             --export-options-plist=/Users/builder/export_options.plist

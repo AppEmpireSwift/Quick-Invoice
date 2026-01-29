@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/database.dart';
 import '../../core/core.dart';
 
-enum PdfTemplate { classic, modern, minimal }
+enum PdfTemplate { classic, modern, minimal, bold }
 
 class PdfService {
   static pw.Font? _font;
@@ -37,6 +37,8 @@ class PdfService {
         return _generateModern(invoice);
       case PdfTemplate.minimal:
         return _generateMinimal(invoice);
+      case PdfTemplate.bold:
+        return _generateBold(invoice);
     }
   }
 
@@ -933,5 +935,320 @@ class PdfService {
         pw.Image(image, width: 150, height: 75, fit: pw.BoxFit.contain),
       ],
     );
+  }
+
+  static Future<Uint8List> _generateBold(Invoice invoice) async {
+    final pdf = pw.Document();
+    final font = _font!;
+    final fontBold = _fontBold!;
+    final company = await _getCompanyInfo();
+
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Container(
+                width: double.infinity,
+                padding: const pw.EdgeInsets.all(24),
+                color: PdfColors.black,
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(
+                      'INVOICE',
+                      style: pw.TextStyle(
+                        font: fontBold,
+                        fontSize: 48,
+                        color: PdfColors.white,
+                      ),
+                    ),
+                    pw.SizedBox(height: 8),
+                    pw.Text(
+                      '#${invoice.invoiceNumber}',
+                      style: pw.TextStyle(
+                        font: font,
+                        fontSize: 16,
+                        color: PdfColors.grey400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 32),
+              pw.Row(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Expanded(
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          'FROM',
+                          style: pw.TextStyle(
+                            font: fontBold,
+                            fontSize: 10,
+                            color: PdfColors.grey600,
+                          ),
+                        ),
+                        pw.SizedBox(height: 8),
+                        if (company['name']!.isNotEmpty)
+                          pw.Text(
+                            company['name']!,
+                            style: pw.TextStyle(font: fontBold, fontSize: 14),
+                          ),
+                        if (company['address']!.isNotEmpty)
+                          pw.Text(
+                            company['address']!,
+                            style: pw.TextStyle(font: font, fontSize: 10),
+                          ),
+                        if (company['phone']!.isNotEmpty)
+                          pw.Text(
+                            company['phone']!,
+                            style: pw.TextStyle(font: font, fontSize: 10),
+                          ),
+                      ],
+                    ),
+                  ),
+                  pw.Expanded(
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          'BILL TO',
+                          style: pw.TextStyle(
+                            font: fontBold,
+                            fontSize: 10,
+                            color: PdfColors.grey600,
+                          ),
+                        ),
+                        pw.SizedBox(height: 8),
+                        pw.Text(
+                          invoice.clientName,
+                          style: pw.TextStyle(font: fontBold, fontSize: 14),
+                        ),
+                        if (invoice.clientPhoneNumber.isNotEmpty)
+                          pw.Text(
+                            invoice.clientPhoneNumber,
+                            style: pw.TextStyle(font: font, fontSize: 10),
+                          ),
+                      ],
+                    ),
+                  ),
+                  pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      pw.Text(
+                        'DATE',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                      ),
+                      pw.Text(
+                        _formatDate(invoice.invoiceDate),
+                        style: pw.TextStyle(font: fontBold, fontSize: 12),
+                      ),
+                      pw.SizedBox(height: 12),
+                      pw.Text(
+                        'DUE DATE',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.grey600,
+                        ),
+                      ),
+                      pw.Text(
+                        _formatDate(invoice.dueDate),
+                        style: pw.TextStyle(font: fontBold, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              pw.SizedBox(height: 40),
+              pw.Container(
+                color: PdfColors.black,
+                padding: const pw.EdgeInsets.all(12),
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      flex: 3,
+                      child: pw.Text(
+                        'DESCRIPTION',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.white,
+                        ),
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        'QTY',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.white,
+                        ),
+                        textAlign: pw.TextAlign.center,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        'RATE',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.white,
+                        ),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        'AMOUNT',
+                        style: pw.TextStyle(
+                          font: fontBold,
+                          fontSize: 10,
+                          color: PdfColors.white,
+                        ),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.Container(
+                padding: const pw.EdgeInsets.all(12),
+                decoration: const pw.BoxDecoration(
+                  border: pw.Border(
+                    bottom: pw.BorderSide(color: PdfColors.grey300, width: 2),
+                  ),
+                ),
+                child: pw.Row(
+                  children: [
+                    pw.Expanded(
+                      flex: 3,
+                      child: pw.Text(
+                        invoice.itemName,
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        invoice.itemQuantity.toString(),
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                        textAlign: pw.TextAlign.center,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        _formatCurrency(invoice.itemPrice, invoice.currency),
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                    pw.Expanded(
+                      child: pw.Text(
+                        _formatCurrency(
+                          invoice.itemPrice * invoice.itemQuantity,
+                          invoice.currency,
+                        ),
+                        style: pw.TextStyle(font: font, fontSize: 12),
+                        textAlign: pw.TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 24),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.end,
+                children: [
+                  pw.SizedBox(
+                    width: 200,
+                    child: pw.Column(
+                      children: [
+                        _summaryRow(
+                          'Subtotal',
+                          _formatCurrency(
+                            invoice.itemPrice * invoice.itemQuantity,
+                            invoice.currency,
+                          ),
+                          font,
+                        ),
+                        if (invoice.tax > 0)
+                          _summaryRow(
+                            'Tax (${invoice.tax}%)',
+                            _formatCurrency(
+                              invoice.totalAmount -
+                                  (invoice.itemPrice * invoice.itemQuantity),
+                              invoice.currency,
+                            ),
+                            font,
+                          ),
+                        pw.SizedBox(height: 8),
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(12),
+                          color: PdfColors.black,
+                          child: pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              pw.Text(
+                                'TOTAL',
+                                style: pw.TextStyle(
+                                  font: fontBold,
+                                  fontSize: 14,
+                                  color: PdfColors.white,
+                                ),
+                              ),
+                              pw.Text(
+                                _formatCurrency(
+                                  invoice.totalAmount,
+                                  invoice.currency,
+                                ),
+                                style: pw.TextStyle(
+                                  font: fontBold,
+                                  fontSize: 14,
+                                  color: PdfColors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (invoice.note.isNotEmpty) ...[
+                pw.SizedBox(height: 40),
+                pw.Text(
+                  'NOTES',
+                  style: pw.TextStyle(
+                    font: fontBold,
+                    fontSize: 10,
+                    color: PdfColors.grey600,
+                  ),
+                ),
+                pw.SizedBox(height: 8),
+                pw.Text(
+                  invoice.note,
+                  style: pw.TextStyle(font: font, fontSize: 11),
+                ),
+              ],
+              if (_buildSignature(invoice, font) != null)
+                _buildSignature(invoice, font)!,
+            ],
+          );
+        },
+      ),
+    );
+
+    return pdf.save();
   }
 }

@@ -19,23 +19,11 @@ class QuickInvoiceClientsTab extends StatefulWidget {
 }
 
 class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
-  List<Client> _clients = [];
   String _searchQuery = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _loadClients();
-  }
-
-  Future<void> _loadClients() async {
-    final clients = await AppDatabase.instance.getAllClients();
-    if (mounted) setState(() => _clients = clients);
-  }
-
-  List<Client> get _filteredClients {
-    if (_searchQuery.isEmpty) return _clients;
-    return _clients
+  List<Client> _filterClients(List<Client> clients) {
+    if (_searchQuery.isEmpty) return clients;
+    return clients
         .where(
           (c) =>
               c.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
@@ -47,7 +35,7 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
   void _showClientInfo(Client client) {
     showCupertinoSheet(
       context: context,
-      builder: (_) => _ClientInfoPage(client: client, onChanged: _loadClients),
+      builder: (_) => _ClientInfoPage(client: client),
     );
   }
 
@@ -55,163 +43,162 @@ class _QuickInvoiceClientsTabState extends State<QuickInvoiceClientsTab> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: QuickInvoiceColorStyles.bgSecondary,
-      child: Column(
-        children: [
-          Container(
-            color: QuickInvoiceColorStyles.white,
-            padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 50.r),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: StreamBuilder<List<Client>>(
+        stream: AppDatabase.instance.watchAllClients(),
+        builder: (context, snapshot) {
+          final clients = snapshot.data ?? [];
+          final filteredClients = _filterClients(clients);
+          
+          return Column(
+            children: [
+              Container(
+                color: QuickInvoiceColorStyles.white,
+                padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Clients', style: QuickInvoiceTextStyles.largeTitleEmphasized),
-                    if (_clients.isNotEmpty)
-                      CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          HapticFeedback.lightImpact();
-                          Navigator.of(context, rootNavigator: true)
-                              .push(
-                                CupertinoPageRoute(
-                                  builder: (_) => const QuickInvoiceAddClientPage(),
-                                ),
-                              )
-                              .then((_) => _loadClients());
-                        },
-                        child: Icon(
-                          CupertinoIcons.plus_circle_fill,
-                          color: QuickInvoiceColorStyles.primary,
-                          size: 28.r,
-                        ),
-                      ),
-                  ],
-                ),
-                SizedBox(height: 16.r),
-                CupertinoSearchTextField(
-                  placeholder: 'Search clients...',
-                  style: QuickInvoiceTextStyles.bodyRegular,
-                  placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
-                    color: QuickInvoiceColorStyles.labelsTertiary,
-                  ),
-                  backgroundColor: QuickInvoiceColorStyles.fillsTertiary,
-                  onChanged: (value) => setState(() => _searchQuery = value),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child:
-                _filteredClients.isEmpty
-                    ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 120.r,
-                            height: 120.r,
-                            decoration: BoxDecoration(
-                              color: QuickInvoiceColorStyles.primary.withValues(alpha: 0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              CupertinoIcons.person_2_fill,
-                              size: 60.r,
-                              color: QuickInvoiceColorStyles.primary,
-                            ),
-                          ),
-                          SizedBox(height: 24.r),
-                          Text('No clients yet', style: QuickInvoiceTextStyles.title3Emphasized),
-                          SizedBox(height: 8.r),
-                          Text(
-                            'Add your first client',
-                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
-                              color: QuickInvoiceColorStyles.secondary,
-                            ),
-                          ),
-                          SizedBox(height: 20.r),
+                    SizedBox(height: 50.r),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Clients', style: QuickInvoiceTextStyles.largeTitleEmphasized),
+                        if (clients.isNotEmpty)
                           CupertinoButton(
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               HapticFeedback.lightImpact();
-                              Navigator.of(context, rootNavigator: true)
-                                  .push(
-                                    CupertinoPageRoute(
-                                      builder: (_) => const QuickInvoiceAddClientPage(),
-                                    ),
-                                  )
-                                  .then((_) => _loadClients());
+                              Navigator.of(context, rootNavigator: true).push(
+                                CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()),
+                              );
                             },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 24.r, vertical: 12.r),
-                              decoration: BoxDecoration(
-                                color: QuickInvoiceColorStyles.primary,
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              child: Text(
-                                'Add Client',
-                                style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
-                              ),
+                            child: Icon(
+                              CupertinoIcons.plus_circle_fill,
+                              color: QuickInvoiceColorStyles.primary,
+                              size: 28.r,
                             ),
                           ),
-                        ],
+                      ],
+                    ),
+                    SizedBox(height: 16.r),
+                    CupertinoSearchTextField(
+                      placeholder: 'Search clients...',
+                      style: QuickInvoiceTextStyles.bodyRegular,
+                      placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                        color: QuickInvoiceColorStyles.labelsTertiary,
                       ),
-                    )
+                      backgroundColor: QuickInvoiceColorStyles.fillsTertiary,
+                      onChanged: (value) => setState(() => _searchQuery = value),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: filteredClients.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 120.r,
+                              height: 120.r,
+                              decoration: BoxDecoration(
+                                color: QuickInvoiceColorStyles.primary.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                CupertinoIcons.person_2_fill,
+                                size: 60.r,
+                                color: QuickInvoiceColorStyles.primary,
+                              ),
+                            ),
+                            SizedBox(height: 24.r),
+                            Text('No clients yet', style: QuickInvoiceTextStyles.title3Emphasized),
+                            SizedBox(height: 8.r),
+                            Text(
+                              'Add your first client',
+                              style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                                color: QuickInvoiceColorStyles.secondary,
+                              ),
+                            ),
+                            SizedBox(height: 20.r),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                HapticFeedback.lightImpact();
+                                Navigator.of(context, rootNavigator: true).push(
+                                  CupertinoPageRoute(builder: (_) => const QuickInvoiceAddClientPage()),
+                                );
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 24.r, vertical: 12.r),
+                                decoration: BoxDecoration(
+                                  color: QuickInvoiceColorStyles.primary,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: Text(
+                                  'Add Client',
+                                  style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(color: QuickInvoiceColorStyles.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     : ListView.builder(
-                      padding: EdgeInsets.all(16.r),
-                      itemCount: _filteredClients.length,
-                      itemBuilder: (context, index) {
-                        final client = _filteredClients[index];
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 12.r),
-                          decoration: BoxDecoration(
-                            color: QuickInvoiceColorStyles.white,
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: CupertinoButton(
-                            padding: EdgeInsets.all(16.r),
-                            onPressed: () => _showClientInfo(client),
-                            child: Row(
-                              children: [
-                                _ClientAvatar(imageData: client.image, name: client.name, size: 40),
-                                SizedBox(width: 12.r),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        client.name,
-                                        style: QuickInvoiceTextStyles.bodyEmphasized,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      if (client.phoneNumber.isNotEmpty)
+                        padding: EdgeInsets.all(16.r),
+                        itemCount: filteredClients.length,
+                        itemBuilder: (context, index) {
+                          final client = filteredClients[index];
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 12.r),
+                            decoration: BoxDecoration(
+                              color: QuickInvoiceColorStyles.white,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: CupertinoButton(
+                              padding: EdgeInsets.all(16.r),
+                              onPressed: () => _showClientInfo(client),
+                              child: Row(
+                                children: [
+                                  _ClientAvatar(imageData: client.image, name: client.name, size: 40),
+                                  SizedBox(width: 12.r),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
                                         Text(
-                                          client.phoneNumber,
-                                          style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
-                                            color: QuickInvoiceColorStyles.secondary,
-                                          ),
+                                          client.name,
+                                          style: QuickInvoiceTextStyles.bodyEmphasized,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                    ],
+                                        if (client.phoneNumber.isNotEmpty)
+                                          Text(
+                                            client.phoneNumber,
+                                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                                              color: QuickInvoiceColorStyles.secondary,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  CupertinoIcons.chevron_right,
-                                  color: QuickInvoiceColorStyles.secondary,
-                                  size: 16.r,
-                                ),
-                              ],
+                                  Icon(
+                                    CupertinoIcons.chevron_right,
+                                    color: QuickInvoiceColorStyles.secondary,
+                                    size: 16.r,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-          ),
-        ],
+                          );
+                        },
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -470,9 +457,8 @@ class _QuickInvoiceAddClientPageState extends State<QuickInvoiceAddClientPage> {
 
 class _ClientInfoPage extends StatefulWidget {
   final Client client;
-  final VoidCallback onChanged;
 
-  const _ClientInfoPage({required this.client, required this.onChanged});
+  const _ClientInfoPage({required this.client});
 
   @override
   State<_ClientInfoPage> createState() => _ClientInfoPageState();
@@ -619,7 +605,6 @@ class _ClientInfoPageState extends State<_ClientInfoPage> {
                   );
                   if (confirm == true) {
                     await AppDatabase.instance.deleteClient(widget.client.id);
-                    widget.onChanged();
                     if (context.mounted) Navigator.pop(context);
                   }
                 },
