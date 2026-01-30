@@ -111,75 +111,79 @@ class _TemplateSelectorModalState extends State<TemplateSelectorModal> {
               child: Text('Select Template', style: QuickInvoiceTextStyles.title3Emphasized),
             ),
             SizedBox(height: 24.r),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.r),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 400),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _TemplateOption(
-                          name: 'Classic',
-                          template: PdfTemplate.classic,
-                          isSelected: _selectedTemplate == PdfTemplate.classic,
-                          onTap: () => setState(() => _selectedTemplate = PdfTemplate.classic),
-                        ),
-                      ),
-                      SizedBox(width: 12.r),
-                      Expanded(
-                        child: _TemplateOption(
-                          name: 'Modern',
-                          template: PdfTemplate.modern,
-                          isSelected: _selectedTemplate == PdfTemplate.modern,
-                          isLocked: !PremiumLimits.isPremium,
-                          onTap: () {
-                            if (!PremiumLimits.isPremium) {
-                              Navigator.pop(context);
-                              QuickInvoiceMainPaywallPage.show(context);
-                              return;
-                            }
-                            setState(() => _selectedTemplate = PdfTemplate.modern);
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 12.r),
-                      Expanded(
-                        child: _TemplateOption(
-                          name: 'Minimal',
-                          template: PdfTemplate.minimal,
-                          isSelected: _selectedTemplate == PdfTemplate.minimal,
-                          isLocked: !PremiumLimits.isPremium,
-                          onTap: () {
-                            if (!PremiumLimits.isPremium) {
-                              Navigator.pop(context);
-                              QuickInvoiceMainPaywallPage.show(context);
-                              return;
-                            }
-                            setState(() => _selectedTemplate = PdfTemplate.minimal);
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 12.r),
-                      Expanded(
-                        child: _TemplateOption(
-                          name: 'Bold',
-                          template: PdfTemplate.bold,
-                          isSelected: _selectedTemplate == PdfTemplate.bold,
-                          isLocked: !PremiumLimits.isPremium,
-                          onTap: () {
-                            if (!PremiumLimits.isPremium) {
-                              Navigator.pop(context);
-                              QuickInvoiceMainPaywallPage.show(context);
-                              return;
-                            }
-                            setState(() => _selectedTemplate = PdfTemplate.bold);
-                          },
-                        ),
-                      ),
-                    ],
+            SizedBox(
+              height: 160.r,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16.r),
+                children: [
+                  _TemplateOption(
+                    name: 'Classic',
+                    template: PdfTemplate.classic,
+                    isSelected: _selectedTemplate == PdfTemplate.classic,
+                    onTap: () => setState(() => _selectedTemplate = PdfTemplate.classic),
                   ),
-                ),
+                  SizedBox(width: 12.r),
+                  _TemplateOption(
+                    name: 'Modern',
+                    template: PdfTemplate.modern,
+                    isSelected: _selectedTemplate == PdfTemplate.modern,
+                    isLocked: !PremiumLimits.isPremium,
+                    onTap: () {
+                      if (!PremiumLimits.isPremium) {
+                        Navigator.pop(context);
+                        QuickInvoiceMainPaywallPage.show(context);
+                        return;
+                      }
+                      setState(() => _selectedTemplate = PdfTemplate.modern);
+                    },
+                  ),
+                  SizedBox(width: 12.r),
+                  _TemplateOption(
+                    name: 'Minimal',
+                    template: PdfTemplate.minimal,
+                    isSelected: _selectedTemplate == PdfTemplate.minimal,
+                    isLocked: !PremiumLimits.isPremium,
+                    onTap: () {
+                      if (!PremiumLimits.isPremium) {
+                        Navigator.pop(context);
+                        QuickInvoiceMainPaywallPage.show(context);
+                        return;
+                      }
+                      setState(() => _selectedTemplate = PdfTemplate.minimal);
+                    },
+                  ),
+                  SizedBox(width: 12.r),
+                  _TemplateOption(
+                    name: 'Bold',
+                    template: PdfTemplate.bold,
+                    isSelected: _selectedTemplate == PdfTemplate.bold,
+                    isLocked: !PremiumLimits.isPremium,
+                    onTap: () {
+                      if (!PremiumLimits.isPremium) {
+                        Navigator.pop(context);
+                        QuickInvoiceMainPaywallPage.show(context);
+                        return;
+                      }
+                      setState(() => _selectedTemplate = PdfTemplate.bold);
+                    },
+                  ),
+                  SizedBox(width: 12.r),
+                  _TemplateOption(
+                    name: 'Elegance',
+                    template: PdfTemplate.elegance,
+                    isSelected: _selectedTemplate == PdfTemplate.elegance,
+                    isLocked: !PremiumLimits.isPremium,
+                    onTap: () {
+                      if (!PremiumLimits.isPremium) {
+                        Navigator.pop(context);
+                        QuickInvoiceMainPaywallPage.show(context);
+                        return;
+                      }
+                      setState(() => _selectedTemplate = PdfTemplate.elegance);
+                    },
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 24.r),
@@ -231,7 +235,8 @@ class _TemplateOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(12.r),
+        width: 100.r,
+        padding: EdgeInsets.all(10.r),
         decoration: BoxDecoration(
           color: QuickInvoiceColorStyles.white,
           borderRadius: BorderRadius.circular(12.r),
@@ -253,15 +258,20 @@ class _TemplateOption extends StatelessWidget {
             SizedBox(height: 8.r),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (isLocked) ...[
-                  Icon(CupertinoIcons.lock_fill, size: 12.r, color: QuickInvoiceColorStyles.secondary),
-                  SizedBox(width: 4.r),
+                  Icon(CupertinoIcons.lock_fill, size: 10.r, color: QuickInvoiceColorStyles.secondary),
+                  SizedBox(width: 2.r),
                 ],
-                Text(
-                  name,
-                  style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
-                    color: isLocked ? QuickInvoiceColorStyles.secondary : null,
+                Flexible(
+                  child: Text(
+                    name,
+                    style: QuickInvoiceTextStyles.caption2Emphasized.copyWith(
+                      color: isLocked ? QuickInvoiceColorStyles.secondary : null,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],
@@ -446,6 +456,63 @@ class _TemplateOption extends StatelessWidget {
                   color: QuickInvoiceColorStyles.separator,
                   borderRadius: BorderRadius.circular(2.r),
                 ),
+              ),
+            ],
+          ),
+        );
+      case PdfTemplate.elegance:
+        return Padding(
+          padding: EdgeInsets.all(8.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    height: 10.r,
+                    width: 30.r,
+                    decoration: BoxDecoration(
+                      color: QuickInvoiceColorStyles.black,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  Container(
+                    height: 8.r,
+                    width: 20.r,
+                    decoration: BoxDecoration(
+                      color: QuickInvoiceColorStyles.separator,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 6.r),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: QuickInvoiceColorStyles.separator,
+              ),
+              SizedBox(height: 8.r),
+              ...List.generate(
+                3,
+                (index) => Padding(
+                  padding: EdgeInsets.only(bottom: 4.r),
+                  child: Container(
+                    height: 4.r,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: QuickInvoiceColorStyles.separator,
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 6.r),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: QuickInvoiceColorStyles.separator,
               ),
             ],
           ),

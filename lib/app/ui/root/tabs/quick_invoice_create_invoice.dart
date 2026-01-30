@@ -39,7 +39,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   final taxController = TextEditingController();
   String status = 'pending';
   final noteController = TextEditingController();
-  List<List<Offset>> _signatureStrokes = [];
+  Uint8List? _signatureImage;
 
   double get subtotal {
     final price = double.tryParse(priceController.text) ?? 0;
@@ -104,27 +104,35 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   }
 
   Future<String> _encodeSignature() async {
-    if (_signatureStrokes.isEmpty) return '';
+    if (_signatureImage == null) return '';
+    return base64Encode(_signatureImage!);
+  }
+
+  Future<Uint8List?> _strokesToImage(List<List<Offset>> strokes) async {
+    if (strokes.isEmpty) return null;
+    const double scale = 3.0;
+    const double width = 900;
+    const double height = 450;
     final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, 300, 150));
+    final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, width, height));
     final paint = Paint()
       ..color = const Color(0xFF000000)
-      ..strokeWidth = 2.0
+      ..strokeWidth = 2.0 * scale
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
-    for (final stroke in _signatureStrokes) {
+    for (final stroke in strokes) {
       if (stroke.length < 2) continue;
-      final path = Path()..moveTo(stroke.first.dx, stroke.first.dy);
+      final path = Path()..moveTo(stroke.first.dx * scale, stroke.first.dy * scale);
       for (int i = 1; i < stroke.length; i++) {
-        path.lineTo(stroke[i].dx, stroke[i].dy);
+        path.lineTo(stroke[i].dx * scale, stroke[i].dy * scale);
       }
       canvas.drawPath(path, paint);
     }
     final picture = recorder.endRecording();
-    final img = await picture.toImage(300, 150);
+    final img = await picture.toImage(width.toInt(), height.toInt());
     final byteData = await img.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData == null) return '';
-    return base64Encode(byteData.buffer.asUint8List());
+    if (byteData == null) return null;
+    return byteData.buffer.asUint8List();
   }
 
   Future<void> _selectClient() async {
@@ -220,9 +228,11 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
 
   Future<void> _handleSave() async {
     final signatureData = await _encodeSignature();
-    
-    // Save client if entered manually (not selected from list)
-    if (selectedClient == null && clientNameController.text.isNotEmpty) {
+
+    // Save client if entered manually (not selected from list) - only for new invoices
+    if (widget.editInvoice == null &&
+        selectedClient == null &&
+        clientNameController.text.isNotEmpty) {
       final clientId = DateTime.now().millisecondsSinceEpoch.toString();
       final newClient = ClientsCompanion(
         id: Value(clientId),
@@ -231,7 +241,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       );
       await AppDatabase.instance.insertClient(newClient);
     }
-    
+
     final edit = widget.editInvoice;
     if (edit != null) {
       final updated = InvoicesCompanion(
@@ -288,7 +298,12 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel', style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primary)),
+          child: Text(
+            'Cancel',
+            style: QuickInvoiceTextStyles.bodyRegular.copyWith(
+              color: QuickInvoiceColorStyles.primary,
+            ),
+          ),
         ),
         middle: Text(widget.editInvoice != null ? 'Edit Invoice' : 'New Invoice'),
         backgroundColor: QuickInvoiceColorStyles.white,
@@ -333,14 +348,18 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     width: double.infinity,
                     height: 50.r,
                     decoration: BoxDecoration(
-                      color: isCurrentStepValid ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.fillsTertiary,
+                      color: isCurrentStepValid
+                          ? QuickInvoiceColorStyles.primary
+                          : QuickInvoiceColorStyles.fillsTertiary,
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       _currentStep < 2 ? 'Continue' : 'Save',
                       style: QuickInvoiceTextStyles.bodyEmphasized.copyWith(
-                        color: isCurrentStepValid ? QuickInvoiceColorStyles.white : QuickInvoiceColorStyles.secondary,
+                        color: isCurrentStepValid
+                            ? QuickInvoiceColorStyles.white
+                            : QuickInvoiceColorStyles.secondary,
                       ),
                     ),
                   ),
@@ -421,7 +440,10 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     CupertinoButton(
                       padding: EdgeInsets.zero,
                       onPressed: () => Navigator.pop(context),
-                      child: Icon(CupertinoIcons.xmark_circle_fill, color: QuickInvoiceColorStyles.secondary),
+                      child: Icon(
+                        CupertinoIcons.xmark_circle_fill,
+                        color: QuickInvoiceColorStyles.secondary,
+                      ),
                     ),
                   ],
                 ),
@@ -443,7 +465,11 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                         children: [
                           Text(currencies[index], style: QuickInvoiceTextStyles.bodyRegular),
                           if (currencyController.text == currencies[index])
-                            Icon(CupertinoIcons.checkmark, color: QuickInvoiceColorStyles.primary, size: 20.r),
+                            Icon(
+                              CupertinoIcons.checkmark,
+                              color: QuickInvoiceColorStyles.primary,
+                              size: 20.r,
+                            ),
                         ],
                       ),
                     ),
@@ -487,10 +513,16 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                       children: [
                         Text(
                           'Choose from list',
-                          style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primary),
+                          style: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                            color: QuickInvoiceColorStyles.primary,
+                          ),
                         ),
                         SizedBox(width: 4.r),
-                        Icon(CupertinoIcons.chevron_right, color: QuickInvoiceColorStyles.primary, size: 18.r),
+                        Icon(
+                          CupertinoIcons.chevron_right,
+                          color: QuickInvoiceColorStyles.primary,
+                          size: 18.r,
+                        ),
                       ],
                     ),
                   ],
@@ -539,7 +571,10 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 controller: priceController,
                 placeholder: '0.00',
                 keyboardType: TextInputType.number,
-                suffix: Text(getCurrencySymbol(currencyController.text), style: QuickInvoiceTextStyles.bodyRegular),
+                suffix: Text(
+                  getCurrencySymbol(currencyController.text),
+                  style: QuickInvoiceTextStyles.bodyRegular,
+                ),
               ),
               Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
               _buildInlineField(
@@ -578,7 +613,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             width: 115.r,
             child: Text(
               label,
-              style: QuickInvoiceTextStyles.calloutRegular.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
+              style: QuickInvoiceTextStyles.calloutRegular.copyWith(
+                color: QuickInvoiceColorStyles.primaryTxt,
+              ),
             ),
           ),
           SizedBox(width: 12.r),
@@ -588,7 +625,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 Expanded(
                   child: CupertinoTextField(
                     controller: controller,
-                    style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
+                    style: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                      color: QuickInvoiceColorStyles.primaryTxt,
+                    ),
                     placeholder: placeholder,
                     placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
                       color: QuickInvoiceColorStyles.secondary.withValues(alpha: 0.5),
@@ -655,7 +694,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     flex: 5,
                     child: Text(
                       '${getCurrencySymbol(currencyController.text)}${total.toStringAsFixed(2)}',
-                      style: QuickInvoiceTextStyles.title3Emphasized.copyWith(color: QuickInvoiceColorStyles.primary),
+                      style: QuickInvoiceTextStyles.title3Emphasized.copyWith(
+                        color: QuickInvoiceColorStyles.primary,
+                      ),
                     ),
                   ),
                 ],
@@ -682,28 +723,32 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
               color: QuickInvoiceColorStyles.white,
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: _signatureStrokes.isEmpty ? QuickInvoiceColorStyles.separator : QuickInvoiceColorStyles.primary,
+                color: _signatureImage == null
+                    ? QuickInvoiceColorStyles.separator
+                    : QuickInvoiceColorStyles.primary,
               ),
             ),
-            child: _signatureStrokes.isEmpty
+            child: _signatureImage == null
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(CupertinoIcons.signature, size: 28.r, color: QuickInvoiceColorStyles.secondary),
+                      Icon(
+                        CupertinoIcons.signature,
+                        size: 28.r,
+                        color: QuickInvoiceColorStyles.secondary,
+                      ),
                       SizedBox(height: 8.r),
                       Text(
                         'Tap to add signature',
-                        style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary),
+                        style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                          color: QuickInvoiceColorStyles.secondary,
+                        ),
                       ),
                     ],
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
-                    child: SizedBox(
-                      height: 200.r,
-                      width: double.infinity,
-                      child: CustomPaint(painter: _SignaturePainter(_signatureStrokes)),
-                    ),
+                    child: Image.memory(_signatureImage!),
                   ),
           ),
         ),
@@ -712,7 +757,7 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
   }
 
   void _showSignatureDialog() {
-    List<List<Offset>> tempStrokes = List.from(_signatureStrokes.map((s) => List<Offset>.from(s)));
+    List<List<Offset>> tempStrokes = [];
     showCupertinoDialog(
       context: context,
       barrierDismissible: true,
@@ -741,7 +786,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                           },
                           child: Text(
                             'Clear',
-                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.primary),
+                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                              color: QuickInvoiceColorStyles.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -778,7 +825,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                     SizedBox(height: 8.r),
                     Text(
                       'Draw your signature above',
-                      style: QuickInvoiceTextStyles.caption1Regular.copyWith(color: QuickInvoiceColorStyles.secondary),
+                      style: QuickInvoiceTextStyles.caption1Regular.copyWith(
+                        color: QuickInvoiceColorStyles.secondary,
+                      ),
                     ),
                     SizedBox(height: 20.r),
                     Row(
@@ -793,7 +842,9 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                                 border: Border.all(color: QuickInvoiceColorStyles.separator),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
-                              child: Center(child: Text('Cancel', style: QuickInvoiceTextStyles.bodyRegular)),
+                              child: Center(
+                                child: Text('Cancel', style: QuickInvoiceTextStyles.bodyRegular),
+                              ),
                             ),
                           ),
                         ),
@@ -801,9 +852,10 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                         Expanded(
                           child: CupertinoButton(
                             padding: EdgeInsets.zero,
-                            onPressed: () {
-                              setState(() => _signatureStrokes = tempStrokes);
-                              Navigator.pop(ctx);
+                            onPressed: () async {
+                              final image = await _strokesToImage(tempStrokes);
+                              setState(() => _signatureImage = image);
+                              if (ctx.mounted) Navigator.pop(ctx);
                             },
                             child: Container(
                               height: 44.r,
@@ -840,7 +892,12 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: QuickInvoiceTextStyles.footnoteRegular.copyWith(color: QuickInvoiceColorStyles.secondary)),
+          Text(
+            label,
+            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+              color: QuickInvoiceColorStyles.secondary,
+            ),
+          ),
           Expanded(
             child: Text(value, style: QuickInvoiceTextStyles.bodyRegular, textAlign: TextAlign.end),
           ),
@@ -896,7 +953,9 @@ class _ProgressIndicator extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 16.h),
             height: 2.r,
-            color: currentStep > 0 ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
+            color: currentStep > 0
+                ? QuickInvoiceColorStyles.primary
+                : QuickInvoiceColorStyles.separator,
           ),
         ),
         _ProgressStep(
@@ -909,7 +968,9 @@ class _ProgressIndicator extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(bottom: 16.h),
             height: 2.r,
-            color: currentStep > 1 ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
+            color: currentStep > 1
+                ? QuickInvoiceColorStyles.primary
+                : QuickInvoiceColorStyles.separator,
           ),
         ),
         _ProgressStep(step: 3, label: 'Review', isCompleted: false, isActive: currentStep == 2),
@@ -939,7 +1000,9 @@ class _ProgressStep extends StatelessWidget {
           width: 32.r,
           height: 32.r,
           decoration: BoxDecoration(
-            color: isCompleted || isActive ? QuickInvoiceColorStyles.primary : QuickInvoiceColorStyles.separator,
+            color: isCompleted || isActive
+                ? QuickInvoiceColorStyles.primary
+                : QuickInvoiceColorStyles.separator,
             shape: BoxShape.circle,
           ),
           child: Center(
@@ -948,7 +1011,9 @@ class _ProgressStep extends StatelessWidget {
                 : Text(
                     step.toString(),
                     style: QuickInvoiceTextStyles.footnoteEmphasized.copyWith(
-                      color: isActive ? QuickInvoiceColorStyles.white : QuickInvoiceColorStyles.secondary,
+                      color: isActive
+                          ? QuickInvoiceColorStyles.white
+                          : QuickInvoiceColorStyles.secondary,
                     ),
                   ),
           ),
@@ -997,7 +1062,9 @@ class _InputWidget extends StatelessWidget {
               Expanded(
                 child: CupertinoTextField(
                   controller: controller,
-                  style: QuickInvoiceTextStyles.bodyRegular.copyWith(color: QuickInvoiceColorStyles.primaryTxt),
+                  style: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                    color: QuickInvoiceColorStyles.primaryTxt,
+                  ),
                   placeholder: placeholder ?? label,
                   placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
                     color: QuickInvoiceColorStyles.secondary.withValues(alpha: 0.5),
@@ -1071,7 +1138,11 @@ class _SelectableContainer extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(CupertinoIcons.chevron_down, color: QuickInvoiceColorStyles.secondary, size: 20.r),
+                Icon(
+                  CupertinoIcons.chevron_down,
+                  color: QuickInvoiceColorStyles.secondary,
+                  size: 20.r,
+                ),
               ],
             ),
           ),
