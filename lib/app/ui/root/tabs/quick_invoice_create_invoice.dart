@@ -220,13 +220,14 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             itemDescriptionController.text.isNotEmpty &&
             priceController.text.isNotEmpty;
       case 2:
-        return true;
+        return _signatureImage != null;
       default:
         return false;
     }
   }
 
   Future<void> _handleSave() async {
+    if (_signatureImage == null) return;
     final signatureData = await _encodeSignature();
 
     // Save client if entered manually (not selected from list) - only for new invoices
@@ -714,42 +715,60 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
         ),
         SizedBox(height: 12.r),
         CupertinoButton(
+          sizeStyle: CupertinoButtonSize.small,
           padding: EdgeInsets.zero,
-          onPressed: _showSignatureDialog,
-          child: Container(
-            width: double.infinity,
-            constraints: BoxConstraints(minHeight: 100.r),
-            decoration: BoxDecoration(
-              color: QuickInvoiceColorStyles.white,
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(
-                color: _signatureImage == null
-                    ? QuickInvoiceColorStyles.separator
-                    : QuickInvoiceColorStyles.primary,
-              ),
-            ),
-            child: _signatureImage == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        CupertinoIcons.signature,
-                        size: 28.r,
-                        color: QuickInvoiceColorStyles.secondary,
-                      ),
-                      SizedBox(height: 8.r),
-                      Text(
-                        'Tap to add signature',
-                        style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
-                          color: QuickInvoiceColorStyles.secondary,
+          onPressed: () {
+            if (PremiumLimits.isPremium) {
+              _showSignatureDialog();
+            } else {
+              QuickInvoiceMainPaywallPage.show(context);
+            }
+          },
+          child: Center(
+            child: SizedBox(
+              height: 200.h,
+              width: 200.h,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: QuickInvoiceColorStyles.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(
+                    color: _signatureImage == null
+                        ? QuickInvoiceColorStyles.separator
+                        : QuickInvoiceColorStyles.primary,
+                  ),
+                ),
+                child: _signatureImage == null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            CupertinoIcons.signature,
+                            size: 28.r,
+                            color: QuickInvoiceColorStyles.secondary,
+                          ),
+                          SizedBox(height: 8.r),
+                          Text(
+                            'Tap to add signature',
+                            style: QuickInvoiceTextStyles.footnoteRegular.copyWith(
+                              color: QuickInvoiceColorStyles.secondary,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Image.memory(
+                          _signatureImage!,
+                          height: 200.h,
+                          width: 200.h,
+                          fit: BoxFit.contain,
                         ),
                       ),
-                    ],
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: Image.memory(_signatureImage!),
-                  ),
+                    ),
+              ),
+            ),
           ),
         ),
       ],
@@ -794,30 +813,32 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                       ],
                     ),
                     SizedBox(height: 16.r),
-                    Container(
-                      height: 200.r,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: QuickInvoiceColorStyles.bgSecondary,
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(color: QuickInvoiceColorStyles.separator),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: GestureDetector(
-                          onPanStart: (details) {
-                            setDialogState(() {
-                              tempStrokes.add([details.localPosition]);
-                            });
-                          },
-                          onPanUpdate: (details) {
-                            setDialogState(() {
-                              tempStrokes.last.add(details.localPosition);
-                            });
-                          },
-                          child: CustomPaint(
-                            painter: _SignaturePainter(tempStrokes),
-                            size: Size.infinite,
+                    SizedBox(
+                      height: 200.h,
+                      width: 200.h,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: QuickInvoiceColorStyles.bgSecondary,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: QuickInvoiceColorStyles.separator),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: GestureDetector(
+                            onPanStart: (details) {
+                              setDialogState(() {
+                                tempStrokes.add([details.localPosition]);
+                              });
+                            },
+                            onPanUpdate: (details) {
+                              setDialogState(() {
+                                tempStrokes.last.add(details.localPosition);
+                              });
+                            },
+                            child: CustomPaint(
+                              painter: _SignaturePainter(tempStrokes),
+                              size: Size.infinite,
+                            ),
                           ),
                         ),
                       ),
