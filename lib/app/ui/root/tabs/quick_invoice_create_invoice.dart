@@ -71,6 +71,11 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
       taxController.text = edit.tax > 0 ? edit.tax.toString() : '';
       status = edit.status;
       noteController.text = edit.note;
+      if (edit.signature.isNotEmpty) {
+        try {
+          _signatureImage = base64Decode(edit.signature);
+        } catch (_) {}
+      }
     } else {
       invoiceDate = DateTime.now();
       dueDate = DateTime.now().add(Duration(days: 30));
@@ -220,14 +225,13 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
             itemDescriptionController.text.isNotEmpty &&
             priceController.text.isNotEmpty;
       case 2:
-        return _signatureImage != null;
+        return true;
       default:
         return false;
     }
   }
 
   Future<void> _handleSave() async {
-    if (_signatureImage == null) return;
     final signatureData = await _encodeSignature();
 
     // Save client if entered manually (not selected from list) - only for new invoices
@@ -335,16 +339,15 @@ class _QuickInvoiceCreateInvoicePageState extends State<QuickInvoiceCreateInvoic
                 top: false,
                 child: CupertinoButton(
                   padding: EdgeInsets.zero,
-                  onPressed: isCurrentStepValid
-                      ? () {
-                          HapticFeedback.selectionClick();
-                          if (_currentStep < 2) {
-                            setState(() => _currentStep++);
-                          } else {
-                            _handleSave();
-                          }
-                        }
-                      : null,
+                  onPressed: () {
+                    if (!isCurrentStepValid) return;
+                    HapticFeedback.selectionClick();
+                    if (_currentStep < 2) {
+                      setState(() => _currentStep++);
+                    } else {
+                      _handleSave();
+                    }
+                  },
                   child: Container(
                     width: double.infinity,
                     height: 50.r,
