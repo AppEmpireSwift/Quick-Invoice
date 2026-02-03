@@ -26,8 +26,7 @@
 ## 3. AppHud Onboarding JSON
 ```json
 {
-  "title": "Unlimited",
-  "subTitle": "access!",
+  "title": "Unlimited\nAccess!",
   "limitedButton": "Or proceed with limited version",
   "tryFreeButton": "Continue",
   "continueButton": "Continue",
@@ -36,11 +35,6 @@
       "id": "com.QuickInvoicea23p.appWeek",
       "title": "Optimal",
       "periodly": "week"
-    },
-    {
-      "id": "com.QuickInvoicea23p.appWeekTrial",
-      "title": "Optimal",
-      "periodly": "week-trial"
     }
   ]
 }

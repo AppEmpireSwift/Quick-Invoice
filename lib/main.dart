@@ -29,9 +29,14 @@ void main() async {
       apiKey: QICore.config.appHudKey,
       productTexts: ProductTexts(),
       dialogs: DialogTexts(),
-      fallbacks: CommonFallbackTexts(restoreButtonText: 'Restore'),
-      mainPaywallSettings: MainPaywallSettings(),
-      onBoardingPaywallSettings: OnBoardingPaywallSettings(),
+      fallbacks: CommonFallbackTexts(
+        restoreButtonText: 'Restore'),
+      mainPaywallSettings: MainPaywallSettings(
+        
+      ),
+      onBoardingPaywallSettings: OnBoardingPaywallSettings(
+        
+      )
     ),
     helperType: HelperType.fallbackBased,
   );

@@ -76,7 +76,7 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
         }
     }
 
-    final firstTitles = ['Invoice', 'Send', 'Use', 'Select', 'We Value'];
+    final firstTitles = ['Invoice', 'Send', 'Use', 'We Value'];
     final secondTitles = ['Making', 'to Client', 'Template', 'Your Feedback'];
     final descriptions = [
       "Create invoices from scratch or use\nready-made templates",
@@ -128,20 +128,25 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                       if (pageNumber == lastPageNumber) {
                         titleSection = PaywallTitle(
                           titleBuilder: (title) {
+
                             final titles = title.split('\n');
                             return Text.rich(
                               TextSpan(
                                 children: [
-                                  TextSpan(text: titles.first),
+                                  TextSpan(text: titles.first,style:  TextStyle(
+                                  fontSize: 24.spMin,
+                                  letterSpacing: -0.4,
+                                  color: CupertinoColors.black,
+                                ),),
                                   if (titles.length > 1) TextSpan(text: '\n'),
                                   if (titles.length > 1)
                                     TextSpan(
                                       text: titles.last,
                                       style: TextStyle(
-                                        fontSize: 22.spMin,
-                                        letterSpacing: -0.4,
-                                        color: CupertinoColors.black,
-                                      ),
+                                  fontSize: 24.spMin,
+                                  letterSpacing: -0.4,
+                                  color: CupertinoColors.black,
+                                ),
                                     ),
                                 ],
                               ),
@@ -154,7 +159,14 @@ class _QuickInvoiceOnBoardingPageState extends State<QuickInvoiceOnBoardingPage>
                         titleSection = Text.rich(
                           TextSpan(
                             children: [
-                              TextSpan(text: firstTitles[pageNumber]),
+                              TextSpan(
+                                text: firstTitles[pageNumber],
+                                style: TextStyle(
+                                  fontSize: 24.spMin,
+                                  letterSpacing: -0.4,
+                                  color: CupertinoColors.black,
+                                ),
+                              ),
                               TextSpan(text: '\n'),
                               TextSpan(
                                 text: secondTitles[pageNumber],
