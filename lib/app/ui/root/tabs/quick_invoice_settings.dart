@@ -13,7 +13,7 @@ import '../../../../data/database.dart';
 import '../../../../style/quick_invoice_style.dart';
 import '../../premium/widgets/quick_invoice_premium_banner.dart';
 import '../../premium/quick_invoice_main_paywall.page.dart';
-import '../../../services/export_service.dart';
+import '../../../services/app_exporting_service.dart';
 
 class QuickInvoiceSettingsTab extends StatefulWidget {
   const QuickInvoiceSettingsTab({super.key});
@@ -209,26 +209,19 @@ class _QuickInvoiceSettingsTabState extends State<QuickInvoiceSettingsTab> {
   }
 
   Future<void> _shareApp(BuildContext context) async {
-    final sharePosition = Rect.fromLTWH(
-      0,
-      0,
-      MediaQuery.of(context).size.width,
-      MediaQuery.of(context).size.height / 2,
-    );
     await QIShareHelper.shareUri(
       uri: Uri.parse(QICore.config.appStoreAppLink),
-      sharePosition: sharePosition,
     );
   }
 
   Future<void> _exportCsv() async {
     final invoices = await AppDatabase.instance.getAllInvoices();
-    await ExportService.shareCsv(invoices);
+    await AppExportingService.shareCsv(invoices);
   }
 
   Future<void> _exportExcel() async {
     final invoices = await AppDatabase.instance.getAllInvoices();
-    await ExportService.shareExcel(invoices);
+    await AppExportingService.shareExcel(invoices);
   }
 
   void _openPrivacyPolicy(BuildContext context) {

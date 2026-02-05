@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,6 +46,8 @@ class QuickInvoiceUIHelper {
 
   double get aspectRatio => _mediaQuery.size.aspectRatio;
 
+  EdgeInsets get viewPadding => _mediaQuery.viewPadding;
+
   DeviceType get deviceType {
     final width = shortestSide;
 
@@ -69,4 +73,17 @@ class QuickInvoiceUIHelper {
   bool get isBaseIphone => deviceType == DeviceType.iphoneBase;
   bool get isPortrait => orientation == Orientation.portrait;
   bool get isLandscape => orientation == Orientation.landscape;
+
+  bool get isIos26OrHigher {
+    if (!Platform.isIOS) return false;
+    final version = Platform.operatingSystemVersion;
+    final match = RegExp(r'(\d+)\.').firstMatch(version);
+    if (match != null) {
+      final major = int.tryParse(match.group(1) ?? '') ?? 0;
+      return major >= 26;
+    }
+    return false;
+  }
+
+  bool get shouldDisableBarrierDismiss => isIpad && isIos26OrHigher;
 }

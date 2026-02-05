@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' hide DeviceType;
+import 'package:quick_invoice/app/app.dart';
 
 import '../../../core/core.dart';
 import '../../../core/services/quick_invoice_ui_helper.dart';
@@ -22,15 +23,14 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final uiHelper = QuickInvoiceUIHelper.of(context);
     String bg;
-    switch (uiHelper.deviceType) {
+    switch (quickInvoiceUIHelper.deviceType) {
       case DeviceType.iphoneSe:
         bg = Assets.images.premium.paywallSe.path;
       case DeviceType.iphoneBase:
         bg = Assets.images.premium.paywall.path;
       case DeviceType.ipad:
-        if (uiHelper.isLandscape) {
+        if (quickInvoiceUIHelper.isLandscape) {
           bg = Assets.images.premium.paywallAlbum.path;
         } else {
           bg = Assets.images.premium.paywallIpad.path;

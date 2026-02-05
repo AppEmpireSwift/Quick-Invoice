@@ -54,7 +54,7 @@
       "periodly": "one-time"
     },
     {
-      "id": "com.QuickInvoicea23p.appMonth",>
+      "id": "com.QuickInvoicea23p.appMonth",
       "title": "Popular",
       "periodly": "month"
     },
@@ -71,6 +71,29 @@
   ]
 }
 ```
+
+
+## 📲 iOS Permissions
+
+### 0. **Доступ к фото и медиа**
+
+- **Ключи**: `NSPhotoLibraryUsageDescription`, 
+- **Библиотеки**:
+  - [image_picker](https://pub.dev/packages/image_picker)
+  - [Документация](https://developer.apple.com/documentation/bundleresources/information_property_list/nsphotolibraryusagedescription)
+
+### 1. **Микрофон**
+
+- **Ключи**: ``NSMicrophoneUsageDescription`, 
+- **Библиотеки**:
+  - [image_picker](https://pub.dev/packages/image_picker)
+  - [Документация](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription)
+
+### 2. **Доступ к камере**
+- **Ключи**: `NSCameraUsageDescription`, 
+- **Библиотеки**:
+  - [image_picker](https://pub.dev/packages/image_picker)
+  - [Документация](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription)
 
 ## 🍏 iOS Capabilities
 

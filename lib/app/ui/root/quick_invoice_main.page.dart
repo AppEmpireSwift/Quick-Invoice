@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quick_invoice/app/app.dart';
 
 import '../../../style/quick_invoice_style.dart';
 import 'tabs/quick_invoice_home.dart';
@@ -42,7 +43,7 @@ class _QuickInvoiceMainPageState extends State<QuickInvoiceMainPage> {
           ),
           Container(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom,
+              bottom: quickInvoiceUIHelper.viewPadding.bottom,
             ),
             decoration: BoxDecoration(
               color: QuickInvoiceColorStyles.white,

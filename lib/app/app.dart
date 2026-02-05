@@ -13,7 +13,6 @@ class QuickInvoiceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    quickInvoiceUIHelper = QuickInvoiceUIHelper.of(context);
     return ScreenUtilInit(
       designSize: QICore.config.figmaDesignSize,
       minTextAdapt: false,
@@ -22,12 +21,13 @@ class QuickInvoiceApp extends StatelessWidget {
         return CupertinoApp(
           title: QICore.config.appName,
           debugShowCheckedModeBanner: false,
-          theme: cupertinoThemeBuilder(context),
+          theme: quickInvoiceCupertinoThemeBuilder(context),
           locale: const Locale('en'),
           localizationsDelegates: const [DefaultMaterialLocalizations.delegate],
-          builder:
-              (context, child) =>
-                  KeyboardDismissOnTap(child: child ?? Container()),
+          builder: (context, child) {
+            quickInvoiceUIHelper = QuickInvoiceUIHelper.of(context);
+            return KeyboardDismissOnTap(child: child ?? Container());
+          },
           home: const QILoading(),
         );
       },

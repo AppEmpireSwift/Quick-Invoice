@@ -4,7 +4,7 @@ import 'package:pdfx/pdfx.dart';
 
 import '../../../../style/quick_invoice_style.dart';
 import '../../../../data/database.dart';
-import '../../../services/pdf_service.dart';
+import '../../../services/invoice_2_pdf_service.dart';
 import '../../../services/premium_limits.dart';
 import '../../premium/quick_invoice_main_paywall.page.dart';
 
@@ -29,7 +29,7 @@ class _QuickInvoicePdfPreviewPageState extends State<QuickInvoicePdfPreviewPage>
   }
 
   Future<void> _loadPdf() async {
-    final path = await PdfService.savePdfToTemp(widget.invoice, template: widget.template);
+    final path = await Invoice2PdfService.savePdfToTemp(widget.invoice, template: widget.template);
     if (mounted) {
       setState(() {
         _pdfController = PdfControllerPinch(
@@ -59,7 +59,7 @@ class _QuickInvoicePdfPreviewPageState extends State<QuickInvoicePdfPreviewPage>
         border: null,
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
-          onPressed: () => PdfService.shareInvoice(widget.invoice, template: widget.template),
+          onPressed: () => Invoice2PdfService.shareInvoice(widget.invoice, template: widget.template),
           child: Icon(CupertinoIcons.share, color: QuickInvoiceColorStyles.primary, size: 22.r),
         ),
       ),

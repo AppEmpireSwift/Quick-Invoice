@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../data/database.dart';
 import '../../../../style/quick_invoice_style.dart';
-import '../../../services/export_service.dart';
-import '../../../services/pdf_service.dart';
+import '../../../app.dart';
+import '../../../services/app_exporting_service.dart';
+import '../../../services/invoice_2_pdf_service.dart';
 import '../../../services/premium_limits.dart';
 import '../../premium/quick_invoice_main_paywall.page.dart';
 import 'quick_invoice_create_invoice.dart';
@@ -353,7 +354,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
                             return;
                           }
                           _showTemplateSelector((template) {
-                            PdfService.shareInvoice(invoice, template: template);
+                            Invoice2PdfService.shareInvoice(invoice, template: template);
                           });
                         },
                         child: Container(
@@ -401,6 +402,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
   void _showExportOptions() {
     showCupertinoModalPopup(
       context: context,
+      barrierDismissible: !quickInvoiceUIHelper.shouldDisableBarrierDismiss,
       builder:
           (context) => CupertinoActionSheet(
             actions: [
@@ -414,14 +416,14 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
               CupertinoActionSheetAction(
                 onPressed: () {
                   Navigator.pop(context);
-                  ExportService.shareCsv([invoice]);
+                  AppExportingService.shareCsv([invoice]);
                 },
                 child: Text('Export CSV'),
               ),
               CupertinoActionSheetAction(
                 onPressed: () {
                   Navigator.pop(context);
-                  ExportService.shareExcel([invoice]);
+                  AppExportingService.shareExcel([invoice]);
                 },
                 child: Text('Export Excel'),
               ),
@@ -458,6 +460,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
   void _confirmDelete() {
     showCupertinoDialog(
       context: context,
+      barrierDismissible: !quickInvoiceUIHelper.shouldDisableBarrierDismiss,
       builder:
           (context) => CupertinoAlertDialog(
             title: Text('Delete Invoice'),
@@ -482,6 +485,7 @@ class _QuickInvoiceInvoiceDetailsPageState extends State<QuickInvoiceInvoiceDeta
   void _showTemplateSelector(Function(PdfTemplate) onTemplateSelected) {
     showCupertinoModalPopup(
       context: context,
+      barrierDismissible: !quickInvoiceUIHelper.shouldDisableBarrierDismiss,
       builder:
           (context) => TemplateSelectorModal(
             onTemplateSelected: (template) {

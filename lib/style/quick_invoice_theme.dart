@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'quick_invoice_style.dart';
 
-ThemeData appThemeBuilder(BuildContext context) => ThemeData(
+ThemeData quickInvoiceAppThemeBuilder(BuildContext context) => ThemeData(
   textTheme: Typography.blackCupertino.apply(bodyColor: QuickInvoiceColorStyles.black),
   colorScheme: ColorScheme.fromSeed(
     seedColor: QuickInvoiceColorStyles.primary,
@@ -60,7 +60,7 @@ ThemeData appThemeBuilder(BuildContext context) => ThemeData(
   ),
 );
 
-CupertinoThemeData cupertinoThemeBuilder(BuildContext context) =>
+CupertinoThemeData quickInvoiceCupertinoThemeBuilder(BuildContext context) =>
     CupertinoThemeData(
       primaryColor: QuickInvoiceColorStyles.primary,
       scaffoldBackgroundColor: QuickInvoiceColorStyles.bgSecondary,
