@@ -79,7 +79,7 @@ class _QuickInvoiceSettingsTabState extends State<QuickInvoiceSettingsTab> {
                   SizedBox(height: 16.r),
                   _buildSection([
                     _buildItem(context, 'Share App', () => _shareApp(context)),
-                    _buildItem(context, 'Rate Us', () => _openAppStore()),
+                    _buildItem(context, 'Rate App', () => _openAppStore()),
                   ]),
                   SizedBox(height: 16.r),
                   _buildSection([
@@ -116,7 +116,7 @@ class _QuickInvoiceSettingsTabState extends State<QuickInvoiceSettingsTab> {
             children: [
               e.value,
               if (!isLast)
-                Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separator),
+                Divider(height: 1, indent: 16.r, color: QuickInvoiceColorStyles.separatorLight),
             ],
           );
         }).toList(),

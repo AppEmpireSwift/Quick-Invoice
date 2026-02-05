@@ -38,7 +38,7 @@ void main() async {
         
       )
     ),
-    helperType: HelperType.fallbackBased,
+    helperType: HelperType.fallbackBased
   );
   runApp(
     DevicePreview(

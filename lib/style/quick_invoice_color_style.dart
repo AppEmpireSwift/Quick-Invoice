@@ -34,6 +34,7 @@ class QuickInvoiceColorStyles {
   static const fillsTertiary = Color(0x1F767680);
 
   static const separator = Color(0xFFC6C6C8);
+  static const separatorLight = Color(0xFFE5E5EA);
   static const searchBg = Color(0xFFE5E5EA);
 
   static const gray2Dark = Color(0xFF636366);
