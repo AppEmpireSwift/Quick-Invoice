@@ -199,7 +199,7 @@ class QuickInvoiceMainPaywallPage extends StatelessWidget {
                         },
                       ),
                       _TermsSection(),
-                      SizedBox(height: MediaQuery.of(context).padding.bottom > 0 ? 8.r : 16.r),
+                      SizedBox(height: quickInvoiceUIHelper.isIphoneSe ? 8.r : 16.r),
                     ],
                   ),
                 ),

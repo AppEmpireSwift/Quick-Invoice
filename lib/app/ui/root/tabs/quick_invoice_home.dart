@@ -124,41 +124,44 @@ class _QuickInvoiceHomeTabState extends State<QuickInvoiceHomeTab> {
           Container(
             color: QuickInvoiceColorStyles.white,
             padding: EdgeInsets.symmetric(horizontal: 16.r),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: MediaQuery.of(context).padding.top + 16.r),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Invoices', style: QuickInvoiceTextStyles.largeTitleEmphasized),
-                    CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: _navigateToCreateInvoice,
-                      child: Icon(
-                        CupertinoIcons.plus_circle_fill,
-                        color: QuickInvoiceColorStyles.primary,
-                        size: 28.r,
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 16.r),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Invoices', style: QuickInvoiceTextStyles.largeTitleEmphasized),
+                      CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: _navigateToCreateInvoice,
+                        child: Icon(
+                          CupertinoIcons.plus_circle_fill,
+                          color: QuickInvoiceColorStyles.primary,
+                          size: 28.r,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.r),
-                CupertinoSearchTextField(
-                  controller: _searchController,
-                  placeholder: 'Search invoices...',
-                  style: QuickInvoiceTextStyles.bodyRegular,
-                  placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
-                    color: QuickInvoiceColorStyles.labelsTertiary,
+                    ],
                   ),
-                  backgroundColor: QuickInvoiceColorStyles.fillsTertiary,
-                  onChanged: (value) {
-                    setState(() => _searchQuery = value);
-                    _filterInvoices();
-                  },
-                ),
-                SizedBox(height: 12.r),
-              ],
+                  SizedBox(height: 16.r),
+                  CupertinoSearchTextField(
+                    controller: _searchController,
+                    placeholder: 'Search invoices...',
+                    style: QuickInvoiceTextStyles.bodyRegular,
+                    placeholderStyle: QuickInvoiceTextStyles.bodyRegular.copyWith(
+                      color: QuickInvoiceColorStyles.labelsTertiary,
+                    ),
+                    backgroundColor: QuickInvoiceColorStyles.fillsTertiary,
+                    onChanged: (value) {
+                      setState(() => _searchQuery = value);
+                      _filterInvoices();
+                    },
+                  ),
+                  SizedBox(height: 12.r),
+                ],
+              ),
             ),
           ),
           Expanded(
